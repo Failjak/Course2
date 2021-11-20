@@ -1,6 +1,8 @@
 #include "People.h"
 
-std::string People::strPPrint(std::string word)
+using namespace std;
+
+std::wstring People::strPPrint(std::wstring word)
 {
 	if (word.length() > 0)
 	{
@@ -12,22 +14,28 @@ std::string People::strPPrint(std::string word)
 	return word;
 }
 
-void People::setName(std::string name)
+void People::setName(std::wstring name)
 {
 	this->name = strPPrint(name);
 }
 
-void People::setSurname(std::string surname)
+void People::setSurname(std::wstring surname)
 {
 	this->surname = strPPrint(surname);
 }
 
-void People::setPatronomic(std::string patr)
+void People::setPatronomic(std::wstring patr)
 {
 	this->patronomic = strPPrint(patr);
 }
 
-std::string People::getFullName()
+std::wstring People::getFullName()
 {
-	return surname + " " + name + " " + patronomic;
+	return surname + L" " + name + L" " + patronomic;
+}
+
+wostream & operator<<(wostream & s, People p)
+{
+	s << p.getFullName() << endl;
+	return s;
 }

@@ -1,26 +1,28 @@
 #pragma once
-
+#include <iostream>
 #include <string>
 
-
+/*----------------Class People--------------------*/
 class People {
 private:
-	std::string name;
-	std::string surname;
-	std::string patronomic;
+	std::wstring name;
+	std::wstring surname;
+	std::wstring patronomic;
 
-	std::string strPPrint(std::string);
+	std::wstring strPPrint(std::wstring);
 
 public:
-	People(std::string name, std::string surname, std::string patr) : name(strPPrint(name)), surname(strPPrint(surname)), patronomic(strPPrint(patr)) { ; }
+	People() { ; }
+	People(std::wstring name, std::wstring surname, std::wstring patr) : name(strPPrint(name)), surname(strPPrint(surname)), patronomic(strPPrint(patr)) { ; }
 
-	void setName(std::string name);
-	void setSurname(std::string surname);
-	void setPatronomic(std::string patr);
+	void setName(std::wstring name);
+	void setSurname(std::wstring surname);
+	void setPatronomic(std::wstring patr);
 
-	std::string getName() { return name; }
-	std::string getSurname() { return surname; }
-	std::string getPatronomic() { return patronomic; }
-	std::string getFullName();
+	std::wstring getName() { return name; }
+	std::wstring getSurname() { return surname; }
+	std::wstring getPatronomic() { return patronomic; }
+	std::wstring getFullName();
 
+	friend std::wostream &operator<<(std::wostream &s, People& );
 };

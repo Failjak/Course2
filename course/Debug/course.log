@@ -1,5 +1,6 @@
-﻿  main.cpp
+﻿  LoginController.h
   People.cpp
-h:\studing\course2\course\course\people.cpp(7): warning C4018: <: несоответствие типов со знаком и без знака
-  Создание кода...
+h:\studing\course2\course\course\people.cpp(9): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+Debug\LoginController.obj : warning LNK4042: object specified more than once; extras ignored
   course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe
