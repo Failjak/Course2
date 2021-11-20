@@ -1,0 +1,5 @@
+﻿  main.cpp
+  People.cpp
+h:\studing\course2\course\course\people.cpp(7): warning C4018: <: несоответствие типов со знаком и без знака
+  Создание кода...
+  course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe
