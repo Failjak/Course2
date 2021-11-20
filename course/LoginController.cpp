@@ -1,26 +1,34 @@
-#include "LoginController.h"
 #include <conio.h>
 
+#include "Header.h"
+#include "LoginController.h"
 
 template<class T>
-wstring LoginController<T>::clear_input(wstring word)
+wstring LoginController<T>::clear_input(wstring word, int mode)
 {
+	/*
+		mode=1 input nothing
+		mode=0 input entered char
+	*/
+
 	int ch = 0;
 	while (true)
 	{
 		ch = _getch();
 		if (ch == 13) { break; }
+		if (ch == 32) { continue; }
 		if (ch == 8)
 		{
 			if (word.length())
 			{
-				cout << (char)8 << ' ' << char(8);
+				wcout << (wchar_t)8 << ' ' << wchar_t(8);
 				word.erase(word.length() - 1);
 			}
 		}
 		else
 		{
-			word += (char)ch;
+			if (!mode) { wcout << (wchar_t)ch; }
+			word += (wchar_t)ch;
 		}
 	}
 	return word;
@@ -35,9 +43,10 @@ bool LoginController<T>::chekAuth(T s)
 	while (flag)
 	{
 		wstring login, password;
-
+		
 		wcout << L"Введите логин: ";
-		wcin >> login;
+		login = clear_input(login, 0);
+		wcout << endl;
 		wcout << L"Введите пароль: ";
 		password = clear_input(password);
 
@@ -55,7 +64,7 @@ bool LoginController<T>::chekAuth(T s)
 
 			++iter;
 		}
-		wcout << L"Неверный логин или пароль." << endl;
+		wcout << L"\nНеверный логин или пароль." << endl;
 	}
 
 	return false;

@@ -1,4 +1,6 @@
-﻿  LoginController.h
+﻿  LoginController.cpp
+  LoginController.h
+  main.cpp
   People.cpp
 h:\studing\course2\course\course\people.cpp(9): warning C4018: '<': signed/unsigned mismatch
   Generating Code...

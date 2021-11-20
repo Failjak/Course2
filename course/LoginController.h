@@ -15,7 +15,7 @@ private:
 	std::wstring user_file = L"user.txt";
 	std::wstring admin_file = L"admin.txt";
 
-	wstring clear_input(wstring);
+	wstring clear_input(wstring, int mode = 1);
 
 public:
 	bool chekAuth(T);
