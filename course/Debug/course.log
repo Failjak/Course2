@@ -1,8 +1,7 @@
-﻿  LoginController.cpp
-  LoginController.h
-  main.cpp
-  People.cpp
-h:\studing\course2\course\course\people.cpp(9): warning C4018: '<': signed/unsigned mismatch
+﻿  main.cpp
+  shell.c
+  sqlite3.c
   Generating Code...
 Debug\LoginController.obj : warning LNK4042: object specified more than once; extras ignored
+LINK : warning LNK4067: ambiguous entry point; selected 'mainCRTStartup'
   course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe

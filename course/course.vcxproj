@@ -29,7 +29,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -127,9 +127,12 @@
     <ClCompile Include="LoginController.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="People.cpp" />
+    <ClCompile Include="sqlite\shell.c" />
+    <ClCompile Include="sqlite\sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Admin.h" />
+    <ClInclude Include="DataBase.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="People.h" />

@@ -12,8 +12,8 @@ using namespace std;
 template <class T>
 class LoginController {
 private:
-	std::wstring user_file = L"user.txt";
-	std::wstring admin_file = L"admin.txt";
+	std::string user_file = "user.txt";
+	std::string admin_file = "admin.txt";
 
 	wstring clear_input(wstring, int mode = 1);
 
