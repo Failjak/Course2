@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <iostream>
 
 #include "Header.h"
@@ -9,10 +9,9 @@ int type_menu()
 {
 	int choice;
 
-	wcout << L"1) Âîéòè êàê àäìèíèñòðàòîð." << endl;
-	wcout << L"2) Âîéòè êàê ñòóäåíò." << endl;
-	wcout << L"3) Âûõîä." << endl;
-
+	wcout << L"1) Ð’Ð¾Ð¹Ñ‚Ð¸ ÐºÐ°Ðº Ð°Ð´Ð¼Ð¸Ð½Ð¸ÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€." << endl;
+	wcout << L"2) Ð’Ð¾Ð¹Ñ‚Ð¸ ÐºÐ°Ðº ÑÑ‚ÑƒÐ´ÐµÐ½Ñ‚." << endl;
+	wcout << L"3) Ð’Ñ‹Ñ…Ð¾Ð´." << endl;
 	CIN_FLUSH;
 	cin >> choice;
 

@@ -21,6 +21,7 @@ private:
 
 public:
 	int exist(T);
+	vector<vector<wstring>> getObj2V();
 };
 
 inline const std::wstring S2WS(const std::string &s)
@@ -41,10 +42,37 @@ inline std::string WS2S(const std::wstring& wstr)
 	return converterX.to_bytes(wstr);
 }
 
+inline vector<vector<wstring>> VVS2VVWS(const vector<vector<string>> vvs)
+{
+	vector<vector<wstring>> vvws;
+	wstring ws;
+
+	for (int i = 0; i < vvs.size(); i++)
+	{
+		vvws.push_back(vector<wstring>());
+		for (int j = 0; j < vvs[i].size(); j++)
+		{
+			std::wstring wsTmp(vvs[i][j].begin(), vvs[i][j].end());
+			ws = wsTmp;
+			vvws[i].push_back(ws);
+		}
+	}
+	return vvws;
+}
+
 template <class T>
 inline
 int DataBase<T>::exist(T s)
 {
+	/*
+		Func get object and select info from DB,
+		if this obj exist the return 1.
+		
+		s = Admin or User type.
+		return: 1 - good auth;
+				0 - faild auth.
+	*/
+
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
@@ -105,4 +133,53 @@ int DataBase<T>::exist(T s)
 
 		wcout << endl;
 	}*/
+}
+
+template<class T>
+inline vector<vector<wstring>> DataBase<T>::getObj2V()
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string table;
+	vector<vector<string>> result;
+
+	if (is_same<T, Admin>::value)
+	{
+		table = "admin";
+	}
+	else if (is_same<T, User>::value) {
+		table = "user";
+	}
+
+	if (sqlite3_open(db_path, &db) == SQLITE_OK)
+	{
+		string sql("select * from " + table + ";");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		int i = 0;
+		while (sqlite3_column_text(stmt, 0))
+		{
+			result.push_back(std::vector< std::string >());
+
+			for (int j = 0; j < 2; j++)
+			{
+				result[i].push_back(string((char *)sqlite3_column_text(stmt, j)));
+			}
+			sqlite3_step(stmt);
+			i++;
+		}
+
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return VVS2VVWS(result);
 }

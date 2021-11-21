@@ -1,13 +1,37 @@
-﻿  DataBase.cpp
+﻿  AdminController.cpp
+h:\studing\course2\course\course\database.h(50): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(53): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(68): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(70): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(72): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(85): warning C4018: '<': signed/unsigned mismatch
   LoginController.cpp
+h:\studing\course2\course\course\database.h(50): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(53): warning C4018: '<': signed/unsigned mismatch
   LoginController.h
+h:\studing\course2\course\course\database.h(50): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(53): warning C4018: '<': signed/unsigned mismatch
   main.cpp
+h:\studing\course2\course\course\database.h(50): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(53): warning C4018: '<': signed/unsigned mismatch
   People.cpp
 h:\studing\course2\course\course\people.cpp(9): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
   shell.c
   sqlite3.c
   Generating Code...
+LoginController.obj : error LNK2005: "void * hCon" (?hCon@@3PAXA) already defined in AdminController.obj
+LoginController.obj : error LNK2005: "struct _CONSOLE_SCREEN_BUFFER_INFO csbiScreenInfo" (?csbiScreenInfo@@3U_CONSOLE_SCREEN_BUFFER_INFO@@A) already defined in AdminController.obj
+LoginController.obj : error LNK2005: "struct _COORD coordStart" (?coordStart@@3U_COORD@@A) already defined in AdminController.obj
+LoginController.obj : error LNK2005: "unsigned long dwNumWritten" (?dwNumWritten@@3KA) already defined in AdminController.obj
+LoginController.obj : error LNK2005: "unsigned long dwScrSize" (?dwScrSize@@3KA) already defined in AdminController.obj
+LoginController.obj : error LNK2005: "unsigned short wAttributes" (?wAttributes@@3GA) already defined in AdminController.obj
 Debug\LoginController.obj : warning LNK4042: object specified more than once; extras ignored
+main.obj : error LNK2005: "void * hCon" (?hCon@@3PAXA) already defined in AdminController.obj
+main.obj : error LNK2005: "struct _CONSOLE_SCREEN_BUFFER_INFO csbiScreenInfo" (?csbiScreenInfo@@3U_CONSOLE_SCREEN_BUFFER_INFO@@A) already defined in AdminController.obj
+main.obj : error LNK2005: "struct _COORD coordStart" (?coordStart@@3U_COORD@@A) already defined in AdminController.obj
+main.obj : error LNK2005: "unsigned long dwNumWritten" (?dwNumWritten@@3KA) already defined in AdminController.obj
+main.obj : error LNK2005: "unsigned long dwScrSize" (?dwScrSize@@3KA) already defined in AdminController.obj
+main.obj : error LNK2005: "unsigned short wAttributes" (?wAttributes@@3GA) already defined in AdminController.obj
 LINK : warning LNK4067: ambiguous entry point; selected 'mainCRTStartup'
-  course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe
+H:\Studing\Course2\course\Debug\course.exe : fatal error LNK1169: one or more multiply defined symbols found

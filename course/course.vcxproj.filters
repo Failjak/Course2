@@ -33,7 +33,7 @@
     <ClCompile Include="sqlite\sqlite3.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="DataBase.cpp">
+    <ClCompile Include="AdminController.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,6 +60,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="DataBase.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="AdminController.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

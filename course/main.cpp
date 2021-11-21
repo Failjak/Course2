@@ -3,6 +3,7 @@
 
 #include "LoginController.h"
 #include "LoginController.cpp"
+#include "AdminController.h"
 #include "Admin.h"
 #include "User.h"
 #include "Menu.h"
@@ -22,20 +23,24 @@ int main(int argc, char* argv[])
 	while (flag)
 	{
 		system("cls");
-		switch (type_menu())
+		//switch (type_menu())
+		switch (1)
 		{
 		case 1:
 		{
-			LoginController<Admin> lContr;
+			/*LoginController<Admin> lContr;
 
 			Admin admin;
 			system("cls");
 			if (lContr.chekAuth(admin))
 			{
 				system("cls");
-				wcout << L"¬ход выполнен успешно." << endl;
-				//AdminController(admin);
-			}
+				wcout << L"¬ход выполнен успешно.\n" << endl;
+				AdminController::main();
+
+				system("pause");
+			}*/
+			AdminController::main();
 			break;
 		}
 		case 2:
