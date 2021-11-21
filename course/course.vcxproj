@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="LoginController.cpp" />
     <ClCompile Include="LoginController.h" />
     <ClCompile Include="main.cpp" />

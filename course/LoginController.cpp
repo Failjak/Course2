@@ -38,6 +38,7 @@ template <class T>
 bool LoginController<T>::chekAuth(T s)
 {
 	vector<T> lp;
+	DataBase<T> db;
 	int flag = 1;
 
 	while (flag)
@@ -50,9 +51,14 @@ bool LoginController<T>::chekAuth(T s)
 		wcout << L"Введите пароль: ";
 		password = clear_input(password);
 
-		lp = ReadFromFile(s);
+		s.setLogin(login);
+		s.setPassword(password);
 
-		auto iter = lp.begin();
+		db.exist(s);
+		
+		//lp = ReadFromFile(s);
+
+		/*auto iter = lp.begin();
 		while (iter != lp.end())
 		{
 			if (iter->getLogin() == login && iter->getPassword() == password)
@@ -63,7 +69,7 @@ bool LoginController<T>::chekAuth(T s)
 			}
 
 			++iter;
-		}
+		}*/
 		wcout << L"\nНеверный логин или пароль." << endl;
 	}
 

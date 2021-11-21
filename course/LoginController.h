@@ -6,6 +6,7 @@
 
 #include "User.h"
 #include "Admin.h"
+#include "DataBase.h"
 
 using namespace std;
 
