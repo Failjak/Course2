@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Admin.cpp" />
     <ClCompile Include="AdminController.cpp" />
     <ClCompile Include="LoginController.cpp" />
     <ClCompile Include="LoginController.h" />

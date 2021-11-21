@@ -19,6 +19,6 @@ private:
 	wstring clear_input(wstring, int mode = 1);
 
 public:
-	bool chekAuth(T);
+	bool chekAuth(T*);
 	//vector<T> ReadFromFile(T);
 };

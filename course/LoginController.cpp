@@ -35,7 +35,7 @@ wstring LoginController<T>::clear_input(wstring word, int mode)
 }
 
 template <class T>
-bool LoginController<T>::chekAuth(T s)
+bool LoginController<T>::chekAuth(T * s)
 {
 	vector<T> lp;
 	DataBase<T> db;
@@ -54,11 +54,13 @@ bool LoginController<T>::chekAuth(T s)
 		if (password == L"0") { return false; }
 		wcout << endl;
 
-		s.setLogin(login);
-		s.setPassword(password);
+		s->setLogin(login);
+		s->setPassword(password);
 
-		if (db.exist(s))
+		if (db.exist(&s))
 		{
+			
+
 			return true;
 		}
 		

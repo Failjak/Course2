@@ -2,6 +2,7 @@
 #include <string>
 
 #include "User.h"
+#include "DataBase.h"
 
 /* TODO 
 	1) Реализовать добавление студентов и регистрации новых пользователей
@@ -15,4 +16,7 @@ private:
 public:
 	Admin() { ; }
 	Admin(std::wstring login, std::wstring pass) : User(login, pass) { ; }
+
+	vector<vector<wstring>> getUsers2V();
+	bool AddUser();
 };

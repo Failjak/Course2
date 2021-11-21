@@ -20,9 +20,12 @@ private:
 	const char* db_path = "migrate/test.db";
 
 public:
-	int exist(T);
+	int exist(T * s);
 	vector<vector<wstring>> getObj2V();
+	int AddNote(T*s);
 };
+
+/*----------------End Class DataBase----------------*/
 
 inline const std::wstring S2WS(const std::string &s)
 {
@@ -62,22 +65,23 @@ inline vector<vector<wstring>> VVS2VVWS(const vector<vector<string>> vvs)
 
 template <class T>
 inline
-int DataBase<T>::exist(T s)
+int DataBase<T>::exist(T * s)
 {
 	/*
-		Func get object and select info from DB,
+		Func get object and select from DB,
 		if this obj exist the return 1.
 		
 		s = Admin or User type.
 		return: 1 - good auth;
-				0 - faild auth.
+				0 - faild auth;
+				-1 - faild opening db.
 	*/
 
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
-	string l = WS2S(s.getLogin());
-	string pass = WS2S(s.getPassword());
+	string l = WS2S(s->getLogin());
+	string pass = WS2S(s->getPassword());
 
 	int res = 0;
 	string table;
@@ -117,6 +121,7 @@ int DataBase<T>::exist(T s)
 	else
 	{
 		cout << "Failed to open db\n";
+		return -1;
 	}
 
 	sqlite3_finalize(stmt);
@@ -138,6 +143,13 @@ int DataBase<T>::exist(T s)
 template<class T>
 inline vector<vector<wstring>> DataBase<T>::getObj2V()
 {
+	/*
+		Func select from DB all T-type objects,
+		if this obj exist the return 1.
+
+		return: ...
+	*/
+
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
@@ -176,10 +188,59 @@ inline vector<vector<wstring>> DataBase<T>::getObj2V()
 	else
 	{
 		cout << "Failed to open db\n";
+		return {};
 	}
 
 	sqlite3_finalize(stmt);
 	sqlite3_close(db);
 
 	return VVS2VVWS(result);
+}
+
+template<class T>
+inline int DataBase<T>::AddNote(T * s)
+{
+	/*
+		Func ...
+
+		return: 1 - good auth;
+				0 - faild auth;
+				-1 - faild opening db.
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+	string table = "user";
+
+	/*if (is_same<T, Admin>::value)
+	{
+		table = "admin";
+	}
+	else if (is_same<T, User>::value) {
+		table = "user";
+	}*/
+
+	if (sqlite3_open(db_path, &db) == SQLITE_OK)
+	{
+		string sql("insert into "+ table + " values ('" + WS2S(s->getLogin()) +
+			"', '" + WS2S(s->getPassword()) + "');");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+
+		if (rc != SQLITE_OK)
+		{
+			wcout << S2WS(err) << endl;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return -1;
+	}
+
+	sqlite3_close(db);
+
+	return 1;
 }

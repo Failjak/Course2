@@ -18,6 +18,9 @@ int main(int argc, char* argv[])
 
 	locale::global(std::locale(".utf-8"));
 
+	system("chcp 65001");
+	system("cls");
+
 	int flag = 1;
 
 	while (flag)
@@ -28,11 +31,11 @@ int main(int argc, char* argv[])
 		{
 		case 1:
 		{
+			Admin admin;
 			/*LoginController<Admin> lContr;
 
-			Admin admin;
 			system("cls");
-			if (lContr.chekAuth(admin))
+			if (lContr.chekAuth(&admin))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно.\n" << endl;
@@ -40,7 +43,7 @@ int main(int argc, char* argv[])
 
 				system("pause");
 			}*/
-			AdminController::main();
+			AdminController::main(&admin);
 			break;
 		}
 		case 2:
@@ -49,7 +52,7 @@ int main(int argc, char* argv[])
 
 			User user;
 			system("cls");
-			if (lContr.chekAuth(user))
+			if (lContr.chekAuth(&user))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно." << endl;
