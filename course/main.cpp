@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
 
 	while (flag)
 	{
+		system("cls");
 		switch (type_menu())
 		{
 		case 1:

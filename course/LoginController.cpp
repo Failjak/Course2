@@ -22,7 +22,7 @@ wstring LoginController<T>::clear_input(wstring word, int mode)
 			if (word.length())
 			{
 				wcout << (wchar_t)8 << ' ' << wchar_t(8);
-				word.erase(word.length() - 1);
+				word.erase(word.length() - 1, 1);
 			}
 		}
 		else
@@ -44,21 +44,26 @@ bool LoginController<T>::chekAuth(T s)
 	while (flag)
 	{
 		wstring login, password;
-		
+
 		wcout << L"Введите логин: ";
 		login = clear_input(login, 0);
+		if (login == L"0") { return false; }
 		wcout << endl;
 		wcout << L"Введите пароль: ";
 		password = clear_input(password);
+		if (password == L"0") { return false; }
+		wcout << endl;
 
 		s.setLogin(login);
 		s.setPassword(password);
 
-		db.exist(s);
+		if (db.exist(s))
+		{
+			return true;
+		}
 		
-		//lp = ReadFromFile(s);
-
-		/*auto iter = lp.begin();
+		/*lp = ReadFromFile(s);
+		auto iter = lp.begin();
 		while (iter != lp.end())
 		{
 			if (iter->getLogin() == login && iter->getPassword() == password)
@@ -70,40 +75,40 @@ bool LoginController<T>::chekAuth(T s)
 
 			++iter;
 		}*/
-		wcout << L"\nНеверный логин или пароль." << endl;
+		wcout << L"\nНеверный логин или пароль.(0 - выйти в главное меню)" << endl;
 	}
 
 	return false;
 }
 
-template <class T>
-vector<T> LoginController<T>::ReadFromFile(T s)
-{
-	std::vector<T> res;
-	wstring login, pass;
-
-	wifstream in;
-
-	if (is_same<T, Admin>::value)
-	{
-		in.open(admin_file);
-	}
-	else {
-		in.open(user_file);
-	}
-
-	if (in.is_open())
-	{
-		while (in >> login >> pass)
-		{
-			s.setLogin(login);
-			s.setPassword(pass);
-
-			res.push_back(s);
-		}
-
-		in.close();
-	}
-
-	return res;
-}
+//template <class T>
+//vector<T> LoginController<T>::ReadFromFile(T s)
+//{
+//	std::vector<T> res;
+//	wstring login, pass;
+//
+//	wifstream in;
+//
+//	if (is_same<T, Admin>::value)
+//	{
+//		in.open(admin_file);
+//	}
+//	else {
+//		in.open(user_file);
+//	}
+//
+//	if (in.is_open())
+//	{
+//		while (in >> login >> pass)
+//		{
+//			s.setLogin(login);
+//			s.setPassword(pass);
+//
+//			res.push_back(s);
+//		}
+//
+//		in.close();
+//	}
+//
+//	return res;
+//}

@@ -2,11 +2,16 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <locale>
+#include <codecvt>
 #include <vector>
+#include <cstdlib> // char to wchar_t
 #include "sqlite/sqlite3.h"
 
 using namespace std;
 
+class Admin;
+class User;
 
 /*----------------Class DataBase--------------------*/
 template <class T>
@@ -15,49 +20,89 @@ private:
 	const char* db_path = "migrate/test.db";
 
 public:
-	bool exist(T);
+	int exist(T);
 };
 
-static int callback(void *pUser, int argc, char** argv, char** azColName)
+inline const std::wstring S2WS(const std::string &s)
 {
-	int *flag = (int*)pUser;
-	*flag = 1;
+	wstring ws;
+	std::wstring wsTmp(s.begin(), s.end());
 
-	return 1;
+	ws = wsTmp;
+
+	return ws;
+}
+
+inline std::string WS2S(const std::wstring& wstr)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	return converterX.to_bytes(wstr);
 }
 
 template <class T>
 inline
-bool DataBase<T>::exist(T s)
+int DataBase<T>::exist(T s)
 {
-	wstring login = s.getLogin();
-	wstring pass = s.getPassword();
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
 
-	sqlite3* DB;
-	int exit = 0;
-	exit = sqlite3_open(db_path, &DB);
+	string l = WS2S(s.getLogin());
+	string pass = WS2S(s.getPassword());
 
-	string sql("select password from admin where login like @login;");
-	if (exit) {
-		wcerr << "Error open DB " << sqlite3_errmsg(DB) << std::endl;
-		return -1;
+	int res = 0;
+	string table;
+	//std::vector< std::vector < std::string > > result;
+
+	if (is_same<T, Admin>::value)
+	{
+		table = "admin";
+	}
+	else if (is_same<T, User>::value) {
+		table = "user";
 	}
 
-	char *pError = NULL;
-	int fHasResult = 0;
-	int result = sqlite3_exec(DB, sql.c_str(), callback, &fHasResult, &pError);
+	if (sqlite3_open(db_path, &db) == SQLITE_OK)
+	{
+		string sql("select count(*) from " + table + " where login like '" + l + "' and password like '" + pass + "';");
 
-	if (result != SQLITE_OK) {
-		wcout << L"Error was: " << pError << endl;
-		free(pError);
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		res = sqlite3_column_int(stmt, 0);
+
+		/*int i = 0;
+		while (sqlite3_column_text(stmt, 0))
+		{
+			result.push_back(std::vector< std::string >());
+
+			for (int j = 0; j < 2; j++)
+			{
+				result[i].push_back(string((char *)sqlite3_column_text(stmt, j)));
+			}
+			sqlite3_step(stmt);
+			i++;
+		}*/
+
+	}
+	else
+	{
+		cout << "Failed to open db\n";
 	}
 
-	sqlite3_close(DB);
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
 
-	if (fHasResult) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return res;
+
+	/*for (int i = 0; i < result.size(); i++)
+	{
+		for (int j = 0; j < result[i].size(); j++)
+		{
+			wcout << S2WS(result[i][j]) << "''";
+		}
+
+		wcout << endl;
+	}*/
 }
