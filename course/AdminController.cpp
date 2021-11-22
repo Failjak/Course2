@@ -59,8 +59,26 @@ int AdminController::user_menu()
 	int choice;
 
 	wcout << L"1) - Просмотр пользователей." << endl;
-	wcout << L"1) - Добавить пользователя" << endl;
+	wcout << L"2) - Добавить пользователя" << endl;
 	wcout << L"3) - Удалить пользователя." << endl;
+	wcout << L"0) - Назад." << endl;
+	wcout << L" Ваш выбор: ";
+	CIN_FLUSH;
+
+	cin >> choice;
+	return choice;
+}
+
+int AdminController::stud_menu()
+{
+	coutTitle(L"Меню управления студентами");
+
+	int choice;
+
+	wcout << L"1) - Просмотр студентов." << endl;
+	wcout << L"2) - Рейтинг студентов." << endl;
+	wcout << L"3) - Добавить студента" << endl;
+	wcout << L"4) - Удалить студена." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
@@ -193,4 +211,26 @@ void AdminController::UserManageController(Admin * admin)
 
 void AdminController::StudentManageController(Admin * admin)
 {
+	int flag = 1;
+
+	while (flag)
+	{
+
+		switch (stud_menu())
+		{
+		case 1: // Просмотр студентов (фио, фак, специальность, группа, средняя оценка, стипендия(если бюджет), mail, phone)
+		{
+			
+		}
+
+		case 0:
+			flag = 0;
+			break;
+
+		default:
+			wcout << L"Неверный выбор." << endl;
+			break;
+		}
+	}
+
 }

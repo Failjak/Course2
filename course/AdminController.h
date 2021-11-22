@@ -11,6 +11,7 @@ public:
 
 	static int menu();
 	static int user_menu();
+	static int stud_menu();
 
 	static void pprint(std::vector<User*>, std::wstring title=L"");
 	

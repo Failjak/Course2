@@ -21,12 +21,40 @@ void create_table()
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("create table students("
-			"student_id INTEGER PRIMARY KEY,"
+		/*string sql("create table students_groups("
+			"student_id text not null,"
+			"student_id_g text not null,"
+			"FOREIGN key (student_id) REFERENCES students(student_id) on delete CASCADE on update no action,"
+			"FOREIGN key (student_id_g) REFERENCES groups(student_id) on delete CASCADE on update no action"
+			");");*/
+
+		/*string sql("CREATE TABLE students("
+			"student_id text CHECK(length(student_id) = 8) PRIMARY KEY,"
 			"first_name TEXT NOT NULL,"
 			"last_name TEXT NOT NULL,"
+			"patronymic TEXT NOT NULL,"
+			"ed_form text check(ed_form in ('C', 'F')) not null default 'F',"
 			"email TEXT NOT NULL UNIQUE,"
-			"phone TEXT NOT NULL UNIQUE);");
+			"phone TEXT NOT NULL UNIQUE)"
+			";");*/
+
+		/*string sql("CREATE TABLE groups("
+			"student_id text CHECK(length(student_id) = 8) PRIMARY KEY,"
+			"group_number text,"
+			"faculty text not null,"
+			"spec text not null,"
+			"FOREIGN KEY (student_id) REFERENCES students(student_id)"
+			");");*/
+
+		string sql("create table marks("
+					"student_id text CHECK(length(student_id) = 8) PRIMARY KEY,"
+					"math INTEGER not null,"
+					"oop INTEGER not null,"
+					"philosophy INTEGER not null,"
+					"CN INTEGER not null,"
+					"economy INTEGER not null,"
+					"FOREIGN KEY (student_id) REFERENCES students(student_id)"
+					");");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
@@ -53,9 +81,8 @@ int main(int argc, char* argv[])
 	system("chcp 65001");
 	system("cls");
 
-	int flag = 0;
+	int flag = 1;
 
-	create_table();
 
 	while (flag)
 	{
