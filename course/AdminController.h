@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Admin.h"
+#include "User.h"
 
 class AdminController {
 public:
@@ -11,7 +12,7 @@ public:
 	static int menu();
 	static int user_menu();
 
-	static void pprint(std::vector<std::vector<std::wstring>>, std::wstring title=L"");
+	static void pprint(std::vector<User*>, std::wstring title=L"");
 	
 	static void UserManageController(Admin * admin);
 };

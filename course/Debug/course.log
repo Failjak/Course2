@@ -1,28 +1,38 @@
 ﻿  Admin.cpp
-h:\studing\course2\course\course\database.h(53): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(56): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admin.cpp(33): warning C4305: 'return': truncation from 'int' to 'bool'
-h:\studing\course2\course\course\database.h(212): warning C4101: 'stmt': unreferenced local variable
-  h:\studing\course2\course\course\database.h(202): note: while compiling class template member function 'int DataBase<User>::AddNote(T *)'
+h:\studing\course2\course\course\database.h(46): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(49): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(183): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(173): note: while compiling class template member function 'int DataBase<User>::AddNoteUser(T *)'
           with
           [
               T=User
           ]
-  h:\studing\course2\course\course\admin.cpp(36): note: see reference to function template instantiation 'int DataBase<User>::AddNote(T *)' being compiled
+  h:\studing\course2\course\course\admin.cpp(36): note: see reference to function template instantiation 'int DataBase<User>::AddNoteUser(T *)' being compiled
           with
           [
               T=User
           ]
   h:\studing\course2\course\course\admin.cpp(6): note: see reference to class template instantiation 'DataBase<User>' being compiled
+h:\studing\course2\course\course\database.h(224): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(222): note: while compiling class template member function 'int DataBase<User>::DelNoteUser(T *)'
+          with
+          [
+              T=User
+          ]
+  h:\studing\course2\course\course\admin.cpp(47): note: see reference to function template instantiation 'int DataBase<User>::DelNoteUser(T *)' being compiled
+          with
+          [
+              T=User
+          ]
   AdminController.cpp
-h:\studing\course2\course\course\database.h(53): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(56): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(46): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(49): warning C4018: '<': signed/unsigned mismatch
 h:\studing\course2\course\course\admincontroller.cpp(77): warning C4018: '<': signed/unsigned mismatch
 h:\studing\course2\course\course\admincontroller.cpp(79): warning C4018: '>': signed/unsigned mismatch
 h:\studing\course2\course\course\admincontroller.cpp(81): warning C4018: '>': signed/unsigned mismatch
 h:\studing\course2\course\course\admincontroller.cpp(107): warning C4018: '<': signed/unsigned mismatch
   LoginController.h
-h:\studing\course2\course\course\database.h(53): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(56): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(46): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(49): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
   course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe

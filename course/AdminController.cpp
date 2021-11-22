@@ -65,7 +65,7 @@ int AdminController::user_menu()
 	return choice;
 }
 
-void AdminController::pprint(vector<vector<wstring>> array, wstring title)
+void AdminController::pprint(vector<User*> array, wstring title)
 {
 
 	int space_subjects = 5;
@@ -76,10 +76,10 @@ void AdminController::pprint(vector<vector<wstring>> array, wstring title)
 	int max_size_login = 0, max_size_pass = 0;
 	for (int i = 0; i < array.size(); i++)
 	{
-		if (array.at(i).at(0).length() > max_size_login)
-			max_size_login = array.at(i).at(0).size();
-		if (array.at(i).at(1).length() > max_size_pass)
-			max_size_pass = array.at(i).at(1).size();
+		if (array.at(i)->getLogin().length() > max_size_login)
+			max_size_login = array.at(i)->getLogin().size();
+		if (array.at(i)->getPassword().length() > max_size_pass)
+			max_size_pass = array.at(i)->getPassword().size();
 	}
 
 	int table_width = space_subjects + ((max_size_pass > MIN_SPACE) ? max_size_pass + 1 : MIN_SPACE) + 
@@ -108,8 +108,8 @@ void AdminController::pprint(vector<vector<wstring>> array, wstring title)
 		wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
 		wcout << L"│" 
 			<< setw(5) << j + 1
-			<< setw(max_size_login > MIN_SPACE ? max_size_login + 1 : MIN_SPACE) << left << array[j].at(0)
-			<< setw(max_size_pass > MIN_SPACE ? max_size_pass + 1 : MIN_SPACE) << left << array[j].at(1)
+			<< setw(max_size_login > MIN_SPACE ? max_size_login + 1 : MIN_SPACE) << left << array[j]->getLogin()
+			<< setw(max_size_pass > MIN_SPACE ? max_size_pass + 1 : MIN_SPACE) << left << array[j]->getPassword()
 			<< left << L"│" << endl;
 	}
 	wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
@@ -128,9 +128,9 @@ void AdminController::UserManageController(Admin * admin)
 		{
 			system("cls");
 
-			vector<vector<wstring>> users = admin->getUsers2V();
+			vector<User*> users = admin->getUsers2V();
 
-			AdminController::pprint(users, L"Users");
+			AdminController::pprint(users, L"Пользователи");
 
 			system("pause");
 			system("cls");
@@ -139,9 +139,12 @@ void AdminController::UserManageController(Admin * admin)
 
 		case 2: // Добавить пользователей
 		{
-			if (admin->AddUser())
+			if (admin->AddUser() == 1)
 			{
 				wcout << L"Добавление выполнено успешно." << endl;
+			}
+			else {
+				wcout << L"Ошибка добавления." << endl;
 			}
 			system("pause");
 			system("cls");
@@ -149,7 +152,28 @@ void AdminController::UserManageController(Admin * admin)
 		}
 
 		case 3: // Удалить пользователя
+		{
+			system("cls");
+
+			int id;
+			vector<User*> users = admin->getUsers2V();
+
+			AdminController::pprint(users, L"Удаление пользователя");
+			wcout << L"№ пользователя для удаление: ";
+			wcin >> id;
+
+			if (admin->DelUser(users.at(id-1)) == 1)
+			{
+				wcout << L"Удаление выполнено успешно." << endl;
+			}
+			else {
+				wcout << L"Ошибка удаления." << endl;
+			}
+
+			system("pause");
+			system("cls");
 			break;
+		}
 
 		case 0:
 			flag = 0;

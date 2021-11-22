@@ -1,20 +1,21 @@
 ﻿#pragma once
 #include <iostream>
 #include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib> // char to wchar_t
 #include <string>
 #include <windows.h>
 #include <wincon.h>
+#include <codecvt>
+#include <locale>
+#include <vector>
+
+
+
 
 #define CIN_FLUSH if (std::cin.fail()) {std::cin.clear(); std::cin.ignore();}
 
+constexpr auto DB_PATH = "migrate/main.db";
 constexpr auto HEADER_SPACE = 32;
-//CONSOLE_SCREEN_BUFFER_INFO csbiScreenInfo;
-//COORD coordStart = { 0, 0 };  // Screen coordinate for upper left
-//DWORD dwNumWritten = 0;       // Holds # of cells written to 
-//							  // by FillConsoleOutputAttribute
-//DWORD dwScrSize;
-//WORD  wAttributes = BACKGROUND_BLUE | FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED;
 
 inline void coutTitle(std::wstring title) {
 	int title_table_widht = HEADER_SPACE - title.length();

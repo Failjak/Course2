@@ -1,14 +1,14 @@
 #include "Admin.h"
 #include "Header.h"
 
-vector<vector<wstring>> Admin::getUsers2V()
+vector<User*> Admin::getUsers2V()
 {
 	DataBase<User> db;
 
 	return db.getObj2V();
 }
 
-bool Admin::AddUser()
+int Admin::AddUser()
 {
 	/*
 		return: 1 - no exeption;
@@ -33,10 +33,21 @@ bool Admin::AddUser()
 		return -1;
 	}
 
-	if (db.AddNote(&user))
+	if (db.AddNoteUser(&user) == 1)
 	{
 		return true;
 	}
 
 	return false;
+}
+
+int Admin::DelUser(User * s)
+{
+	DataBase<User> db;
+	if (db.DelNoteUser(s) == 1)
+	{
+		return 1;
+	}
+
+	return 0;
 }

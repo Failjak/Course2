@@ -17,6 +17,7 @@ public:
 	Admin() { ; }
 	Admin(std::wstring login, std::wstring pass) : User(login, pass) { ; }
 
-	vector<vector<wstring>> getUsers2V();
-	bool AddUser();
+	vector<User*> getUsers2V();
+	int AddUser();
+	int DelUser(User * s);
 };

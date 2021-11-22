@@ -21,6 +21,7 @@ private:
 public:
 	User() { ; }
 	User(std::wstring login, std::wstring pass) : login(login), password(pass) { ; }
+	User(const User &);
 
 	
 	std::wstring getLogin() { return login; }
