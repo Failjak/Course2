@@ -83,7 +83,6 @@ int main(int argc, char* argv[])
 
 	int flag = 1;
 
-
 	while (flag)
 	{
 		system("cls");

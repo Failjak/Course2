@@ -17,6 +17,10 @@ public:
 	int AddNoteUser(T*s);
 	int DelNoteUser(T * s);
 
+	vector<Student*> getStudents2V();
+	map<wstring, vector<wstring>> getGrpOrMark2V(wstring mode);
+	vector<wstring> getColNames(wstring table);
+
 };
 /*----------------End Class DataBase----------------*/
 
@@ -122,7 +126,7 @@ inline vector<T*> DataBase<T>::getObj2V()
 	sqlite3_stmt * stmt;
 
 	string table;
-	vector<User*> result;
+	vector<T*> result;
 
 	if (is_same<T, Admin>::value)
 	{
@@ -134,23 +138,19 @@ inline vector<T*> DataBase<T>::getObj2V()
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("select id, login, password from " + table + ";");
+		string sql("select * from " + table + ";");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
 
 		while (sqlite3_column_text(stmt, 0))
 		{
+
 			T *s = new T;
 			s->setLogin(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
 			s->setPassword(S2WS(string((char *)sqlite3_column_text(stmt, 2))));
 
 			result.push_back(s);
-
-			/*for (int j = 0; j < 2; j++)
-			{
-				result[i].push_back();
-			}*/
 			sqlite3_step(stmt);
 		}
 
@@ -164,7 +164,6 @@ inline vector<T*> DataBase<T>::getObj2V()
 	sqlite3_finalize(stmt);
 	sqlite3_close(db);
 
-	//return VVS2VVWS(result);
 	return result;
 }
 
@@ -254,3 +253,131 @@ int DataBase<T>::DelNoteUser(T * s)
 	return 1;
 }
 
+template<class T>
+inline vector<Student*> DataBase<T>::getStudents2V()
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string table = "students";
+	vector<T*> result;
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select student_id, first_name, last_name, patronymic, ed_form, email, phone from " + table + ";");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		while (sqlite3_column_text(stmt, 0))
+		{
+			T *s = new T();
+			s->setStudentId(S2WS(string((char *)sqlite3_column_text(stmt, 0))));
+			s->setName(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
+			s->setSurname(S2WS(string((char *)sqlite3_column_text(stmt, 2))));
+			s->setPatronomic(S2WS(string((char *)sqlite3_column_text(stmt, 3))));
+			s->setEdForm(S2WS(string((char *)sqlite3_column_text(stmt, 4))));
+			s->setEmail(S2WS(string((char *)sqlite3_column_text(stmt, 5))));
+			s->setPhone(S2WS(string((char *)sqlite3_column_text(stmt, 6))));
+
+			result.push_back(s);
+
+			sqlite3_step(stmt);
+		}
+
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return result;
+}
+
+template<class T>
+inline map<wstring, vector<wstring>> DataBase<T>::getGrpOrMark2V(wstring mode)
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string table;
+	map<wstring, vector<wstring>> result;
+
+	if (mode == L"group")
+	{
+		table = "groups";
+	}
+	else if (mode == L"mark")
+	{
+		table = "marks";
+	}
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select * from " + table + ";");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		while (sqlite3_column_text(stmt, 0))
+		{
+			vector<wstring> tmp;
+
+			wstring key = S2WS(string((char *)sqlite3_column_text(stmt, 0)));
+			
+			for (int j =1; sqlite3_column_text(stmt, j); j++)
+				tmp.push_back(S2WS(string((char *)sqlite3_column_text(stmt, j))));
+
+			result[key] = tmp;
+			sqlite3_step(stmt);
+		}
+
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return result;
+}
+
+template<class T>
+inline vector<wstring> DataBase<T>::getColNames(wstring table)
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+	vector<wstring> result;
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("pragma table_info(" + WS2S(table) + ");");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL);
+		sqlite3_step(stmt);
+
+		while (sqlite3_column_text(stmt, 0))
+		{
+			result.push_back(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
+			sqlite3_step(stmt);
+		}
+
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+	}
+
+	sqlite3_close(db);
+
+	return result;
+}

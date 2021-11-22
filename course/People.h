@@ -24,5 +24,5 @@ public:
 	std::wstring getPatronomic() { return patronomic; }
 	std::wstring getFullName();
 
-	friend std::wostream &operator<<(std::wostream &s, People& );
+	friend std::wostream &operator<<(std::wostream &s, People * p);
 };

@@ -34,8 +34,8 @@ std::wstring People::getFullName()
 	return surname + L" " + name + L" " + patronomic;
 }
 
-wostream & operator<<(wostream & s, People p)
+std::wostream & operator<<(std::wostream & s, People *p)
 {
-	s << p.getFullName() << endl;
+	s << p->getFullName() << endl;
 	return s;
 }

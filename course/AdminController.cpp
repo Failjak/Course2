@@ -87,7 +87,7 @@ int AdminController::stud_menu()
 	return choice;
 }
 
-void AdminController::pprint(vector<User*> array, wstring title)
+void AdminController::pprintUser(vector<User*> array, wstring title)
 {
 
 	int space_subjects = 5;
@@ -137,6 +137,10 @@ void AdminController::pprint(vector<User*> array, wstring title)
 	wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
 }
 
+void AdminController::pprinStudent(std::vector<Student*>, std::wstring title)
+{
+}
+
 void AdminController::UserManageController(Admin * admin)
 {
 	int flag = 1;
@@ -152,7 +156,7 @@ void AdminController::UserManageController(Admin * admin)
 
 			vector<User*> users = admin->getUsers2V();
 
-			AdminController::pprint(users, L"Пользователи");
+			AdminController::pprintUser(users, L"Пользователи");
 
 			system("pause");
 			system("cls");
@@ -180,7 +184,7 @@ void AdminController::UserManageController(Admin * admin)
 			int id;
 			vector<User*> users = admin->getUsers2V();
 
-			AdminController::pprint(users, L"Удаление пользователя");
+			AdminController::pprintUser(users, L"Удаление пользователя");
 			wcout << L"№ пользователя для удаление: ";
 			wcin >> id;
 
@@ -220,7 +224,14 @@ void AdminController::StudentManageController(Admin * admin)
 		{
 		case 1: // Просмотр студентов (фио, фак, специальность, группа, средняя оценка, стипендия(если бюджет), mail, phone)
 		{
-			
+			//system("cls");
+
+			vector<Student*> students = admin->getStudents2V();
+
+			AdminController::pprinStudent(students, L"Студенты");
+
+			system("pause");
+			//system("cls");
 		}
 
 		case 0:

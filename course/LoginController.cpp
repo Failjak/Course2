@@ -61,54 +61,9 @@ bool LoginController<T>::chekAuth(T * s)
 		{
 			return true;
 		}
-		
-		/*lp = ReadFromFile(s);
-		auto iter = lp.begin();
-		while (iter != lp.end())
-		{
-			if (iter->getLogin() == login && iter->getPassword() == password)
-			{
-				s.setLogin(login);
-				s.setPassword(password);
-				return true;
-			}
 
-			++iter;
-		}*/
 		wcout << L"\nНеверный логин или пароль.(0 - выйти в главное меню)" << endl;
 	}
 
 	return false;
 }
-
-//template <class T>
-//vector<T> LoginController<T>::ReadFromFile(T s)
-//{
-//	std::vector<T> res;
-//	wstring login, pass;
-//
-//	wifstream in;
-//
-//	if (is_same<T, Admin>::value)
-//	{
-//		in.open(admin_file);
-//	}
-//	else {
-//		in.open(user_file);
-//	}
-//
-//	if (in.is_open())
-//	{
-//		while (in >> login >> pass)
-//		{
-//			s.setLogin(login);
-//			s.setPassword(pass);
-//
-//			res.push_back(s);
-//		}
-//
-//		in.close();
-//	}
-//
-//	return res;
-//}
