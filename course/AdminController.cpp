@@ -22,7 +22,11 @@ void AdminController::main(Admin * admin)
 		}
 
 		case 2:
+		{
+			system("cls");
+			StudentManageController(admin);
 			break;
+		}
 
 		default:
 			wcout << L"Неверный выбор." << endl;
@@ -185,4 +189,8 @@ void AdminController::UserManageController(Admin * admin)
 	}
 
 	return;
+}
+
+void AdminController::StudentManageController(Admin * admin)
+{
 }

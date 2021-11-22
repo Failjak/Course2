@@ -11,6 +11,38 @@
 
 using namespace std;
 
+void create_table() 
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+	string table = "user";
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("create table students("
+			"student_id INTEGER PRIMARY KEY,"
+			"first_name TEXT NOT NULL,"
+			"last_name TEXT NOT NULL,"
+			"email TEXT NOT NULL UNIQUE,"
+			"phone TEXT NOT NULL UNIQUE);");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+
+		if (rc != SQLITE_OK)
+		{
+			wcout << L"ERROR:" <<S2WS(err) << endl;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+	}
+
+	sqlite3_close(db);
+}
+
 int main(int argc, char* argv[])
 {
 	SetConsoleCP(1251);
@@ -21,7 +53,9 @@ int main(int argc, char* argv[])
 	system("chcp 65001");
 	system("cls");
 
-	int flag = 1;
+	int flag = 0;
+
+	create_table();
 
 	while (flag)
 	{

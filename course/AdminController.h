@@ -15,4 +15,5 @@ public:
 	static void pprint(std::vector<User*>, std::wstring title=L"");
 	
 	static void UserManageController(Admin * admin);
+	static void StudentManageController(Admin * admin);
 };
