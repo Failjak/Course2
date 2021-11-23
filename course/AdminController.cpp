@@ -95,17 +95,20 @@ void AdminController::pprintUser(vector<User*> array, wstring title)
 	HANDLE hCon;
 	hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	int max_size_login = 0, max_size_pass = 0;
+	int max_size_login = 0, max_size_pass = 0, max_size_id = 0;
 	for (int i = 0; i < array.size(); i++)
 	{
 		if (array.at(i)->getLogin().length() > max_size_login)
 			max_size_login = array.at(i)->getLogin().size();
 		if (array.at(i)->getPassword().length() > max_size_pass)
 			max_size_pass = array.at(i)->getPassword().size();
+		if (array.at(i)->getStudentId().length() > max_size_id)
+			max_size_id = array.at(i)->getStudentId().size();
 	}
 
 	int table_width = space_subjects + ((max_size_pass > MIN_SPACE) ? max_size_pass + 1 : MIN_SPACE) + 
-		(max_size_login > MIN_SPACE ? max_size_login + 1 : MIN_SPACE);
+		(max_size_login > MIN_SPACE ? max_size_login + 1 : MIN_SPACE) + 
+		(max_size_id > MIN_SPACE ? max_size_id + 1 : MIN_SPACE);
 
 
 	if (title.length())
@@ -121,7 +124,8 @@ void AdminController::pprintUser(vector<User*> array, wstring title)
 	wcout 
 		<< setw(5) << left << L"№"
 		<< setw(max_size_login > MIN_SPACE ? max_size_login + 1 : MIN_SPACE) << left << L"Логин "
-		<< setw(max_size_pass > MIN_SPACE ? max_size_pass + 1 : MIN_SPACE) << left << L"Пароль ";
+		<< setw(max_size_pass > MIN_SPACE ? max_size_pass + 1 : MIN_SPACE) << left << L"Пароль "
+		<< setw(max_size_id > MIN_SPACE ? max_size_id + 1 : MIN_SPACE) << left << L"ID студента ";
 
 	SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 	wcout << L"│" << endl;
@@ -132,13 +136,65 @@ void AdminController::pprintUser(vector<User*> array, wstring title)
 			<< setw(5) << j + 1
 			<< setw(max_size_login > MIN_SPACE ? max_size_login + 1 : MIN_SPACE) << left << array[j]->getLogin()
 			<< setw(max_size_pass > MIN_SPACE ? max_size_pass + 1 : MIN_SPACE) << left << array[j]->getPassword()
+			<< setw(max_size_id > MIN_SPACE ? max_size_id + 1 : MIN_SPACE) << left << array[j]->getStudentId()
 			<< left << L"│" << endl;
 	}
 	wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
 }
 
-void AdminController::pprinStudent(std::vector<Student*>, std::wstring title)
+void AdminController::pprinStudent(std::vector<Student*> array, std::wstring title)
 {
+	// (фио, фак, специальность, группа, средняя оценка, стипендия(если бюджет), mail, phone)
+	int space_subjects = 5;
+	int MIN_SPACE = 14;
+	HANDLE hCon;
+	hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	int max_size_FN = 0, max_size_fac = 0, max_size_spec = 0;
+	for (int i = 0; i < array.size(); i++)
+	{
+		if (array.at(i)->getFullName().length() > max_size_FN)
+			max_size_FN = array.at(i)->getFullName().size();
+		if (array.at(i)->getFaculty().length() > max_size_fac)
+			max_size_fac = array.at(i)->getFaculty().size();
+		if (array.at(i)->getSpec().length() > max_size_spec)
+			max_size_spec = array.at(i)->getSpec().size();
+	}
+
+	int table_width = space_subjects + ((max_size_FN > MIN_SPACE) ? max_size_FN + 1 : MIN_SPACE) +
+		(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) +
+		(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE);
+
+
+	if (title.length())
+	{
+		int title_table_widht = table_width - title.length();
+		wcout << wstring(title_table_widht, L'─') << title << wstring(title_table_widht, L'─') << endl;
+	}
+
+	wcout << L"┌" << wstring(table_width, L'─') << L"┐" << endl;
+	wcout << L"│";
+	SetConsoleTextAttribute(hCon, FOREGROUND_INTENSITY);
+
+	wcout
+		<< setw(5) << left << L"№"
+		<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << L"ФИО"
+		<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << L"Факультет"
+		<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << L"Спецальность";
+
+	SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+	wcout << L"│" << endl;
+
+	for (int j = 0; j < array.size(); j++) {
+		wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
+		wcout << L"│"
+			<< setw(5) << j + 1
+			<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << array[j]->getFullName()
+			<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << array[j]->getFaculty()
+			<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << array[j]->getSpec()
+			<< left << L"│" << endl;
+	}
+	wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
 }
 
 void AdminController::UserManageController(Admin * admin)
@@ -233,7 +289,19 @@ void AdminController::StudentManageController(Admin * admin)
 			system("pause");
 			//system("cls");
 		}
-
+		case 2
+		{
+			if (admin->AddStudent() == 1)
+			{
+				wcout << L"Добавление выполнено успешно." << endl;
+			}
+			else {
+				wcout << L"Ошибка добавления." << endl;
+			}
+			system("pause");
+			system("cls");
+			break;
+		}
 		case 0:
 			flag = 0;
 			break;

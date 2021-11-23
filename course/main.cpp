@@ -35,8 +35,13 @@ void create_table()
 			"patronymic TEXT NOT NULL,"
 			"ed_form text check(ed_form in ('C', 'F')) not null default 'F',"
 			"email TEXT NOT NULL UNIQUE,"
-			"phone TEXT NOT NULL UNIQUE)"
-			";");*/
+			"phone TEXT NOT NULL UNIQUE,"
+			"FOREIGN KEY(student_id) REFERENCES users(student_id));");*/
+
+		string sql("create table users("
+					"login text not null,"
+					"password text not null,"
+					"student_id text CHECK(length(student_id) = 8) PRIMARY KEY not null);");
 
 		/*string sql("CREATE TABLE groups("
 			"student_id text CHECK(length(student_id) = 8) PRIMARY KEY,"
@@ -46,7 +51,7 @@ void create_table()
 			"FOREIGN KEY (student_id) REFERENCES students(student_id)"
 			");");*/
 
-		string sql("create table marks("
+		/*string sql("create table marks("
 					"student_id text CHECK(length(student_id) = 8) PRIMARY KEY,"
 					"math INTEGER not null,"
 					"oop INTEGER not null,"
@@ -54,7 +59,7 @@ void create_table()
 					"CN INTEGER not null,"
 					"economy INTEGER not null,"
 					"FOREIGN KEY (student_id) REFERENCES students(student_id)"
-					");");
+					");");*/
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
@@ -82,6 +87,8 @@ int main(int argc, char* argv[])
 	system("cls");
 
 	int flag = 1;
+
+	create_table();
 
 	while (flag)
 	{

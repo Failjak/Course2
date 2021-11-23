@@ -16,10 +16,14 @@ private:
 
 public:
 	Admin() { ; }
-	Admin(std::wstring login, std::wstring pass) : User(login, pass) { ; }
+	Admin(std::wstring login, std::wstring pass) : User(login, pass, L"") { ; }
 
 	vector<Student*> getStudents2V();
 	vector<User*> getUsers2V();
+
 	int AddUser();
 	int DelUser(User * s);
+
+	int AddStudent();
+	int DelStudent(User * s);
 };

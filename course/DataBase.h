@@ -20,6 +20,7 @@ public:
 	vector<Student*> getStudents2V();
 	map<wstring, vector<wstring>> getGrpOrMark2V(wstring mode);
 	vector<wstring> getColNames(wstring table);
+	Student * getStudentById(wstring id);
 
 };
 /*----------------End Class DataBase----------------*/
@@ -133,7 +134,7 @@ inline vector<T*> DataBase<T>::getObj2V()
 		table = "admin";
 	}
 	else if (is_same<T, User>::value) {
-		table = "user";
+		table = "users";
 	}
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
@@ -147,8 +148,12 @@ inline vector<T*> DataBase<T>::getObj2V()
 		{
 
 			T *s = new T;
-			s->setLogin(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
-			s->setPassword(S2WS(string((char *)sqlite3_column_text(stmt, 2))));
+			s->setLogin(S2WS(string((char *)sqlite3_column_text(stmt, 0))));
+			s->setPassword(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
+
+			if (sqlite3_column_text(stmt, 2)){ 
+				s->setStudentId(S2WS(string((char *)sqlite3_column_text(stmt, 2))));
+			}
 
 			result.push_back(s);
 			sqlite3_step(stmt);
@@ -182,7 +187,7 @@ inline int DataBase<T>::AddNoteUser(T * s)
 	sqlite3_stmt * stmt;
 	char *err;
 
-	string table = "user";
+	string table = "users";
 
 	/*if (is_same<T, Admin>::value)
 	{
@@ -194,14 +199,15 @@ inline int DataBase<T>::AddNoteUser(T * s)
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("insert into "+ table + "(login, password) values ('" + WS2S(s->getLogin()) +
-			"', '" + WS2S(s->getPassword()) + "');");
+		string sql("insert into "+ table + "(login, password, student_id) values ('" + WS2S(s->getLogin()) +
+			"', '" + WS2S(s->getPassword()) + "', '" + WS2S(s->getStudentId()) + "');");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
 		if (rc != SQLITE_OK)
 		{
-			wcout << S2WS(err) << endl;
+			//wcout << S2WS(err) << endl;
+			return -1;
 		}
 	}
 	else
@@ -227,13 +233,13 @@ int DataBase<T>::DelNoteUser(T * s)
 
 	if (is_same<T, User>::value)
 	{
-		table = "user";
+		table = "users";
 	}
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
 		string sql("delete from " + table + " where login='" +WS2S(s->getLogin()) +"' and password = '"
-			+ WS2S(s->getPassword()) + "' ;");
+			+ WS2S(s->getPassword()) + "' and student_id = '" + WS2S(s->getStudentId()) + "';");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
@@ -380,4 +386,48 @@ inline vector<wstring> DataBase<T>::getColNames(wstring table)
 	sqlite3_close(db);
 
 	return result;
+}
+
+template<class T>
+inline Student * DataBase<T>::getStudentById(wstring id)
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string table = "students";
+
+	Student* s = new Student();
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select student_id, first_name, last_name, patronymic, ed_form, email, phone from " + table +
+					"where student_id = '" + WS2S(id) + ";");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		while (sqlite3_column_text(stmt, 0))
+		{
+			s->setStudentId(S2WS(string((char *)sqlite3_column_text(stmt, 0))));
+			s->setName(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
+			s->setSurname(S2WS(string((char *)sqlite3_column_text(stmt, 2))));
+			s->setPatronomic(S2WS(string((char *)sqlite3_column_text(stmt, 3))));
+			s->setEdForm(S2WS(string((char *)sqlite3_column_text(stmt, 4))));
+			s->setEmail(S2WS(string((char *)sqlite3_column_text(stmt, 5))));
+			s->setPhone(S2WS(string((char *)sqlite3_column_text(stmt, 6))));
+
+			sqlite3_step(stmt);
+		}
+
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return s;
 }
