@@ -10,8 +10,16 @@ class User;
 /*----------------Class DataBase--------------------*/
 template <class T>
 class DataBase {
+private: 
+	string admin_table = "admin";
+	string user_table = "users";
+	string stud_table = "students";
+	string mark_table = "marks";
+	string group_table = "table";
+
 public:
 	int exist(T * s);
+	int existStudent(Student * s);
 	vector<T*> getObj2V();
 
 	int AddNoteUser(T*s);
@@ -63,6 +71,40 @@ inline vector<vector<wstring>> VVS2VVWS(const vector<vector<string>> vvs)
 
 template <class T>
 inline
+int DataBase<T>::existStudent(Student * s)
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string id = WS2S(s->getStudentId());
+
+	int res = 0;
+	string table;
+
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select count(*) from " + stud_table + " where student_id like '" + id + "';");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		res = sqlite3_column_int(stmt, 0);
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return -1;
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return res;
+}
+
+template <class T>
+inline
 int DataBase<T>::exist(T * s)
 {
 	/*
@@ -77,9 +119,10 @@ int DataBase<T>::exist(T * s)
 
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
+	string l, pass;
 
-	string l = WS2S(s->getLogin());
-	string pass = WS2S(s->getPassword());
+	l = WS2S(s->getLogin());
+	pass = WS2S(s->getPassword());
 
 	int res = 0;
 	string table;
@@ -199,7 +242,8 @@ inline int DataBase<T>::AddNoteUser(T * s)
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("insert into "+ table + "(login, password, student_id) values ('" + WS2S(s->getLogin()) +
+		string sql("pragma foreign_keys=on;"
+			"insert into "+ table + "(login, password, student_id) values ('" + WS2S(s->getLogin()) +
 			"', '" + WS2S(s->getPassword()) + "', '" + WS2S(s->getStudentId()) + "');");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
@@ -265,12 +309,11 @@ inline vector<Student*> DataBase<T>::getStudents2V()
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
-	string table = "students";
 	vector<T*> result;
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("select student_id, first_name, last_name, patronymic, ed_form, email, phone from " + table + ";");
+		string sql("select student_id, first_name, last_name, patronymic, ed_form, email, phone from " + stud_table + ";");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
@@ -341,7 +384,10 @@ inline map<wstring, vector<wstring>> DataBase<T>::getGrpOrMark2V(wstring mode)
 			result[key] = tmp;
 			sqlite3_step(stmt);
 		}
-
+		if (!result.size())
+		{
+			wcout << L"SELECT ERROR: Table '" << S2WS(table) << "' is Empty.'" << endl;
+		}
 	}
 	else
 	{

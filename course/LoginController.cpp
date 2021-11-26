@@ -19,10 +19,10 @@ wstring LoginController<T>::clear_input(wstring word, int mode)
 		if (ch == 32) { continue; }
 		if (ch == 8)
 		{
-			if (word.length())
+			if (word.length() > 0)
 			{
-				wcout << (wchar_t)8 << ' ' << wchar_t(8);
-				word.erase(word.length() - 1, 1);
+				if (!mode) { wcout << (wchar_t)8 << ' ' << wchar_t(8); }
+				word.erase(word.length() - 1, word.length());
 			}
 		}
 		else
@@ -47,12 +47,12 @@ bool LoginController<T>::chekAuth(T * s)
 
 		wcout << L"¬ведите логин: ";
 		login = clear_input(login, 0);
-		if (login == L"0") { return false; }
 		wcout << endl;
+		if (login == L"0") { return false; }
 		wcout << L"¬ведите пароль: ";
 		password = clear_input(password);
-		if (password == L"0") { return false; }
 		wcout << endl;
+		if (password == L"0") { return false; }
 
 		s->setLogin(login);
 		s->setPassword(password);

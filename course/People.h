@@ -15,9 +15,9 @@ public:
 	People() { ; }
 	People(std::wstring name, std::wstring surname, std::wstring patr) : name(strPPrint(name)), surname(strPPrint(surname)), patronomic(strPPrint(patr)) { ; }
 
-	void setName(std::wstring name);
-	void setSurname(std::wstring surname);
-	void setPatronomic(std::wstring patr);
+	virtual void setName(std::wstring name);
+	virtual void setSurname(std::wstring surname);
+	virtual void setPatronomic(std::wstring patr);
 
 	std::wstring getName() { return name; }
 	std::wstring getSurname() { return surname; }

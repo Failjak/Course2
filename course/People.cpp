@@ -7,10 +7,11 @@ std::wstring People::strPPrint(std::wstring word)
 	if (word.length() > 0)
 	{
 		for (int i = 0; i < word.length(); i++) {
-			word[i] = islower(word[i]);
+			word[i] = tolower(word[i]);
 		}
 		word[0] = toupper(word[0]);
 	}
+
 	return word;
 }
 

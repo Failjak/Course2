@@ -27,7 +27,11 @@ void AdminController::main(Admin * admin)
 			StudentManageController(admin);
 			break;
 		}
-
+		case 0:
+		{
+			flag = 0;
+			return;
+		}
 		default:
 			wcout << L"Неверный выбор." << endl;
 			break;
@@ -150,7 +154,10 @@ void AdminController::pprinStudent(std::vector<Student*> array, std::wstring tit
 	HANDLE hCon;
 	hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	int max_size_FN = 0, max_size_fac = 0, max_size_spec = 0;
+	int max_size_FN = 0, max_size_fac = 0, max_size_spec = 0, 
+		max_size_group = 0, max_size_av_mark = 0, max_size_stipend = 0, 
+		max_size_mail = 0, max_size_phone = 0;
+
 	for (int i = 0; i < array.size(); i++)
 	{
 		if (array.at(i)->getFullName().length() > max_size_FN)
@@ -159,6 +166,18 @@ void AdminController::pprinStudent(std::vector<Student*> array, std::wstring tit
 			max_size_fac = array.at(i)->getFaculty().size();
 		if (array.at(i)->getSpec().length() > max_size_spec)
 			max_size_spec = array.at(i)->getSpec().size();
+
+		if (array.at(i)->getGroup().length() > max_size_group)
+			max_size_group = array.at(i)->getGroup().size();
+		if (array.at(i)->getAvgMark().length() > max_size_av_mark)
+			max_size_av_mark = array.at(i)->getAvgMark().size();
+		//if (array.at(i)->getSpec().length() > max_size_stipend) // TO DO Сделать стипендию
+			//max_size_stipend = array.at(i)->getSpec().size();
+
+		if (array.at(i)->getGroup().length() > max_size_mail)
+			max_size_mail = array.at(i)->getGroup().size();
+		if (array.at(i)->getPhone().length() > max_size_phone)
+			max_size_phone = array.at(i)->getPhone().size();
 	}
 
 	int table_width = space_subjects + ((max_size_FN > MIN_SPACE) ? max_size_FN + 1 : MIN_SPACE) +
@@ -280,16 +299,18 @@ void AdminController::StudentManageController(Admin * admin)
 		{
 		case 1: // Просмотр студентов (фио, фак, специальность, группа, средняя оценка, стипендия(если бюджет), mail, phone)
 		{
-			//system("cls");
+			system("cls");
 
 			vector<Student*> students = admin->getStudents2V();
 
 			AdminController::pprinStudent(students, L"Студенты");
 
 			system("pause");
-			//system("cls");
+			system("cls");
+
+			break;
 		}
-		case 2
+		case 3: // Добавление студента
 		{
 			if (admin->AddStudent() == 1)
 			{
@@ -311,5 +332,4 @@ void AdminController::StudentManageController(Admin * admin)
 			break;
 		}
 	}
-
 }

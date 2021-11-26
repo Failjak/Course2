@@ -88,29 +88,28 @@ int main(int argc, char* argv[])
 
 	int flag = 1;
 
-	create_table();
+	//create_table();
 
 	while (flag)
 	{
 		system("cls");
 		//switch (type_menu())
-		switch (1)
+		switch(1)
 		{
 		case 1:
 		{
 			Admin admin;
-			/*LoginController<Admin> lContr;
+			LoginController<Admin> lContr;
 
 			system("cls");
-			if (lContr.chekAuth(&admin))
+			AdminController::main(&admin);
+
+			/*if (lContr.chekAuth(&admin))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно.\n" << endl;
-				AdminController::main();
-
-				system("pause");
+				AdminController::main(&admin);
 			}*/
-			AdminController::main(&admin);
 			break;
 		}
 		case 2:

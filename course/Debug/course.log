@@ -1,14 +1,19 @@
 ﻿  AdminController.cpp
-h:\studing\course2\course\course\database.h(51): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(54): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(99): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(101): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(103): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(59): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(62): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(103): warning C4018: '<': signed/unsigned mismatch
 h:\studing\course2\course\course\admincontroller.cpp(105): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(133): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(154): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(156): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(158): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(160): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(188): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(107): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(109): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(137): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(161): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(163): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(165): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(167): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(195): warning C4018: '<': signed/unsigned mismatch
+  Student.cpp
+h:\studing\course2\course\course\student.cpp(23): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\student.cpp(34): warning C4101: 'avg': unreferenced local variable
+  Generating Code...
+h:\studing\course2\course\course\student.cpp(42): warning C4715: 'Student::getAvgMark': not all control paths return a value
   course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe

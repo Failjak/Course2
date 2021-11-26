@@ -9,7 +9,8 @@ void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, w
 	{
 		key = st->at(i)->getStudentId();
 		map<wstring, vector<wstring>>::const_iterator pos = b.find(key);
-		if (pos != b.end()) {
+
+		if (b.count(key))  {
 			if (mode == L"group")
 			{
 				st->at(i)->setGroup(pos->second.at(0));
@@ -18,7 +19,7 @@ void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, w
 			}
 			else if (mode == L"mark")
 			{
-				st->at(i)->setMarks(pos->second);
+				st->at(i)->setMarks(pos->second, b[L"subj"]);
 			}
 		}
 	}
@@ -34,7 +35,11 @@ vector<Student*> Admin::getStudents2V()
 	students = db.getStudents2V();
 	groups = db.getGrpOrMark2V(L"group");
 	marks = db.getGrpOrMark2V(L"mark");
-	marks[L"subj"] = db.getColNames(L"marks");
+	if (marks.size())
+	{
+		marks[L"subj"] = db.getColNames(L"marks");
+		marks[L"subj"].erase(marks[L"subj"].begin()); // del 'student_id' from subjects
+	}
 
 	mergeStGr(&students, groups, L"group");
 	mergeStGr(&students, marks, L"mark");
@@ -47,7 +52,7 @@ vector<User*> Admin::getUsers2V()
 	DataBase<User> db;
 	vector<User *> users = db.getObj2V();
 
-	for (int i =0 ; i< users.size(); i++)
+	for (int i = 0; i < users.size(); i++)
 		users[i]->setStudent(db.getStudentById(users[i]->getStudentId()));
 
 	return users;
@@ -135,7 +140,7 @@ int Admin::AddStudent()
 
 	Student student(student_id, first_name, last_name, patr, group, faculty, spec, email, phone, ed_form);
 
-	if (db.exist(&student))
+	if (db.existStudent(&student))
 	{
 		wcout << L"Такой пользователь уже существует." << endl;
 		return -1;
