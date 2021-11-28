@@ -145,7 +145,7 @@ int Admin::AddStudent()
 
 	Student student(student_id, first_name, last_name, patr, group, faculty, spec, email, phone, ed_form);
 
-	if (db.existStudent(&student))
+	if (db.existStudent(student.getStudentId()))
 	{
 		wcout << L"Такой пользователь уже существует." << endl;
 		return -1;
@@ -166,6 +166,63 @@ int Admin::DelStudent(Student * s)
 	{
 		return 1;
 	}
+
+	return 0;
+}
+
+int Admin::AddMarksToStudent(Student * s)
+{
+	DataBase<Student> db;
+
+
+
+	return 0;
+}
+
+int Admin::AddMarksToStudent(wstring student_id)
+{
+	DataBase<Student> db;
+
+	/*
+		Считывает какие есть поля в таблице(было бы правильно иметь таблицу
+			со всеми прдеметами и искать по нашему курсу, факультету, специальности)
+		После чего заменяем считанне поля по нашему чему-то и просим ввести данные
+		Запихиваем в вектор, и все чики-пики!!!
+	*/
+
+	if (!db.existStudent(student_id))
+	{
+		wcout << L"Такого студента не существует." << endl;
+		return -1;
+	}
+
+	vector<wstring> cols = db.getColNames(L"marks");
+	vector<int> marks;
+
+	wcout << L"Введите оценки по предметам:" << endl;
+	for (int i = 2; i < cols.size(); i++) // bacause first&sec elem is student_id and term
+	{
+		int num;
+
+		wcout << DBfield_subj.at(cols.at(i)) << L": ";
+		CIN_FLUSH;
+		cin >> num;
+		marks.push_back(num);
+
+		/*try
+		{
+			wcout << DBfield_subj.at(cols.at(i)) << L": ";
+			cin >> num;
+			marks.push_back(num);
+		}
+		catch (int)
+		{
+					
+			std::wcerr << L"We caught an int exception with value: " << endl;
+		}*/
+	}
+
+	//DBfield_subj.at(L"Math");
 
 	return 0;
 }

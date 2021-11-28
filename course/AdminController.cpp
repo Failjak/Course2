@@ -97,6 +97,22 @@ int AdminController::stud_menu()
 	return choice;
 }
 
+int AdminController::marks_menu()
+{
+	coutTitle(L"Меню добавления оценок");
+
+	int choice;
+
+	wcout << L"1) - Выбор студента." << endl;
+	wcout << L"2) - Добавление по id студента." << endl;
+	wcout << L"0) - Назад." << endl;
+	wcout << L" Ваш выбор: ";
+	CIN_FLUSH;
+
+	cin >> choice;
+	return choice;
+}
+
 void AdminController::pprintUser(vector<User*> array, wstring title)
 {
 
@@ -379,5 +395,70 @@ void AdminController::StudentManageController(Admin * admin)
 			wcout << L"Неверный выбор." << endl;
 			break;
 		}
+	}
+}
+
+void AdminController::MarksManage(Admin * admin)
+{
+	/*
+		Для начала выведем всех студентов и спросим для какого .
+		Или же можно сделать меню:	1) Введи ид 
+									2) Выберете пользователя сами
+	*/
+
+	switch (marks_menu())
+	{
+	case 1: // Выираем студента сами
+	{
+		system("cls");
+
+		int id;
+		vector<Student*> students = admin->getStudents2V();
+
+		AdminController::pprinStudent(students, L"Добавление оценок");
+		wcout << L"№ студента: ";
+		wcin >> id;
+
+		if (admin->AddMarksToStudent(students.at(id - 1)) == 1)
+		{
+			wcout << L"Добавление оценок прошло успешно." << endl;
+		}
+		else {
+			wcout << L"Ошибка добавление оценок." << endl;
+		}
+
+		system("pause");
+		system("cls");
+		break;
+	}
+	case 2: // Добавляем по id // TODO Сделать валидацию на существование id
+	{
+		system("cls");
+
+		wstring student_id;
+		coutTitle(L"Добавление оценок");
+
+		wcout << L"ID-студента: ";
+		CIN_FLUSH;
+		wcin >> student_id;
+
+		if (admin->AddMarksToStudent(student_id) == 1)
+		{
+			wcout << L"Добавление оценок прошло успешно." << endl;
+		}
+		else {
+			wcout << L"Ошибка добавление оценок." << endl;
+		}
+
+		system("pause");
+		system("cls");
+		break;
+	}
+	case 0:
+		break;
+
+	default:
+		wcout << L"Неверный выбор." << endl;
+		break;
 	}
 }

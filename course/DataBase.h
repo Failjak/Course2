@@ -20,7 +20,7 @@ private:
 
 public:
 	int exist(T * s);
-	int existStudent(Student * s);
+	int existStudent(wstring student_id);
 	vector<T*> getObj2V();
 	
 	/*-----Admin------*/
@@ -32,12 +32,13 @@ public:
 
 	/*-----Student------*/
 	int AddNoteStudent(Student *s);
-	/*-----Student------*/
-
+	int AddMarks2Student(vector<int> marks, Student *s);
 	vector<Student*> getStudents2V();
 	map<wstring, vector<wstring>> getGrpOrMark2V(wstring mode);
-	vector<wstring> getColNames(wstring table);
 	Student * getStudentById(wstring id);
+	/*-----Student------*/
+
+	vector<wstring> getColNames(wstring table);
 
 };
 /*----------------End Class DataBase----------------*/
@@ -80,12 +81,11 @@ inline vector<vector<wstring>> VVS2VVWS(const vector<vector<string>> vvs)
 
 template <class T>
 inline
-int DataBase<T>::existStudent(Student * s)
+int DataBase<T>::existStudent(wstring student_id)
 {
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
-	string id = WS2S(s->getStudentId());
 
 	int res = 0;
 	string table;
@@ -93,7 +93,7 @@ int DataBase<T>::existStudent(Student * s)
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("select count(*) from " + stud_table + " where student_id like '" + id + "';");
+		string sql("select count(*) from " + stud_table + " where student_id like '" + WS2S(student_id) + "';");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
@@ -344,6 +344,49 @@ inline int DataBase<T>::AddNoteStudent(Student * s)
 			wcout << S2WS(err) << endl;
 			return 0;
 		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return -1;
+	}
+
+	sqlite3_close(db);
+
+	return 1;
+}
+
+template<class T>
+inline int DataBase<T>::AddMarks2Student(vector<int> marks, Student * s)
+{
+	/*
+		Func add inf about Student to db.
+
+		return: 1 - good auth;
+				0 - faild auth;
+				-1 - faild opening db.
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		/*wstring info = L"'" + s->getStudentId() + L"'," + L"'" + s->getName() + L"'," + L"'" + s->getSurname() + L"'," + L"'" + s->getPatronomic() +
+			L"'," + L"'" + s->getEdForm() + L"'," + L"'" + s->getEmail() + L"'," + L"'" + s->getPhone() + L"'";
+
+		string sql("pragma foreign_keys=on;"
+			"insert into " + stud_table + " values (" + WS2S(info) + ");");*/
+
+		/*int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+
+		if (rc != SQLITE_OK)
+		{
+			wcout << S2WS(err) << endl;
+			return 0;
+		}*/
 	}
 	else
 	{

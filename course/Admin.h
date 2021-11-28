@@ -22,12 +22,17 @@ public:
 	Admin() { ; }
 	Admin(std::wstring login, std::wstring pass) : User(login, pass, L"") { ; }
 
-	vector<Student*> getStudents2V();
-	vector<User*> getUsers2V();
-
+	/*-----Admin------*/
 	int AddUser();
+	vector<User*> getUsers2V();
 	int DelUser(User * s);
+	/*-----Admin------*/
 
+	/*-----Student------*/
 	int AddStudent();
 	int DelStudent(Student * s);
+	vector<Student*> getStudents2V();
+	int AddMarksToStudent(Student *s);
+	int AddMarksToStudent(wstring student_id);
+	/*-----Student------*/
 };

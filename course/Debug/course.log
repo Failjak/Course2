@@ -1,7 +1,9 @@
-﻿  main.cpp
-h:\studing\course2\course\course\database.h(68): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(71): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\main.cpp(17): warning C4101: 'stmt': unreferenced local variable
+﻿  Admin.cpp
+h:\studing\course2\course\course\database.h(69): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(72): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(8): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(60): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(203): warning C4018: '<': signed/unsigned mismatch
 c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
           with
           [
@@ -27,6 +29,34 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Other1=const wchar_t (&)[5],
               _Other2=double
           ]
-Debug\LoginController.obj : warning LNK4042: object specified more than once; extras ignored
-LINK : warning LNK4067: ambiguous entry point; selected 'mainCRTStartup'
+h:\studing\course2\course\course\database.h(280): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(278): note: while compiling class template member function 'int DataBase<Student>::DelNoteByStydentId(std::wstring)'
+  h:\studing\course2\course\course\admin.cpp(165): note: see reference to function template instantiation 'int DataBase<Student>::DelNoteByStydentId(std::wstring)' being compiled
+  h:\studing\course2\course\course\admin.cpp(37): note: see reference to class template instantiation 'DataBase<Student>' being compiled
+h:\studing\course2\course\course\database.h(328): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(318): note: while compiling class template member function 'int DataBase<Student>::AddNoteStudent(Student *)'
+  h:\studing\course2\course\course\admin.cpp(154): note: see reference to function template instantiation 'int DataBase<Student>::AddNoteStudent(Student *)' being compiled
+h:\studing\course2\course\course\database.h(505): warning C4101: 'err': unreferenced local variable
+  h:\studing\course2\course\course\database.h(502): note: while compiling class template member function 'std::vector<std::wstring,std::allocator<_Ty>> DataBase<Student>::getColNames(std::wstring)'
+          with
+          [
+              _Ty=std::wstring
+          ]
+  h:\studing\course2\course\course\admin.cpp(45): note: see reference to function template instantiation 'std::vector<std::wstring,std::allocator<_Ty>> DataBase<Student>::getColNames(std::wstring)' being compiled
+          with
+          [
+              _Ty=std::wstring
+          ]
+h:\studing\course2\course\course\database.h(239): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(229): note: while compiling class template member function 'int DataBase<User>::AddNoteUser(T *)'
+          with
+          [
+              T=User
+          ]
+  h:\studing\course2\course\course\admin.cpp(93): note: see reference to function template instantiation 'int DataBase<User>::AddNoteUser(T *)' being compiled
+          with
+          [
+              T=User
+          ]
+  h:\studing\course2\course\course\admin.cpp(57): note: see reference to class template instantiation 'DataBase<User>' being compiled
   course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe

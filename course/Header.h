@@ -16,6 +16,7 @@
 #define CIN_FLUSH if (std::cin.fail()) {std::cin.clear(); std::cin.ignore();}
 
 constexpr auto DB_PATH = "migrate/main.db";
+
 constexpr auto HEADER_SPACE = 32;
 
 inline void coutTitle(std::wstring title) {
@@ -23,3 +24,11 @@ inline void coutTitle(std::wstring title) {
 	std::wcout << std::wstring(title_table_widht, L'─') << title 
 		<< std::wstring(title_table_widht, L'─') << L"\n" << std::endl;
 }
+
+const std::map<std::wstring, std::wstring> DBfield_subj = {
+	{L"Math", L"Матем"},
+	{L"OOP", L"ООП"},
+	{L"Philosophy", L"Философия"},
+	{L"CN", L"КС"},
+	{L"Economic", L"Экономика"}
+};
