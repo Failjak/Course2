@@ -27,6 +27,10 @@ void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, w
 
 vector<Student*> Admin::getStudents2V()
 {
+	/*
+		schema marks: student_id: {term, subjs ...}
+	*/
+	
 	vector<Student *> students;
 	map<wstring, vector<wstring>> groups;
 	map<wstring, vector<wstring>> marks;
@@ -35,6 +39,7 @@ vector<Student*> Admin::getStudents2V()
 	students = db.getStudents2V();
 	groups = db.getGrpOrMark2V(L"group");
 	marks = db.getGrpOrMark2V(L"mark");
+
 	if (marks.size())
 	{
 		marks[L"subj"] = db.getColNames(L"marks");
@@ -96,7 +101,7 @@ int Admin::AddUser()
 int Admin::DelUser(User * s)
 {
 	DataBase<User> db;
-	if (db.DelNoteUser(s) == 1)
+	if (db.DelNoteByStydentId(s->getStudentId()) == 1)
 	{
 		return 1;
 	}
@@ -146,15 +151,21 @@ int Admin::AddStudent()
 		return -1;
 	}
 
-	/*if (db.AddNoteStudent(&Student) == 1)
+	if (db.AddNoteStudent(&student))
 	{
 		return true;
-	}*/
+	}
 
 	return false;
 }
 
-int Admin::DelStudent(User * s)
+int Admin::DelStudent(Student * s)
 {
+	DataBase<Student> db;
+	if (db.DelNoteByStydentId(s->getStudentId()) == 1)
+	{
+		return 1;
+	}
+
 	return 0;
 }

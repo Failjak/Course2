@@ -27,6 +27,11 @@ void AdminController::main(Admin * admin)
 			StudentManageController(admin);
 			break;
 		}
+		case 3:
+		{
+			system("cls");
+			MarksManage(admin);
+		}
 		case 0:
 		{
 			flag = 0;
@@ -48,6 +53,7 @@ int AdminController::menu()
 
 	wcout << L"1) - Работа с пользователями." << endl;
 	wcout << L"2) - Работа со студентами." << endl;
+	wcout << L"3) - Выставить оценки." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
@@ -146,7 +152,7 @@ void AdminController::pprintUser(vector<User*> array, wstring title)
 	wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
 }
 
-void AdminController::pprinStudent(std::vector<Student*> array, std::wstring title)
+void AdminController::pprinStudent(std::vector<Student*> students, std::wstring title)
 {
 	// (фио, фак, специальность, группа, средняя оценка, стипендия(если бюджет), mail, phone)
 	int space_subjects = 5;
@@ -158,31 +164,41 @@ void AdminController::pprinStudent(std::vector<Student*> array, std::wstring tit
 		max_size_group = 0, max_size_av_mark = 0, max_size_stipend = 0, 
 		max_size_mail = 0, max_size_phone = 0;
 
-	for (int i = 0; i < array.size(); i++)
+	for (int i = 0; i < students.size(); i++)
 	{
-		if (array.at(i)->getFullName().length() > max_size_FN)
-			max_size_FN = array.at(i)->getFullName().size();
-		if (array.at(i)->getFaculty().length() > max_size_fac)
-			max_size_fac = array.at(i)->getFaculty().size();
-		if (array.at(i)->getSpec().length() > max_size_spec)
-			max_size_spec = array.at(i)->getSpec().size();
+		if (students.at(i)->getFullName().length() > max_size_FN)
+			max_size_FN = students.at(i)->getFullName().size();
 
-		if (array.at(i)->getGroup().length() > max_size_group)
-			max_size_group = array.at(i)->getGroup().size();
-		if (array.at(i)->getAvgMark().length() > max_size_av_mark)
-			max_size_av_mark = array.at(i)->getAvgMark().size();
+		if (students.at(i)->getFaculty().length() > max_size_fac)
+			max_size_fac = students.at(i)->getFaculty().size();
+
+		if (students.at(i)->getSpec().length() > max_size_spec)
+			max_size_spec = students.at(i)->getSpec().size();
+
+		if (students.at(i)->getGroup().length() > max_size_group)
+			max_size_group = students.at(i)->getGroup().size();
+
+		if (to_string(students.at(i)->getAvgMark()).length() > max_size_av_mark)
+			max_size_av_mark = to_string(students.at(i)->getAvgMark()).length();
 		//if (array.at(i)->getSpec().length() > max_size_stipend) // TO DO Сделать стипендию
 			//max_size_stipend = array.at(i)->getSpec().size();
 
-		if (array.at(i)->getGroup().length() > max_size_mail)
-			max_size_mail = array.at(i)->getGroup().size();
-		if (array.at(i)->getPhone().length() > max_size_phone)
-			max_size_phone = array.at(i)->getPhone().size();
+		if (students.at(i)->getGroup().length() > max_size_mail)
+			max_size_mail = students.at(i)->getGroup().size();
+
+		if (students.at(i)->getPhone().length() > max_size_phone)
+			max_size_phone = students.at(i)->getPhone().size();
 	}
 
-	int table_width = space_subjects + ((max_size_FN > MIN_SPACE) ? max_size_FN + 1 : MIN_SPACE) +
+	int table_width = space_subjects + (
+		(max_size_FN > MIN_SPACE) ? max_size_FN + 1 : MIN_SPACE) +
 		(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) +
-		(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE);
+		(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) +
+		(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) +
+		(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) +
+		//(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) +
+		(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) +
+		(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE);
 
 
 	if (title.length())
@@ -199,18 +215,29 @@ void AdminController::pprinStudent(std::vector<Student*> array, std::wstring tit
 		<< setw(5) << left << L"№"
 		<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << L"ФИО"
 		<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << L"Факультет"
-		<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << L"Спецальность";
+		<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << L"Спецальность"
+		<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << L"Группа"
+		<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << L"Ср. балл"
+		//<< setw(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) << left << L"Стипендия"
+		<< setw(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) << left << L"Почта"
+		<< setw(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE) << left << L"Телефон";
+
 
 	SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 	wcout << L"│" << endl;
 
-	for (int j = 0; j < array.size(); j++) {
+	for (int j = 0; j < students.size(); j++) {
 		wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
 		wcout << L"│"
 			<< setw(5) << j + 1
-			<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << array[j]->getFullName()
-			<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << array[j]->getFaculty()
-			<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << array[j]->getSpec()
+			<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << students[j]->getFullName()
+			<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << students[j]->getFaculty()
+			<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << students[j]->getSpec()
+			<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << students[j]->getGroup()
+			<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << students[j]->getAvgMark()
+			//<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << students[j]->get()
+			<< setw(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) << left << students[j]->getEmail()
+			<< setw(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE) << left << students[j]->getPhone()
 			<< left << L"│" << endl;
 	}
 	wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
@@ -319,6 +346,27 @@ void AdminController::StudentManageController(Admin * admin)
 			else {
 				wcout << L"Ошибка добавления." << endl;
 			}
+			system("pause");
+			system("cls");
+			break;
+		}
+		case 4: // Удаление студента
+		{
+			int id;
+			vector<Student*> students = admin->getStudents2V();
+
+			AdminController::pprinStudent(students, L"Удаление студента");
+			wcout << L"№ студентя для удаление: ";
+			wcin >> id;
+
+			if (admin->DelStudent(students.at(id - 1)) == 1)
+			{
+				wcout << L"Удаление выполнено успешно." << endl;
+			}
+			else {
+				wcout << L"Ошибка удаления." << endl;
+			}
+
 			system("pause");
 			system("cls");
 			break;

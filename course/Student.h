@@ -10,7 +10,7 @@ using namespace std;
 /*----------------Class Student--------------------*/
 class Student : public People {
 private:
-	map <wstring, vector<int>> marks;
+	map<int, map <wstring, int>> marks; // term: (subj: {mark, ...})
 	wstring student_id;
 	wstring group;
 	wstring faculty;
@@ -42,6 +42,8 @@ public:
 	wstring getSpec() { return spec; }
 	wstring getEmail() { return email; }
 	wstring getPhone() { return phone; }
+	wstring getEdFormWstr() { return education_form == L"F" ? L"Бюджет" : L"Платно"; }
 	wstring getEdForm() { return education_form; }
+	int getEdFormInt() { return education_form == L"F" ? 1 : 0; }
 	int getAvgMark();
 };

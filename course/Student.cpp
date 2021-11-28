@@ -20,11 +20,16 @@ void Student::setMarks(vector<wstring> tmp, vector<wstring> subj)
 		return;
 	}
 
-	for (int s = 0; s < subj.size(); s++)
+	map <wstring, int> subj_map;
+
+	for (int s = 1; s < subj.size(); s++)
 	{
-		marks[subj[s]] = {};
-		marks[subj[s]].push_back(stoi(tmp[s]));
+		subj_map[subj[s]] = {};
+		subj_map[subj[s]] = stoi(tmp[s]);
+
 	}
+	marks[stoi(tmp[0])] = subj_map;
+
 }
 
 int Student::getAvgMark()
@@ -34,9 +39,6 @@ int Student::getAvgMark()
 	int avg, sum = 0;
 	map <wstring, vector<int>>::iterator iter;
 
-	for (iter = marks.begin(); iter != marks.end(); iter++)
-	{
-		sum += (*iter).second.at(0); // пока берем только первую оценку
-		iter++;
-	}
+	//for (iter = marks.begin(); iter != marks.end(); iter++)
+		//sum += (*iter).second.at(0); // пока берем только первую оценку
 }

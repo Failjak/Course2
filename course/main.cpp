@@ -38,10 +38,10 @@ void create_table()
 			"phone TEXT NOT NULL UNIQUE,"
 			"FOREIGN KEY(student_id) REFERENCES users(student_id));");*/
 
-		string sql("create table users("
+		/*string sql("create table users("
 					"login text not null,"
 					"password text not null,"
-					"student_id text CHECK(length(student_id) = 8) PRIMARY KEY not null);");
+					"student_id text CHECK(length(student_id) = 8) PRIMARY KEY not null);");*/
 
 		/*string sql("CREATE TABLE groups("
 			"student_id text CHECK(length(student_id) = 8) PRIMARY KEY,"
@@ -51,15 +51,16 @@ void create_table()
 			"FOREIGN KEY (student_id) REFERENCES students(student_id)"
 			");");*/
 
-		/*string sql("create table marks("
+		string sql("create table marks("
 					"student_id text CHECK(length(student_id) = 8) PRIMARY KEY,"
-					"math INTEGER not null,"
-					"oop INTEGER not null,"
-					"philosophy INTEGER not null,"
+					"term INTEGER not null,"
+					"Math INTEGER not null,"
+					"OOP INTEGER not null,"
+					"Philosophy INTEGER not null,"
 					"CN INTEGER not null,"
-					"economy INTEGER not null,"
+					"Economic INTEGER not null,"
 					"FOREIGN KEY (student_id) REFERENCES students(student_id)"
-					");");*/
+					");");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
