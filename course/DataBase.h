@@ -27,8 +27,6 @@ public:
 	int AddNoteUser(T *s);
 	/*-----Admin------*/
 
-	int DelNoteByStydentId(wstring id);
-
 
 	/*-----Student------*/
 	int AddNoteStudent(Student *s);
@@ -37,6 +35,7 @@ public:
 	map<wstring, vector<wstring>> getGroup2V();
 	vector<pair<int, vector<int>>> getMarks2VById(wstring student_id);
 	Student * getStudentById(wstring id);
+	int DelNoteByStydentId(wstring id);
 	/*-----Student------*/
 
 	vector<wstring> getColNames(wstring table);
@@ -199,14 +198,21 @@ inline vector<T*> DataBase<T>::getObj2V()
 
 		while (sqlite3_column_text(stmt, 0))
 		{
-
+			// static_cast<const char*>(sqlite3_column_text16(statement, index))
 			T *s = new T;
-			s->setLogin(S2WS(string((char *)sqlite3_column_text(stmt, 0))));
+			s->setLogin(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0)));
+			s->setPassword(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
+
+			if (sqlite3_column_text(stmt, 2)) {
+				s->setStudentId(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
+			}
+
+			/*s->setLogin(S2WS(string((char *)sqlite3_column_text(stmt, 0))));
 			s->setPassword(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
 
 			if (sqlite3_column_text(stmt, 2)){ 
 				s->setStudentId(S2WS(string((char *)sqlite3_column_text(stmt, 2))));
-			}
+			}*/
 
 			result.push_back(s);
 			sqlite3_step(stmt);
@@ -418,13 +424,13 @@ inline vector<Student*> DataBase<T>::getStudents2V()
 		while (sqlite3_column_text(stmt, 0))
 		{
 			T *s = new T();
-			s->setStudentId(S2WS(string((char *)sqlite3_column_text(stmt, 0))));
-			s->setName(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
-			s->setSurname(S2WS(string((char *)sqlite3_column_text(stmt, 2))));
-			s->setPatronomic(S2WS(string((char *)sqlite3_column_text(stmt, 3))));
-			s->setEdForm(S2WS(string((char *)sqlite3_column_text(stmt, 4))));
-			s->setEmail(S2WS(string((char *)sqlite3_column_text(stmt, 5))));
-			s->setPhone(S2WS(string((char *)sqlite3_column_text(stmt, 6))));
+			s->setStudentId(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0)));
+			s->setName(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
+			s->setSurname(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
+			s->setPatronomic(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 3)));
+			s->setEdForm(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 4)));
+			s->setEmail(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 5)));
+			s->setPhone(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 6)));
 
 			result.push_back(s);
 
@@ -464,10 +470,10 @@ inline map<wstring, vector<wstring>> DataBase<T>::getGroup2V()
 		{
 			vector<wstring> tmp;
 
-			wstring key = S2WS(string((char *)sqlite3_column_text(stmt, 0)));
+			wstring key = static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0));
 			
 			for (int j =1; sqlite3_column_text(stmt, j); j++)
-				tmp.push_back(S2WS(string((char *)sqlite3_column_text(stmt, j))));
+				tmp.push_back(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, j)));
 
 			result[key] = tmp;
 			sqlite3_step(stmt);
@@ -528,7 +534,7 @@ inline vector<pair<int, vector<int>>> DataBase<T>::getMarks2VById(wstring studen
 		{
 			vector<int> tmp;
 
-			wstring student_id = S2WS(string((char *)sqlite3_column_text(stmt, 0)));
+			wstring student_id = static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0));
 			int term = sqlite3_column_int(stmt, 1);
 
 			for (int j = 2; sqlite3_column_text(stmt, j); j++)
@@ -573,7 +579,7 @@ inline vector<wstring> DataBase<T>::getColNames(wstring table)
 
 		while (sqlite3_column_text(stmt, 0))
 		{
-			result.push_back(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
+			result.push_back(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
 			sqlite3_step(stmt);
 		}
 
@@ -608,13 +614,13 @@ inline Student * DataBase<T>::getStudentById(wstring id)
 
 		while (sqlite3_column_text(stmt, 0))
 		{
-			s->setStudentId(S2WS(string((char *)sqlite3_column_text(stmt, 0))));
-			s->setName(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
-			s->setSurname(S2WS(string((char *)sqlite3_column_text(stmt, 2))));
-			s->setPatronomic(S2WS(string((char *)sqlite3_column_text(stmt, 3))));
-			s->setEdForm(S2WS(string((char *)sqlite3_column_text(stmt, 4))));
-			s->setEmail(S2WS(string((char *)sqlite3_column_text(stmt, 5))));
-			s->setPhone(S2WS(string((char *)sqlite3_column_text(stmt, 6))));
+			s->setStudentId(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0)));
+			s->setName(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
+			s->setSurname(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
+			s->setPatronomic(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 3)));
+			s->setEdForm(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 4)));
+			s->setEmail(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 5)));
+			s->setPhone(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 6)));
 
 			sqlite3_step(stmt);
 		}

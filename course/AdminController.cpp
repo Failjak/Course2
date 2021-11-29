@@ -58,7 +58,7 @@ int AdminController::menu()
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
 
-	cin >> choice;
+	wcin >> choice;
 	return choice;
 }
 
@@ -75,7 +75,7 @@ int AdminController::user_menu()
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
 
-	cin >> choice;
+	wcin >> choice;
 	return choice;
 }
 
@@ -93,7 +93,7 @@ int AdminController::stud_menu()
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
 
-	cin >> choice;
+	wcin >> choice;
 	return choice;
 }
 
@@ -109,7 +109,7 @@ int AdminController::marks_menu()
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
 
-	cin >> choice;
+	wcin >> choice;
 	return choice;
 }
 

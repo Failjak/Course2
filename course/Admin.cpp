@@ -77,6 +77,8 @@ int Admin::AddUser()
 
 	coutTitle(L"Добавление пользователя");
 
+//	system("chcp 1251");
+
 	wcout << L"Введите логин: ";
 	wcin >> login;
 	wcout << L"Введите пароль: ";

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <Windows.h>
+#include <io.h>
+#include <fcntl.h>
 
 #include "LoginController.h"
 #include "LoginController.cpp"
@@ -79,13 +81,9 @@ void create_table()
 
 int main(int argc, char* argv[])
 {
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
-
-	locale::global(std::locale(".utf-8"));
-
-	system("chcp 65001");
-	system("cls");
+	_setmode(_fileno(stdout), _O_U16TEXT);
+	_setmode(_fileno(stdin), _O_U16TEXT);
+	_setmode(_fileno(stderr), _O_U16TEXT);
 
 	int flag = 1;
 
