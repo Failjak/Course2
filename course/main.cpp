@@ -21,11 +21,11 @@ void create_table()
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		/*string sql("create table students_groups("
+		/*string sql("create table students_marks("
 			"student_id text not null,"
-			"student_id_g text not null,"
+			"student_id_marks text not null,"
 			"FOREIGN key (student_id) REFERENCES students(student_id) on delete CASCADE on update no action,"
-			"FOREIGN key (student_id_g) REFERENCES groups(student_id) on delete CASCADE on update no action"
+			"FOREIGN key (student_id_marks) REFERENCES marks(student_id) on delete CASCADE on update no action"
 			");");*/
 
 		/*string sql("CREATE TABLE students("
@@ -52,14 +52,14 @@ void create_table()
 			");");*/
 
 		string sql("create table marks("
-					"student_id text CHECK(length(student_id) = 8) PRIMARY KEY,"
+					"student_id text CHECK(length(student_id) = 8),"
 					"term INTEGER not null,"
 					"Math INTEGER not null,"
 					"OOP INTEGER not null,"
 					"Philosophy INTEGER not null,"
 					"CN INTEGER not null,"
-					"Economic INTEGER not null,"
-					"FOREIGN KEY (student_id) REFERENCES students(student_id)"
+					"Economic INTEGER not null"
+					//"FOREIGN KEY (student_id) REFERENCES students(student_id)"
 					");");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);

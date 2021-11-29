@@ -16,7 +16,7 @@ private:
 	string user_table = "users";
 	string stud_table = "students";
 	string mark_table = "marks";
-	string group_table = "table";
+	string group_table = "groups";
 
 public:
 	int exist(T * s);
@@ -34,7 +34,8 @@ public:
 	int AddNoteStudent(Student *s);
 	int AddMarks2Student(vector<int> marks, Student *s);
 	vector<Student*> getStudents2V();
-	map<wstring, vector<wstring>> getGrpOrMark2V(wstring mode);
+	map<wstring, vector<wstring>> getGroup2V();
+	vector<pair<int, vector<int>>> getMarks2VById(wstring student_id);
 	Student * getStudentById(wstring id);
 	/*-----Student------*/
 
@@ -444,26 +445,17 @@ inline vector<Student*> DataBase<T>::getStudents2V()
 }
 
 template<class T>
-inline map<wstring, vector<wstring>> DataBase<T>::getGrpOrMark2V(wstring mode)
+inline map<wstring, vector<wstring>> DataBase<T>::getGroup2V()
 {
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
-	string table;
 	map<wstring, vector<wstring>> result;
 
-	if (mode == L"group")
-	{
-		table = "groups";
-	}
-	else if (mode == L"mark")
-	{
-		table = "marks";
-	}
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("select * from " + table + ";");
+		string sql("select * from " + group_table + ";");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
@@ -482,7 +474,74 @@ inline map<wstring, vector<wstring>> DataBase<T>::getGrpOrMark2V(wstring mode)
 		}
 		if (!result.size())
 		{
-			wcout << L"SELECT ERROR: Table '" << S2WS(table) << "' is Empty.'" << endl;
+			wcout << L"SELECT ERROR: Table '" << S2WS(group_table) << "' is Empty.'" << endl;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return result;
+}
+
+template<class T>
+inline vector<pair<int, vector<int>>> DataBase<T>::getMarks2VById(wstring student_id)
+{
+	/*
+		Get studetn_id 
+		return: {	
+					{term, {marks ...}}, 
+					{term, {marks ...}}
+				};
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	vector<pair<int, vector<int>>> result;
+
+	vector<wstring> cols = getColNames(S2WS(mark_table));
+	wstring str_cols;
+
+	for (int i = 0; i < cols.size(); i++)
+	{
+		str_cols = str_cols + S2WS(mark_table) + L"." + cols[i];
+
+		if (i < cols.size() - 1)
+			str_cols = str_cols + L",";
+	}
+
+	 wcout << str_cols << endl;
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		//"select * from students as s inner join marks as m on s.student_id = m.student_id where s.student_id like '07360022';"
+		string sql("select " + WS2S(str_cols) + " from " + stud_table + " as s inner join " + mark_table + " on s.student_id = marks.student_id where s.student_id like '" + WS2S(student_id) + "';");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		while (sqlite3_column_text(stmt, 0))
+		{
+			vector<int> tmp;
+
+			wstring student_id = S2WS(string((char *)sqlite3_column_text(stmt, 0)));
+			int term = sqlite3_column_int(stmt, 1);
+
+			for (int j = 2; sqlite3_column_text(stmt, j); j++)
+				tmp.push_back(sqlite3_column_int(stmt, j));
+
+			result.push_back(make_pair(term, tmp));
+			sqlite3_step(stmt);
+		}
+		if (!result.size())
+		{
+			wcout << L"SELECT ERROR: Table '" << S2WS(mark_table) << "' is Empty.'" << endl;
 		}
 	}
 	else

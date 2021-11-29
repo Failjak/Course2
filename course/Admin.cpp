@@ -33,21 +33,22 @@ vector<Student*> Admin::getStudents2V()
 	
 	vector<Student *> students;
 	map<wstring, vector<wstring>> groups;
-	map<wstring, vector<wstring>> marks;
+	//map<wstring, vector<wstring>> marks;
+	vector<pair<int, vector<int>>> marks;
 	DataBase<Student> db;
 
 	students = db.getStudents2V();
-	groups = db.getGrpOrMark2V(L"group");
-	marks = db.getGrpOrMark2V(L"mark");
+	groups = db.getGroup2V();
+	marks = db.getMarks2VById(L"07360022");
 
-	if (marks.size())
-	{
-		marks[L"subj"] = db.getColNames(L"marks");
-		marks[L"subj"].erase(marks[L"subj"].begin()); // del 'student_id' from subjects
-	}
+	//if (marks.size())
+	//{
+	//	marks[L"subj"] = db.getColNames(L"marks");
+	//	marks[L"subj"].erase(marks[L"subj"].begin()); // del 'student_id' from subjects
+	//}
 
 	mergeStGr(&students, groups, L"group");
-	mergeStGr(&students, marks, L"mark");
+	//mergeStGr(&students, marks, L"mark");
 
 	return students;
 }
