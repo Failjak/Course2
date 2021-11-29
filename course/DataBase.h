@@ -516,12 +516,10 @@ inline vector<pair<int, vector<int>>> DataBase<T>::getMarks2VById(wstring studen
 			str_cols = str_cols + L",";
 	}
 
-	 wcout << str_cols << endl;
-
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
 		//"select * from students as s inner join marks as m on s.student_id = m.student_id where s.student_id like '07360022';"
-		string sql("select " + WS2S(str_cols) + " from " + stud_table + " as s inner join " + mark_table + " on s.student_id = marks.student_id where s.student_id like '" + WS2S(student_id) + "';");
+		string sql("select " + WS2S(str_cols) + " from " + stud_table + " as s inner join " + mark_table + " on s.student_id = marks.student_id where s.student_id = '" + WS2S(student_id) + "';");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
@@ -541,7 +539,8 @@ inline vector<pair<int, vector<int>>> DataBase<T>::getMarks2VById(wstring studen
 		}
 		if (!result.size())
 		{
-			wcout << L"SELECT ERROR: Table '" << S2WS(mark_table) << "' is Empty.'" << endl;
+			//wcout << L"SELECT ERROR: Table '" << S2WS(mark_table) << "' is Empty.'" << endl;
+			return {};
 		}
 	}
 	else

@@ -34,7 +34,7 @@ public:
 	void setEmail(wstring m) { email = m; }
 	void setPhone(wstring p) { phone = p; }
 	void setEdForm(wstring ed_form) { education_form = ed_form; }
-	void setMarks(vector<wstring> marks, vector<wstring> subj);
+	void setMarks(vector<pair<int, vector<int>>>, vector<wstring> subj);
 
 	wstring getStudentId() { return student_id; }
 	wstring getGroup() { return group; }
@@ -45,5 +45,6 @@ public:
 	wstring getEdFormWstr() { return education_form == L"F" ? L"Бюджет" : L"Платно"; }
 	wstring getEdForm() { return education_form; }
 	int getEdFormInt() { return education_form == L"F" ? 1 : 0; }
-	int getAvgMark();
+	vector<pair<int, float>> getAvgMarkByTerm();
+	float getAvgMark();
 };

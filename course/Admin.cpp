@@ -3,23 +3,19 @@
 
 void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, wstring mode) 
 {
-	wstring key;
+	wstring student_id;
 
 	for (int i = 0; i < st->size(); i++)
 	{
-		key = st->at(i)->getStudentId();
-		map<wstring, vector<wstring>>::const_iterator pos = b.find(key);
+		student_id = st->at(i)->getStudentId();
+		map<wstring, vector<wstring>>::const_iterator pos = b.find(student_id);
 
-		if (b.count(key))  {
+		if (b.count(student_id))  {
 			if (mode == L"group")
 			{
 				st->at(i)->setGroup(pos->second.at(0));
 				st->at(i)->setFaculty(pos->second.at(1));
 				st->at(i)->setSpec(pos->second.at(2));
-			}
-			else if (mode == L"mark")
-			{
-				st->at(i)->setMarks(pos->second, b[L"subj"]);
 			}
 		}
 	}
@@ -33,22 +29,27 @@ vector<Student*> Admin::getStudents2V()
 	
 	vector<Student *> students;
 	map<wstring, vector<wstring>> groups;
-	//map<wstring, vector<wstring>> marks;
 	vector<pair<int, vector<int>>> marks;
+	vector<wstring> subj;
 	DataBase<Student> db;
 
 	students = db.getStudents2V();
 	groups = db.getGroup2V();
-	marks = db.getMarks2VById(L"07360022");
+	
+	for (int i = 0; i < students.size(); i++)
+	{
+		wstring student_id = students.at(i)->getStudentId();
 
-	//if (marks.size())
-	//{
-	//	marks[L"subj"] = db.getColNames(L"marks");
-	//	marks[L"subj"].erase(marks[L"subj"].begin()); // del 'student_id' from subjects
-	//}
+		marks = db.getMarks2VById(student_id);
+		if (marks.size())
+		{
+			subj = db.getColNames(L"marks");
+			subj.erase(subj.begin(), subj.begin()+2); // del 'student_id'&'tern' from subjects
+		}
 
+		students.at(i)->setMarks(marks, subj);
+	}
 	mergeStGr(&students, groups, L"group");
-	//mergeStGr(&students, marks, L"mark");
 
 	return students;
 }
