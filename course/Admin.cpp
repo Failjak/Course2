@@ -1,3 +1,5 @@
+#include <conio.h>
+
 #include "Admin.h"
 #include "Header.h"
 
@@ -77,8 +79,6 @@ int Admin::AddUser()
 
 	coutTitle(L"Добавление пользователя");
 
-//	system("chcp 1251");
-
 	wcout << L"Введите логин: ";
 	wcin >> login;
 	wcout << L"Введите пароль: ";
@@ -155,7 +155,7 @@ int Admin::AddStudent()
 		return -1;
 	}
 
-	if (db.AddNoteStudent(&student))
+	if (db.AddNoteStudent(&student) and db.AddNoteStudentGroup(&student))
 	{
 		return true;
 	}
@@ -201,32 +201,66 @@ int Admin::AddMarksToStudent(wstring student_id)
 	}
 
 	vector<wstring> cols = db.getColNames(L"marks");
+	cols.erase(cols.begin()); // del 'student_id'&'tern' from subjects
 	vector<int> marks;
 
-	wcout << L"Введите оценки по предметам:" << endl;
-	for (int i = 2; i < cols.size(); i++) // bacause first&sec elem is student_id and term
+	int ch;
+	wstring num = L"";
+
+	wcout << L"Отметки за семестр: " << endl;
+	while (true)
 	{
-		int num;
-
-		wcout << DBfield_subj.at(cols.at(i)) << L": ";
-		CIN_FLUSH;
-		cin >> num;
-		marks.push_back(num);
-
-		/*try
+		ch = _getch();
+		if (ch == 13 and num.length() > 0) { break; }
+		if (ch == 32) { continue; }
+		if (ch == 8 and num.length() > 0)
 		{
-			wcout << DBfield_subj.at(cols.at(i)) << L": ";
-			cin >> num;
-			marks.push_back(num);
+			wcout << (wchar_t)8 << ' ' << wchar_t(8);
+			num.erase(num.length() - 1, num.length());
 		}
-		catch (int)
+		else if (ch >= 48 and ch <= 57)
 		{
-					
-			std::wcerr << L"We caught an int exception with value: " << endl;
-		}*/
+			if (stoi(num + (wchar_t)ch) > 0 and stoi(num + (wchar_t)ch) < 9)
+			{
+				wcout << (wchar_t)ch;
+				num += (wchar_t)ch;
+			}
+		}
+	}
+	marks.push_back(1);
+
+	wcout << L"Введите оценки по предметам:" << endl;
+	for (int i = 1; i < cols.size(); i++) // bacause first&sec elem is student_id and term
+	{
+		wcout << DBfield_subj.at(cols.at(i)) << L": ";
+
+		while (true)
+		{
+			ch = _getch();
+			if (ch == 13 and num.length() > 0) { break; }
+			if (ch == 32) { continue; }
+			if (ch == 8 and num.length() > 0)
+			{
+				wcout << (wchar_t)8 << ' ' << wchar_t(8);
+				num.erase(num.length() - 1, num.length());
+			}
+			else if (ch >= 48 and ch <= 57)
+			{
+				if (num.length() == 0 or (stoi(num + (wchar_t)ch) >= 0 and stoi(num + (wchar_t)ch) <= 10))
+				{
+					wcout << (wchar_t)ch;
+					num += (wchar_t)ch;
+				}
+			}
+		}
+
+		wcout << endl;
+
+		marks.push_back(stoi(num));
 	}
 
-	//DBfield_subj.at(L"Math");
+
+	db.AddMarks(marks, cols, student_id);
 
 	return 0;
 }

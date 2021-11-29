@@ -20,5 +20,4 @@ private:
 
 public:
 	bool chekAuth(T*);
-	//vector<T> ReadFromFile(T);
 };

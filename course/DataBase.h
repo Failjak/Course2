@@ -30,10 +30,11 @@ public:
 
 	/*-----Student------*/
 	int AddNoteStudent(Student *s);
-	int AddMarks2Student(vector<int> marks, Student *s);
+	int AddNoteStudentGroup(Student *s);
+	int AddMarks(vector<int>, vector<wstring>, wstring);
 	vector<Student*> getStudents2V();
 	map<wstring, vector<wstring>> getGroup2V();
-	vector<pair<int, vector<int>>> getMarks2VById(wstring student_id);
+	vector<pair<int, vector<int>>> getMarks2VById(wstring);
 	Student * getStudentById(wstring id);
 	int DelNoteByStydentId(wstring id);
 	/*-----Student------*/
@@ -364,7 +365,7 @@ inline int DataBase<T>::AddNoteStudent(Student * s)
 }
 
 template<class T>
-inline int DataBase<T>::AddMarks2Student(vector<int> marks, Student * s)
+inline int DataBase<T>::AddNoteStudentGroup(Student * s)
 {
 	/*
 		Func add inf about Student to db.
@@ -381,19 +382,71 @@ inline int DataBase<T>::AddMarks2Student(vector<int> marks, Student * s)
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		/*wstring info = L"'" + s->getStudentId() + L"'," + L"'" + s->getName() + L"'," + L"'" + s->getSurname() + L"'," + L"'" + s->getPatronomic() +
-			L"'," + L"'" + s->getEdForm() + L"'," + L"'" + s->getEmail() + L"'," + L"'" + s->getPhone() + L"'";
+		wstring info = L"'" + s->getStudentId() + L"'," + L"'" + s->getGroup() + L"'," + L"'" + s->getFaculty() + L"'," + L"'" + s->getSpec() +  L"'";
 
 		string sql("pragma foreign_keys=on;"
-			"insert into " + stud_table + " values (" + WS2S(info) + ");");*/
+			"insert into " + group_table + " values (" + WS2S(info) + ");");
 
-		/*int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
 		if (rc != SQLITE_OK)
 		{
 			wcout << S2WS(err) << endl;
 			return 0;
-		}*/
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return -1;
+	}
+
+	sqlite3_close(db);
+
+	return 1;
+}
+
+template<class T>
+inline int DataBase<T>::AddMarks(vector<int> marks, vector<wstring> subj, wstring student_id)
+{
+	/*
+		Func add inf about Student to db.
+
+		return: 1 - good auth;
+				0 - faild auth;
+				-1 - faild opening db.
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+	wstring str_cols, str_marks;
+
+	for (int i = 0; i < subj.size(); i++)
+	{
+		str_marks += L"'" + marks[i];
+
+		str_cols += subj[i];
+
+		if (i < subj.size() - 1)
+		{
+			str_cols += L",";
+			str_marks += L"',";
+		}
+	}
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("insert into " + mark_table + " student_id, " + WS2S(str_cols) + "values('" + WS2S(str_marks) + ");");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+
+		if (rc != SQLITE_OK)
+		{
+			wcout << S2WS(err) << endl;
+			return 0;
+		}
 	}
 	else
 	{
