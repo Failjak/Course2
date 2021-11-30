@@ -1,10 +1,10 @@
 ﻿  Admin.cpp
-h:\studing\course2\course\course\database.h(70): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(73): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(71): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(74): warning C4018: '<': signed/unsigned mismatch
 h:\studing\course2\course\course\admin.cpp(10): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admin.cpp(41): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admin.cpp(64): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admin.cpp(233): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(62): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(109): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(132): warning C4018: '<': signed/unsigned mismatch
 c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
           with
           [
@@ -14,7 +14,7 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
           [
               _Ty2=float
           ]
-  h:\studing\course2\course\course\admin.h(19): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],double,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+  h:\studing\course2\course\course\admin.h(20): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],double,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
           with
           [
               _Kty=std::wstring,
@@ -22,7 +22,7 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Other1=const wchar_t (&)[5],
               _Other2=double
           ]
-  h:\studing\course2\course\course\admin.h(15): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],double,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+  h:\studing\course2\course\course\admin.h(16): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],double,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
           with
           [
               _Kty=std::wstring,
@@ -30,133 +30,62 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Other1=const wchar_t (&)[5],
               _Other2=double
           ]
-h:\studing\course2\course\course\database.h(336): warning C4101: 'stmt': unreferenced local variable
-  h:\studing\course2\course\course\database.h(326): note: while compiling class template member function 'int DataBase<Student>::AddNoteStudent(Student *)'
-  h:\studing\course2\course\course\admin.cpp(158): note: see reference to function template instantiation 'int DataBase<Student>::AddNoteStudent(Student *)' being compiled
-  h:\studing\course2\course\course\admin.cpp(36): note: see reference to class template instantiation 'DataBase<Student>' being compiled
-h:\studing\course2\course\course\database.h(379): warning C4101: 'stmt': unreferenced local variable
-  h:\studing\course2\course\course\database.h(369): note: while compiling class template member function 'int DataBase<Student>::AddNoteStudentGroup(Student *)'
-  h:\studing\course2\course\course\admin.cpp(158): note: see reference to function template instantiation 'int DataBase<Student>::AddNoteStudentGroup(Student *)' being compiled
-h:\studing\course2\course\course\database.h(426): warning C4018: '<': signed/unsigned mismatch
-  h:\studing\course2\course\course\database.h(411): note: while compiling class template member function 'int DataBase<Student>::AddMarks(std::vector<int,std::allocator<_Ty>>,std::vector<std::wstring,std::allocator<std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t>>>>,std::wstring)'
+h:\studing\course2\course\course\database.h(363): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(353): note: while compiling class template member function 'int DataBase<Student>::AddNoteStudent(Student *)'
+  h:\studing\course2\course\course\admin.cpp(226): note: see reference to function template instantiation 'int DataBase<Student>::AddNoteStudent(Student *)' being compiled
+  h:\studing\course2\course\course\admin.cpp(28): note: see reference to class template instantiation 'DataBase<Student>' being compiled
+h:\studing\course2\course\course\database.h(406): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(396): note: while compiling class template member function 'int DataBase<Student>::AddNoteStudentGroup(Student *)'
+  h:\studing\course2\course\course\admin.cpp(226): note: see reference to function template instantiation 'int DataBase<Student>::AddNoteStudentGroup(Student *)' being compiled
+h:\studing\course2\course\course\database.h(453): warning C4018: '<': signed/unsigned mismatch
+  h:\studing\course2\course\course\database.h(438): note: while compiling class template member function 'int DataBase<Student>::AddMarks(std::vector<int,std::allocator<_Ty>>,std::vector<std::wstring,std::allocator<std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t>>>>,std::wstring)'
           with
           [
               _Ty=int
           ]
-  h:\studing\course2\course\course\admin.cpp(263): note: see reference to function template instantiation 'int DataBase<Student>::AddMarks(std::vector<int,std::allocator<_Ty>>,std::vector<std::wstring,std::allocator<std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t>>>>,std::wstring)' being compiled
+  h:\studing\course2\course\course\admin.cpp(269): note: see reference to function template instantiation 'int DataBase<Student>::AddMarks(std::vector<int,std::allocator<_Ty>>,std::vector<std::wstring,std::allocator<std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t>>>>,std::wstring)' being compiled
           with
           [
               _Ty=int
           ]
-h:\studing\course2\course\course\database.h(432): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(421): warning C4101: 'stmt': unreferenced local variable
-h:\studing\course2\course\course\database.h(570): warning C4018: '<': signed/unsigned mismatch
-  h:\studing\course2\course\course\database.h(553): note: while compiling class template member function 'std::vector<std::pair<int,std::vector<int,std::allocator<_Ty>>>,std::allocator<std::pair<int,std::vector<_Ty,std::allocator<_Ty>>>>> DataBase<Student>::getMarks2VById(std::wstring)'
+h:\studing\course2\course\course\database.h(459): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(448): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(598): warning C4018: '<': signed/unsigned mismatch
+  h:\studing\course2\course\course\database.h(581): note: while compiling class template member function 'std::vector<std::pair<int,std::vector<int,std::allocator<_Ty>>>,std::allocator<std::pair<int,std::vector<_Ty,std::allocator<_Ty>>>>> DataBase<Student>::getMarks2VById(std::wstring)'
           with
           [
               _Ty=int
           ]
-  h:\studing\course2\course\course\admin.cpp(45): note: see reference to function template instantiation 'std::vector<std::pair<int,std::vector<int,std::allocator<_Ty>>>,std::allocator<std::pair<int,std::vector<_Ty,std::allocator<_Ty>>>>> DataBase<Student>::getMarks2VById(std::wstring)' being compiled
+  h:\studing\course2\course\course\admin.cpp(113): note: see reference to function template instantiation 'std::vector<std::pair<int,std::vector<int,std::allocator<_Ty>>>,std::allocator<std::pair<int,std::vector<_Ty,std::allocator<_Ty>>>>> DataBase<Student>::getMarks2VById(std::wstring)' being compiled
           with
           [
               _Ty=int
           ]
-h:\studing\course2\course\course\database.h(574): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(288): warning C4101: 'stmt': unreferenced local variable
-  h:\studing\course2\course\course\database.h(286): note: while compiling class template member function 'int DataBase<Student>::DelNoteByStydentId(std::wstring)'
-  h:\studing\course2\course\course\admin.cpp(169): note: see reference to function template instantiation 'int DataBase<Student>::DelNoteByStydentId(std::wstring)' being compiled
-h:\studing\course2\course\course\database.h(622): warning C4101: 'err': unreferenced local variable
-  h:\studing\course2\course\course\database.h(619): note: while compiling class template member function 'std::vector<std::wstring,std::allocator<_Ty>> DataBase<Student>::getColNames(std::wstring)'
+h:\studing\course2\course\course\database.h(602): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(315): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(313): note: while compiling class template member function 'int DataBase<Student>::DelNoteByStydentId(std::wstring)'
+  h:\studing\course2\course\course\admin.cpp(237): note: see reference to function template instantiation 'int DataBase<Student>::DelNoteByStydentId(std::wstring)' being compiled
+h:\studing\course2\course\course\database.h(650): warning C4101: 'err': unreferenced local variable
+  h:\studing\course2\course\course\database.h(647): note: while compiling class template member function 'std::vector<std::wstring,std::allocator<_Ty>> DataBase<Student>::getColNames(std::wstring)'
           with
           [
               _Ty=std::wstring
           ]
-  h:\studing\course2\course\course\admin.cpp(48): note: see reference to function template instantiation 'std::vector<std::wstring,std::allocator<_Ty>> DataBase<Student>::getColNames(std::wstring)' being compiled
+  h:\studing\course2\course\course\admin.cpp(116): note: see reference to function template instantiation 'std::vector<std::wstring,std::allocator<_Ty>> DataBase<Student>::getColNames(std::wstring)' being compiled
           with
           [
               _Ty=std::wstring
           ]
-h:\studing\course2\course\course\database.h(247): warning C4101: 'stmt': unreferenced local variable
-  h:\studing\course2\course\course\database.h(237): note: while compiling class template member function 'int DataBase<User>::AddNoteUser(T *)'
+h:\studing\course2\course\course\database.h(274): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(264): note: while compiling class template member function 'int DataBase<User>::AddNoteUser(T *)'
           with
           [
               T=User
           ]
-  h:\studing\course2\course\course\admin.cpp(97): note: see reference to function template instantiation 'int DataBase<User>::AddNoteUser(T *)' being compiled
+  h:\studing\course2\course\course\admin.cpp(165): note: see reference to function template instantiation 'int DataBase<User>::AddNoteUser(T *)' being compiled
           with
           [
               T=User
           ]
-  h:\studing\course2\course\course\admin.cpp(61): note: see reference to class template instantiation 'DataBase<User>' being compiled
-  AdminController.cpp
-h:\studing\course2\course\course\database.h(70): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(73): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(125): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(127): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(129): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(131): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(159): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(183): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(185): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(188): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(191): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(194): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(197): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(202): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(205): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(245): warning C4018: '<': signed/unsigned mismatch
-c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
-          with
-          [
-              _Ty=double
-          ]
-          and
-          [
-              _Ty2=float
-          ]
-  h:\studing\course2\course\course\admin.h(19): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],double,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
-          with
-          [
-              _Kty=std::wstring,
-              _Ty=float,
-              _Other1=const wchar_t (&)[5],
-              _Other2=double
-          ]
-  h:\studing\course2\course\course\admin.h(15): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],double,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
-          with
-          [
-              _Kty=std::wstring,
-              _Ty=float,
-              _Other1=const wchar_t (&)[5],
-              _Other2=double
-          ]
-  LoginController.h
-h:\studing\course2\course\course\database.h(70): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(73): warning C4018: '<': signed/unsigned mismatch
-c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
-          with
-          [
-              _Ty=double
-          ]
-          and
-          [
-              _Ty2=float
-          ]
-  h:\studing\course2\course\course\admin.h(19): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],double,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
-          with
-          [
-              _Kty=std::wstring,
-              _Ty=float,
-              _Other1=const wchar_t (&)[5],
-              _Other2=double
-          ]
-  h:\studing\course2\course\course\admin.h(15): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],double,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
-          with
-          [
-              _Kty=std::wstring,
-              _Ty=float,
-              _Other1=const wchar_t (&)[5],
-              _Other2=double
-          ]
-  Generating Code...
+  h:\studing\course2\course\course\admin.cpp(129): note: see reference to class template instantiation 'DataBase<User>' being compiled
   course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe

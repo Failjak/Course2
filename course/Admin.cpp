@@ -23,6 +23,74 @@ void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, w
 	}
 }
 
+vector<int> Admin::addMarks2V(wstring student_id, vector<wstring> subjs)
+{
+	DataBase<Student> db;
+	vector<int> marks;
+	int ch;
+	wstring num;
+
+	wcout << L"Отметки за семестр: ";
+	do
+	{
+		if (num.length())
+		{
+			wcout << (wchar_t)8 << ' ' << wchar_t(8);
+			num = L"";
+		}
+
+		ch = _getch();
+		if (ch == 13 and num.length() > 0) { break; }
+		if (ch == 32) { continue; }
+		if (ch == 8 and num.length() > 0)
+		{
+			wcout << (wchar_t)8 << ' ' << wchar_t(8);
+			num.erase(num.length() - 1, num.length());
+		}
+		else if (ch >= 48 and ch <= 57)
+		{
+			if (stoi(num + (wchar_t)ch) > 0 and stoi(num + (wchar_t)ch) < 9)
+			{
+				wcout << (wchar_t)ch;
+				num += (wchar_t)ch;
+			}
+		}
+	} while (db.existMarks(student_id, stoi(num)));
+	marks.push_back(stoi(num));
+
+	wcout << L"\nВведите оценки по предметам:" << endl;
+	for (int i = 1; i < subjs.size(); i++)
+	{
+		num = L"";
+		wcout << DBfield_subj.at(subjs.at(i)) << L": ";
+
+		while (true)
+		{
+			ch = _getch();
+			if (ch == 13 and num.length() > 0) { break; }
+			if (ch == 32) { continue; }
+			if (ch == 8 and num.length() > 0)
+			{
+				wcout << (wchar_t)8 << ' ' << wchar_t(8);
+				num.erase(num.length() - 1, num.length());
+			}
+			else if (ch >= 48 and ch <= 57)
+			{
+				if (num.length() == 0 or (stoi(num + (wchar_t)ch) >= 0 and stoi(num + (wchar_t)ch) <= 10))
+				{
+					wcout << (wchar_t)ch;
+					num += (wchar_t)ch;
+				}
+			}
+		}
+		wcout << endl;
+
+		marks.push_back(stoi(num));
+	}
+
+	return marks;
+}
+
 vector<Student*> Admin::getStudents2V()
 {
 	/*
@@ -187,13 +255,6 @@ int Admin::AddMarksToStudent(wstring student_id)
 {
 	DataBase<Student> db;
 
-	/*
-		Считывает какие есть поля в таблице(было бы правильно иметь таблицу
-			со всеми прдеметами и искать по нашему курсу, факультету, специальности)
-		После чего заменяем считанне поля по нашему чему-то и просим ввести данные
-		Запихиваем в вектор, и все чики-пики!!!
-	*/
-
 	if (!db.existStudent(student_id))
 	{
 		wcout << L"Такого студента не существует." << endl;
@@ -203,64 +264,12 @@ int Admin::AddMarksToStudent(wstring student_id)
 	vector<wstring> cols = db.getColNames(L"marks");
 	cols.erase(cols.begin()); // del 'student_id'&'tern' from subjects
 	vector<int> marks;
+	marks = addMarks2V(student_id, cols);
 
-	int ch;
-	wstring num = L"";
-
-	wcout << L"Отметки за семестр: " << endl;
-	while (true)
+	if (db.AddMarks(marks, cols, student_id))
 	{
-		ch = _getch();
-		if (ch == 13 and num.length() > 0) { break; }
-		if (ch == 32) { continue; }
-		if (ch == 8 and num.length() > 0)
-		{
-			wcout << (wchar_t)8 << ' ' << wchar_t(8);
-			num.erase(num.length() - 1, num.length());
-		}
-		else if (ch >= 48 and ch <= 57)
-		{
-			if (stoi(num + (wchar_t)ch) > 0 and stoi(num + (wchar_t)ch) < 9)
-			{
-				wcout << (wchar_t)ch;
-				num += (wchar_t)ch;
-			}
-		}
+		return 1;
 	}
-	marks.push_back(1);
-
-	wcout << L"Введите оценки по предметам:" << endl;
-	for (int i = 1; i < cols.size(); i++) // bacause first&sec elem is student_id and term
-	{
-		wcout << DBfield_subj.at(cols.at(i)) << L": ";
-
-		while (true)
-		{
-			ch = _getch();
-			if (ch == 13 and num.length() > 0) { break; }
-			if (ch == 32) { continue; }
-			if (ch == 8 and num.length() > 0)
-			{
-				wcout << (wchar_t)8 << ' ' << wchar_t(8);
-				num.erase(num.length() - 1, num.length());
-			}
-			else if (ch >= 48 and ch <= 57)
-			{
-				if (num.length() == 0 or (stoi(num + (wchar_t)ch) >= 0 and stoi(num + (wchar_t)ch) <= 10))
-				{
-					wcout << (wchar_t)ch;
-					num += (wchar_t)ch;
-				}
-			}
-		}
-
-		wcout << endl;
-
-		marks.push_back(stoi(num));
-	}
-
-
-	db.AddMarks(marks, cols, student_id);
 
 	return 0;
 }

@@ -11,6 +11,7 @@
 class Admin : public User{
 private:
 	void mergeStGr(vector<Student *> *, const map<wstring, vector<wstring>>, wstring mode);
+	vector<int> addMarks2V(wstring student_id, vector<wstring> subjs);
 
 	std::map<std::wstring, float> rate = {
 		{L"base", 96.4 },

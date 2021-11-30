@@ -21,6 +21,7 @@ private:
 public:
 	int exist(T * s);
 	int existStudent(wstring student_id);
+	int existMarks(wstring student_id, int term);
 	vector<T*> getObj2V();
 	
 	/*-----Admin------*/
@@ -87,14 +88,40 @@ int DataBase<T>::existStudent(wstring student_id)
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
-
 	int res = 0;
-	string table;
-
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
 		string sql("select count(*) from " + stud_table + " where student_id like '" + WS2S(student_id) + "';");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		res = sqlite3_column_int(stmt, 0);
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return -1;
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return res;
+}
+
+template<class T>
+inline int DataBase<T>::existMarks(wstring student_id, int term)
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	int res = 0;
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select count(*) from " + mark_table + " where student_id like '" + WS2S(student_id) + "' and term =" + to_string(term) + ";");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
@@ -421,24 +448,25 @@ inline int DataBase<T>::AddMarks(vector<int> marks, vector<wstring> subj, wstrin
 	sqlite3_stmt * stmt;
 	char *err;
 
-	wstring str_cols, str_marks;
+	string str_cols, str_marks;
 
 	for (int i = 0; i < subj.size(); i++)
 	{
-		str_marks += L"'" + marks[i];
+		str_marks += to_string(marks[i]);
 
-		str_cols += subj[i];
+		str_cols += WS2S(subj[i]);
 
 		if (i < subj.size() - 1)
 		{
-			str_cols += L",";
-			str_marks += L"',";
+			str_cols += ",";
+			str_marks += ",";
 		}
 	}
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("insert into " + mark_table + " student_id, " + WS2S(str_cols) + "values('" + WS2S(str_marks) + ");");
+		string sql("pragma foreign_keys=on;"
+			"insert into " + mark_table + " (student_id, " + str_cols + ") values('" + WS2S(student_id) + "', " + str_marks + ");");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
