@@ -3,7 +3,24 @@
 #include "Admin.h"
 #include "Header.h"
 
-void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, wstring mode) 
+float Admin::getStipendRatio(float avg_mark)
+{
+	using namespace Stipend;
+	float stipend_ratio = -1;
+	wstring key;
+	
+	for (auto it = stipend_condition.begin(); it != stipend_condition.end(); ++it)
+	{
+		if ((*it).second.first <= avg_mark and avg_mark <= (*it).second.second)
+		{
+			key = (*it).first;
+			return stipend_rate.at(key);
+		}
+	}
+	return stipend_ratio;
+}
+
+void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, wstring mode)
 {
 	wstring student_id;
 
@@ -58,8 +75,29 @@ vector<int> Admin::addMarks2V(wstring student_id, vector<wstring> subjs)
 	} while (db.existMarks(student_id, stoi(num)) > 0);
 	marks.push_back(stoi(num));
 
+	wcout << L"\nПересдачи(1-'да', 0-'нет'): ";
+	while (true)
+	{
+		num = L"";
+		ch = _getch();
+		if (ch == 13 and num.length() > 0) { break; }
+		if (ch == 32) { continue; }
+		if (ch == 8 and num.length() > 0)
+		{
+			wcout << (wchar_t)8 << ' ' << wchar_t(8);
+			num.erase(num.length() - 1, num.length());
+		}
+		else if (ch == 48 or ch == 49)
+		{
+			wcout << (wchar_t)ch;
+			num += (wchar_t)ch;
+			break;
+		}
+	}
+	marks.push_back(stoi(num));
+
 	wcout << L"\nВведите оценки по предметам:" << endl;
-	for (int i = 1; i < subjs.size(); i++)
+	for (int i = 2; i < subjs.size(); i++) // skip term and retake
 	{
 		num = L"";
 		wcout << DBfield_subj.at(subjs.at(i)) << L": ";
@@ -94,13 +132,14 @@ vector<int> Admin::addMarks2V(wstring student_id, vector<wstring> subjs)
 vector<Student*> Admin::getStudents2V()
 {
 	/*
-		schema marks: student_id: {term, subjs ...}
+		schema marks: student_id: {term, retake, subjs ...}
 	*/
 	
 	vector<Student *> students;
 	map<wstring, vector<wstring>> groups;
-	vector<pair<int, vector<int>>> marks;
+	vector<pair<pair<int, bool>, vector<int>>> marks;
 	vector<wstring> subj;
+	vector<bool> retake;
 	DataBase<Student> db;
 
 	students = db.getStudents2V();
@@ -110,14 +149,15 @@ vector<Student*> Admin::getStudents2V()
 	{
 		wstring student_id = students.at(i)->getStudentId();
 
-		marks = db.getMarks2VById(student_id);
+		marks = db.getMarks2VById(student_id);// получаю вектор с набором семестров и отметок за него
 		if (marks.size())
 		{
 			subj = db.getColNames(L"marks");
-			subj.erase(subj.begin(), subj.begin()+2); // del 'student_id'&'tern' from subjects
+			subj.erase(subj.begin(), subj.begin()+3); // del 'student_id'&'term'&'retake' from subjects
 		}
-
+		
 		students.at(i)->setMarks(marks, subj);
+		calcStipend(students.at(i));
 	}
 	mergeStGr(&students, groups, L"group");
 
@@ -248,7 +288,7 @@ int Admin::AddMarksToStudent(Student * s)
 	wstring student_id = s->getStudentId();
 
 	vector<wstring> cols = db.getColNames(L"marks");
-	cols.erase(cols.begin()); // del 'student_id'&'tern' from subjects
+	cols.erase(cols.begin()); // del 'student_id' from subjects
 	vector<int> marks;
 	marks = addMarks2V(student_id, cols);
 
@@ -271,7 +311,7 @@ int Admin::AddMarksToStudent(wstring student_id)
 	}
 
 	vector<wstring> cols = db.getColNames(L"marks");
-	cols.erase(cols.begin()); // del 'student_id'&'tern' from subjects
+	cols.erase(cols.begin()); // del 'student_id' from subjects
 	vector<int> marks;
 	marks = addMarks2V(student_id, cols);
 
@@ -281,4 +321,39 @@ int Admin::AddMarksToStudent(wstring student_id)
 	}
 
 	return 0;
+}
+
+void Admin::calcStipend(Student * s)
+{
+	using namespace Stipend;
+
+	/*
+		Я получаю студента и набор оценок за все существующие семестры
+
+		Для начала проверяем бюджет или нет. Перебираю все семестры, если
+		была пересдача тогда стипендии нет. Если же нет идем дальше.
+		 если 1-семестр: базовая стипендия
+		 2-семестр: смотрим на первый, средний балл; умножаем на коэфф
+		 3-семест
+	*/
+
+	if (!s->getEdFormInt()) { return; }
+
+	vector<pair<int, float>> stipend;
+
+	vector<pair<pair<int, bool>, float>> marks = s->getAvgMarkByTerm(); // schema: {{ {term, retake}, {marks...} }}	
+	vector<pair<pair<int, bool>, float>>::iterator mark;
+	vector<pair<pair<int, bool>, float>>::iterator prev_mark;
+
+	for (mark = marks.begin(), prev_mark = marks.begin(); mark != marks.end(); prev_mark = mark, mark++)
+	{
+		if ((*mark).first.first == 1) { stipend.push_back(make_pair(1, Stipend::BASE_STIPEND)); continue; }  // add stipend for the first semester
+		
+		float avg_mark = (*prev_mark).second;
+		float ratio = getStipendRatio(avg_mark);
+
+		if ((*prev_mark).first.second) { stipend.push_back(make_pair(1, 0)); continue; } // пересдача
+
+		stipend.push_back(make_pair((*mark).first.first, BASE_STIPEND * ratio));
+	}
 }

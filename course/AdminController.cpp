@@ -196,8 +196,9 @@ void AdminController::pprinStudent(std::vector<Student*> students, std::wstring 
 
 		if (to_string(students.at(i)->getAvgMark()).length() > max_size_av_mark)
 			max_size_av_mark = to_string(students.at(i)->getAvgMark()).length();
-		//if (array.at(i)->getSpec().length() > max_size_stipend) // TO DO Сделать стипендию
-			//max_size_stipend = array.at(i)->getSpec().size();
+
+		if (students.at(i)->getEdFormWstr().length() > max_size_stipend) // TO DO Сделать стипендию
+			max_size_stipend = students.at(i)->getEdFormWstr().size();
 
 		if (students.at(i)->getGroup().length() > max_size_mail)
 			max_size_mail = students.at(i)->getGroup().size();
@@ -212,7 +213,7 @@ void AdminController::pprinStudent(std::vector<Student*> students, std::wstring 
 		(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) +
 		(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) +
 		(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) +
-		//(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) +
+		(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) +
 		(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) +
 		(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE);
 
@@ -234,7 +235,7 @@ void AdminController::pprinStudent(std::vector<Student*> students, std::wstring 
 		<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << L"Спецальность"
 		<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << L"Группа"
 		<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << L"Ср. балл"
-		//<< setw(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) << left << L"Стипендия"
+		<< setw(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) << left << L"Стипендия"
 		<< setw(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) << left << L"Почта"
 		<< setw(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE) << left << L"Телефон";
 
@@ -251,7 +252,7 @@ void AdminController::pprinStudent(std::vector<Student*> students, std::wstring 
 			<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << students[j]->getSpec()
 			<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << students[j]->getGroup()
 			<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << students[j]->getAvgMark()
-			//<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << students[j]->get()
+			<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << students[j]->getEdFormWstr()
 			<< setw(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) << left << students[j]->getEmail()
 			<< setw(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE) << left << students[j]->getPhone()
 			<< left << L"│" << endl;

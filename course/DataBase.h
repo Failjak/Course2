@@ -1,4 +1,8 @@
 #pragma once
+#include <locale>
+#include <codecvt>
+#include <string>
+
 #include "Header.h"
 #include "sqlite/sqlite3.h"
 
@@ -35,7 +39,7 @@ public:
 	int AddMarks(vector<int>, vector<wstring>, wstring);
 	vector<Student*> getStudents2V();
 	map<wstring, vector<wstring>> getGroup2V();
-	vector<pair<int, vector<int>>> getMarks2VById(wstring);
+	vector<pair<pair<int, bool>, vector<int>>> getMarks2VById(wstring);
 	Student * getStudentById(wstring id);
 	int DelNoteByStydentId(wstring id);
 	/*-----Student------*/
@@ -57,8 +61,9 @@ inline const std::wstring S2WS(const std::string &s)
 
 inline std::string WS2S(const std::wstring& wstr)
 {
-	using convert_typeX = std::codecvt_utf8<wchar_t>;
-	std::wstring_convert<convert_typeX, wchar_t> converterX;
+	using convert_typeX = codecvt_utf8_utf16<wchar_t>;
+	//wstring_convert<codecvt_utf8_utf16<wchar_t>> converter;
+	wstring_convert<convert_typeX, wchar_t> converterX;
 
 	return converterX.to_bytes(wstr);
 }
@@ -582,20 +587,20 @@ inline map<wstring, vector<wstring>> DataBase<T>::getGroup2V()
 }
 
 template<class T>
-inline vector<pair<int, vector<int>>> DataBase<T>::getMarks2VById(wstring student_id)
+inline vector<pair<pair<int, bool>, vector<int>>> DataBase<T>::getMarks2VById(wstring student_id)
 {
 	/*
-		Get studetn_id 
+		Get student_id 
 		return: {	
-					{term, {marks ...}}, 
-					{term, {marks ...}}
+					{term, {retake, marks ...}}, 
+					{term, {retake, marks ...}}
 				};
 	*/
 
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
-	vector<pair<int, vector<int>>> result;
+	vector<pair<pair<int, bool>, vector<int>>> result;
 
 	vector<wstring> cols = getColNames(S2WS(mark_table));
 	wstring str_cols;
@@ -622,11 +627,13 @@ inline vector<pair<int, vector<int>>> DataBase<T>::getMarks2VById(wstring studen
 
 			wstring student_id = static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0));
 			int term = sqlite3_column_int(stmt, 1);
+			bool retake = sqlite3_column_int(stmt, 2);
 
-			for (int j = 2; sqlite3_column_text(stmt, j); j++)
+			for (int j = 3; sqlite3_column_text(stmt, j); j++)
 				tmp.push_back(sqlite3_column_int(stmt, j));
 
-			result.push_back(make_pair(term, tmp));
+			pair<int, bool> term_retake = {term, retake};
+			result.push_back(make_pair(term_retake, tmp));
 			sqlite3_step(stmt);
 		}
 		if (!result.size())

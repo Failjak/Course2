@@ -12,12 +12,12 @@ Student::Student(const Student & tmp)
 	this->marks = tmp.marks;
 }
 
-void Student::setMarks(vector<pair<int, vector<int>>> tmp, vector<wstring> subj)
+void Student::setMarks(vector<pair<pair<int, bool>, vector<int>>> tmp, vector<wstring> subj)
 {
 	/*
 		tmp:	{
-					term, {Math, OOP, etc...},
-					term, {marks}
+					{term, retake}, {Math, OOP, etc...},
+					{term, retake}, {marks}
 				};
 	*/
 
@@ -34,35 +34,28 @@ void Student::setMarks(vector<pair<int, vector<int>>> tmp, vector<wstring> subj)
 
 			tmp_marks[subj.at(j)] = tmp.at(i).second.at(j);
 		}
-		marks[tmp.at(i).first] = tmp_marks;
+		tmp_marks[L"retake"] = tmp.at(i).first.second;
+		marks[tmp.at(i).first.first] = tmp_marks; // key = term
 	}
-
-	/*if(tmp.size() != subj.size()) 
-	{
-		wcout << L"Uncorrect size in setMarks." << endl;
-		return;
-	}
-
-	map <wstring, int> subj_map;
-
-	for (int s = 1; s < subj.size(); s++)
-	{
-		subj_map[subj[s]] = {};
-		subj_map[subj[s]] = stoi(tmp[s]);
-
-	}
-	marks[stoi(tmp[0])] = subj_map;*/
-
 }
 
-vector<pair<int, float>> Student::getAvgMarkByTerm()
+
+vector<pair<pair<int, bool>, float>> Student::getAvgMarkByTerm()
 {
+	/*
+		Return avg mark by every term
+		{
+			{term, avg_mark},
+				...
+		};	
+	*/
+
 	if (!marks.size()) { return {}; }
 
 	float avg, sum = 0;
 	map<int, map <wstring, int>>::iterator iter;
 
-	vector<pair<int, float>> avg_marks; // return avg mark by every term
+	vector<pair<pair<int, bool>, float>> avg_marks; // schema: { { {term, reatake}, {marks ...} } }
 
 	for (iter = marks.begin(); iter != marks.end(); iter++)
 	{
@@ -72,7 +65,9 @@ vector<pair<int, float>> Student::getAvgMarkByTerm()
 			sum += (*mark_iter).second;
 		}
 
-		avg_marks.push_back(make_pair((*iter).first, sum / (*iter).second.size()));
+		pair<int, bool> term_retake = { (*iter).first, (*iter).second.at(L"retake") };
+
+		avg_marks.push_back(make_pair(term_retake, sum / (*iter).second.size()));
 		sum = 0;
 	}
 
@@ -83,7 +78,7 @@ float Student::getAvgMark()
 {
 	if (!marks.size()) { return 0; }
 
-	vector<pair<int, float>> avg_marks = getAvgMarkByTerm();
+	vector<pair<pair<int, bool>, float>> avg_marks = getAvgMarkByTerm();
 	float sum = 0;
 	int count_subjs = 0;
 
