@@ -311,6 +311,10 @@ template<class T>
 inline
 int DataBase<T>::DelNoteByStydentId(wstring id)
 {
+	/*
+		Func delete note from Users or Students, by Student id 	
+	*/
+
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 	char *err;
@@ -328,7 +332,8 @@ int DataBase<T>::DelNoteByStydentId(wstring id)
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("delete from " + table + " where student_id = '" + WS2S(id) + "';");
+		string sql("pragma foreign_keys=on;"
+			"delete from " + table + " where student_id = '" + WS2S(id) + "';");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
@@ -561,7 +566,7 @@ inline map<wstring, vector<wstring>> DataBase<T>::getGroup2V()
 		}
 		if (!result.size())
 		{
-			wcout << L"SELECT ERROR: Table '" << S2WS(group_table) << "' is Empty.'" << endl;
+			//wcout << L"SELECT ERROR: Table '" << S2WS(group_table) << "' is Empty.'" << endl;
 		}
 	}
 	else

@@ -1,3 +1,6 @@
+#include <wctype.h>
+#include <locale.h>
+
 #include "People.h"
 
 using namespace std;
@@ -7,9 +10,9 @@ std::wstring People::strPPrint(std::wstring word)
 	if (word.length() > 0)
 	{
 		for (int i = 0; i < word.length(); i++) {
-			word[i] = tolower(word[i]);
+			word[i] = _towlower_l(word[i], _create_locale(LC_ALL, "Russian"));
 		}
-		word[0] = toupper(word[0]);
+		word[0] = _towupper_l(word[0], _create_locale(LC_ALL, "Russian"));
 	}
 
 	return word;

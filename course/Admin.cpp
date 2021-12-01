@@ -28,7 +28,7 @@ vector<int> Admin::addMarks2V(wstring student_id, vector<wstring> subjs)
 	DataBase<Student> db;
 	vector<int> marks;
 	int ch;
-	wstring num;
+	wstring num =L"";
 
 	wcout << L"Отметки за семестр: ";
 	do
@@ -55,7 +55,7 @@ vector<int> Admin::addMarks2V(wstring student_id, vector<wstring> subjs)
 				num += (wchar_t)ch;
 			}
 		}
-	} while (db.existMarks(student_id, stoi(num)));
+	} while (db.existMarks(student_id, stoi(num)) > 0);
 	marks.push_back(stoi(num));
 
 	wcout << L"\nВведите оценки по предметам:" << endl;
@@ -245,8 +245,17 @@ int Admin::DelStudent(Student * s)
 int Admin::AddMarksToStudent(Student * s)
 {
 	DataBase<Student> db;
+	wstring student_id = s->getStudentId();
 
+	vector<wstring> cols = db.getColNames(L"marks");
+	cols.erase(cols.begin()); // del 'student_id'&'tern' from subjects
+	vector<int> marks;
+	marks = addMarks2V(student_id, cols);
 
+	if (db.AddMarks(marks, cols, student_id))
+	{
+		return 1;
+	}
 
 	return 0;
 }

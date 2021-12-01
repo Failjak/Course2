@@ -38,22 +38,22 @@ void create_table()
 			"ed_form text check(ed_form in ('C', 'F')) not null default 'F',"
 			"email TEXT NOT NULL UNIQUE,"
 			"phone TEXT NOT NULL UNIQUE,"
-			"FOREIGN KEY(student_id) REFERENCES users(student_id));");*/
+			"FOREIGN KEY(student_id) REFERENCES users(student_id) ON DELETE CASCADE);");*/
 
 		/*string sql("create table users("
 					"login text not null,"
 					"password text not null,"
 					"student_id text CHECK(length(student_id) = 8) PRIMARY KEY not null);");*/
 
-		/*string sql("CREATE TABLE groups("
+		string sql("CREATE TABLE groups("
 			"student_id text CHECK(length(student_id) = 8) PRIMARY KEY,"
 			"group_number text,"
 			"faculty text not null,"
 			"spec text not null,"
-			"FOREIGN KEY (student_id) REFERENCES students(student_id)"
-			");");*/
+			"FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE"
+			");");
 
-		string sql("create table marks("
+		/*string sql("create table marks("
 					"student_id text CHECK(length(student_id) = 8),"
 					"term INTEGER not null,"
 					"Math INTEGER not null,"
@@ -62,7 +62,7 @@ void create_table()
 					"CN INTEGER not null,"
 					"Economic INTEGER not null"
 					//"FOREIGN KEY (student_id) REFERENCES students(student_id)"
-					");");
+					");");*/
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
