@@ -40,6 +40,15 @@ void Student::setMarks(vector<pair<pair<int, bool>, vector<int>>> tmp, vector<ws
 }
 
 
+float Student::getStipendLastTerm()
+{
+	if (stipend.size())
+	{
+		return stipend.back().second;
+	}
+	return -1;
+}
+
 vector<pair<pair<int, bool>, float>> Student::getAvgMarkByTerm()
 {
 	/*

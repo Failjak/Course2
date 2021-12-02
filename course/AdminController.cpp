@@ -32,6 +32,11 @@ void AdminController::main(Admin * admin)
 			system("cls");
 			MarksManage(admin);
 		}
+		case 4:
+		{
+			system("cls");
+			StipendManage(admin);
+		}
 		case 0:
 		{
 			flag = 0;
@@ -54,6 +59,7 @@ int AdminController::menu()
 	wcout << L"1) - Работа с пользователями." << endl;
 	wcout << L"2) - Работа со студентами." << endl;
 	wcout << L"3) - Выставить оценки." << endl;
+	wcout << L"4) - Просмотр стпипендий." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
@@ -105,6 +111,22 @@ int AdminController::marks_menu()
 
 	wcout << L"1) - Выбор студента." << endl;
 	wcout << L"2) - Добавление по id студента." << endl;
+	wcout << L"0) - Назад." << endl;
+	wcout << L" Ваш выбор: ";
+	CIN_FLUSH;
+
+	wcin >> choice;
+	return choice;
+}
+
+int AdminController::stipend_menu()
+{
+	coutTitle(L"Меню просмтора стипендий");
+
+	int choice;
+
+	//wcout << L"1) - Просмотр стипендий для всех студентов." << endl;
+	wcout << L"1) - Вычислить стипендию для студента." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
@@ -170,14 +192,13 @@ void AdminController::pprintUser(vector<User*> array, wstring title)
 
 void AdminController::pprinStudent(std::vector<Student*> students, std::wstring title)
 {
-	// (фио, фак, специальность, группа, средняя оценка, стипендия(если бюджет), mail, phone)
 	int space_subjects = 5;
 	int MIN_SPACE = 14;
 	HANDLE hCon;
 	hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	int max_size_FN = 0, max_size_fac = 0, max_size_spec = 0, 
-		max_size_group = 0, max_size_av_mark = 0, max_size_stipend = 0, 
+		max_size_group = 0, max_size_av_mark = 0, max_size_ed_form = 0, 
 		max_size_mail = 0, max_size_phone = 0;
 
 	for (int i = 0; i < students.size(); i++)
@@ -197,8 +218,8 @@ void AdminController::pprinStudent(std::vector<Student*> students, std::wstring 
 		if (to_string(students.at(i)->getAvgMark()).length() > max_size_av_mark)
 			max_size_av_mark = to_string(students.at(i)->getAvgMark()).length();
 
-		if (students.at(i)->getEdFormWstr().length() > max_size_stipend) // TO DO Сделать стипендию
-			max_size_stipend = students.at(i)->getEdFormWstr().size();
+		if (students.at(i)->getEdFormWstr().length() > max_size_ed_form)
+			max_size_ed_form = students.at(i)->getEdFormWstr().size();
 
 		if (students.at(i)->getGroup().length() > max_size_mail)
 			max_size_mail = students.at(i)->getGroup().size();
@@ -208,14 +229,14 @@ void AdminController::pprinStudent(std::vector<Student*> students, std::wstring 
 	}
 
 	int table_width = space_subjects + (
-		(max_size_FN > MIN_SPACE) ? max_size_FN + 1 : MIN_SPACE) +
+		(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) +
 		(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) +
 		(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) +
 		(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) +
 		(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) +
-		(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) +
+		(max_size_ed_form > MIN_SPACE ? max_size_ed_form + 1 : MIN_SPACE) +
 		(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) +
-		(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE);
+		(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE));
 
 
 	if (title.length())
@@ -235,7 +256,7 @@ void AdminController::pprinStudent(std::vector<Student*> students, std::wstring 
 		<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << L"Спецальность"
 		<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << L"Группа"
 		<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << L"Ср. балл"
-		<< setw(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) << left << L"Стипендия"
+		<< setw(max_size_ed_form > MIN_SPACE ? max_size_ed_form + 1 : MIN_SPACE) << left << L"Форма обучения"
 		<< setw(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) << left << L"Почта"
 		<< setw(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE) << left << L"Телефон";
 
@@ -252,9 +273,74 @@ void AdminController::pprinStudent(std::vector<Student*> students, std::wstring 
 			<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << students[j]->getSpec()
 			<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << students[j]->getGroup()
 			<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << students[j]->getAvgMark()
-			<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << students[j]->getEdFormWstr()
+			<< setw(max_size_ed_form > MIN_SPACE ? max_size_ed_form + 1 : MIN_SPACE) << left << students[j]->getEdFormWstr()
 			<< setw(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) << left << students[j]->getEmail()
 			<< setw(max_size_phone > MIN_SPACE ? max_size_phone + 1 : MIN_SPACE) << left << students[j]->getPhone()
+			<< left << L"│" << endl;
+	}
+	wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
+}
+
+void AdminController::pprinStipend(std::vector<Student*> students, std::wstring title)
+{
+	int space_subjects = 5;
+	int MIN_SPACE = 14;
+	HANDLE hCon;
+	hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	int max_size_FN = 0, max_size_id = 0, max_size_av_mark = 0, max_size_stipend = 0;
+
+	for (int i = 0; i < students.size(); i++)
+	{
+		if (students.at(i)->getStudentId().length() > max_size_id)
+			max_size_id = students.at(i)->getStudentId().size();
+
+		if (students.at(i)->getFullName().length() > max_size_FN)
+			max_size_FN = students.at(i)->getFullName().size();
+
+		if (to_string(students.at(i)->getAvgMark()).length() > max_size_av_mark)
+			max_size_av_mark = to_string(students.at(i)->getAvgMark()).length();
+
+		if (to_string(students.at(i)->getStipendLastTerm()).length() > max_size_stipend)
+			max_size_stipend = to_string(students.at(i)->getStipendLastTerm()).size();
+	}
+
+	int table_width = space_subjects + (
+		(max_size_id > MIN_SPACE ? max_size_id + 1 : MIN_SPACE) +
+		(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) +
+		(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) +
+		(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE));
+
+
+	if (title.length())
+	{
+		int title_table_widht = (table_width - title.length()) / 2;
+		wcout << wstring(title_table_widht, L'─') << title << wstring(title_table_widht, L'─') << endl;
+	}
+
+	wcout << L"┌" << wstring(table_width, L'─') << L"┐" << endl;
+	wcout << L"│";
+	SetConsoleTextAttribute(hCon, FOREGROUND_INTENSITY);
+
+	wcout
+		<< setw(5) << left << L"№"
+		<< setw(max_size_id > MIN_SPACE ? max_size_id + 1 : MIN_SPACE) << left << L"ID"
+		<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << L"ФИО"
+		<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << L"Ср. балл"
+		<< setw(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) << left << L"Стипендия";
+
+
+	SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+	wcout << L"│" << endl;
+
+	for (int j = 0; j < students.size(); j++) {
+		wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
+		wcout << L"│"
+			<< setw(5) << j + 1
+			<< setw(max_size_id > MIN_SPACE ? max_size_id + 1 : MIN_SPACE) << left << students[j]->getStudentId()
+			<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << students[j]->getFullName()
+			<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << std::fixed << std::setprecision(2) << students[j]->getAvgMark()
+			<< setw(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) << left << std::fixed << std::setprecision(2) << students[j]->getStipendLastTerm()
 			<< left << L"│" << endl;
 	}
 	wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
@@ -401,15 +487,9 @@ void AdminController::StudentManageController(Admin * admin)
 
 void AdminController::MarksManage(Admin * admin)
 {
-	/*
-		Для начала выведем всех студентов и спросим для какого .
-		Или же можно сделать меню:	1) Введи ид 
-									2) Выберете пользователя сами
-	*/
-
 	switch (marks_menu())
 	{
-	case 1: // Выираем студента сами
+	case 1: // Выбираем студента сами
 	{
 		system("cls");
 
@@ -432,7 +512,7 @@ void AdminController::MarksManage(Admin * admin)
 		system("cls");
 		break;
 	}
-	case 2: // Добавляем по id // TODO Сделать валидацию на существование id
+	case 2: // Добавляем по id
 	{
 		system("cls");
 
@@ -450,6 +530,39 @@ void AdminController::MarksManage(Admin * admin)
 		else {
 			wcout << L"Ошибка добавление оценок." << endl;
 		}
+
+		system("pause");
+		system("cls");
+		break;
+	}
+	case 0:
+		break;
+
+	default:
+		wcout << L"Неверный выбор." << endl;
+		break;
+	}
+}
+
+void AdminController::StipendManage(Admin * admin)
+{
+	switch (stipend_menu())
+	{
+	case 1: // Расчет по id 
+	{
+		system("cls");
+
+		wstring student_id;
+		coutTitle(L"Раcчет стипендии(за текущий семестр)");
+
+		wcout << L"ID-студента: ";
+		CIN_FLUSH;
+		wcin >> student_id;
+
+		vector<Student * > students = admin->getStudents2V(student_id);
+		if (!students.size()) { break; }
+
+		pprinStipend(students);
 
 		system("pause");
 		system("cls");

@@ -129,12 +129,14 @@ vector<int> Admin::addMarks2V(wstring student_id, vector<wstring> subjs)
 	return marks;
 }
 
-vector<Student*> Admin::getStudents2V()
+vector<Student*> Admin::getStudents2V(wstring student_id)
 {
 	/*
 		schema marks: student_id: {term, retake, subjs ...}
+		get: student_id, условие, по которому надо выбирать студентов
+		return: vector<student *> с заполненными полями (вычислена стипендия, заполнены имеющиеся отметки)
 	*/
-	
+
 	vector<Student *> students;
 	map<wstring, vector<wstring>> groups;
 	vector<pair<pair<int, bool>, vector<int>>> marks;
@@ -142,9 +144,20 @@ vector<Student*> Admin::getStudents2V()
 	vector<bool> retake;
 	DataBase<Student> db;
 
-	students = db.getStudents2V();
+	if (student_id.length())
+	{
+		if (!db.existStudent(student_id))
+		{
+			wcout << L"Такого студента не существует." << endl;
+			return {};
+		}
+		students.push_back(db.getStudentById(student_id));
+	}
+	else
+		students = db.getStudents2V();
+
 	groups = db.getGroup2V();
-	
+
 	for (int i = 0; i < students.size(); i++)
 	{
 		wstring student_id = students.at(i)->getStudentId();
@@ -153,9 +166,9 @@ vector<Student*> Admin::getStudents2V()
 		if (marks.size())
 		{
 			subj = db.getColNames(L"marks");
-			subj.erase(subj.begin(), subj.begin()+3); // del 'student_id'&'term'&'retake' from subjects
+			subj.erase(subj.begin(), subj.begin() + 3); // del 'student_id'&'term'&'retake' from subjects
 		}
-		
+
 		students.at(i)->setMarks(marks, subj);
 		calcStipend(students.at(i));
 	}
@@ -356,4 +369,5 @@ void Admin::calcStipend(Student * s)
 
 		stipend.push_back(make_pair((*mark).first.first, BASE_STIPEND * ratio));
 	}
+	s->setStipend(stipend);
 }

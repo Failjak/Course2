@@ -27,7 +27,7 @@ public:
 	/*-----Student------*/
 	int AddStudent();
 	int DelStudent(Student * s);
-	vector<Student*> getStudents2V();
+	vector<Student*> getStudents2V(wstring student_id = L"");
 	int AddMarksToStudent(Student *s);
 	int AddMarksToStudent(wstring student_id);
 	void calcStipend(Student *s);

@@ -46,6 +46,7 @@ public:
 	wstring getEmail() { return email; }
 	wstring getPhone() { return phone; }
 	vector<pair<int, float>> getStipend() { return stipend; }
+	float getStipendLastTerm();
 
 	wstring getEdFormWstr() { return education_form == L"F" ? L"Бюджет" : L"Платно"; }
 	wstring getEdForm() { return education_form; }

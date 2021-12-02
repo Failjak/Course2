@@ -15,7 +15,7 @@ int type_menu()
 	wcout << L"2) Войти как студент." << endl;
 	wcout << L"3) Выход." << endl;
 	CIN_FLUSH;
-	cin >> choice;
+	wcin >> choice;
 
 	return choice;
 }

@@ -6,6 +6,7 @@
 #include "LoginController.h"
 #include "LoginController.cpp"
 #include "AdminController.h"
+#include "UserController.h"
 #include "Admin.h"
 #include "User.h"
 #include "Menu.h"
@@ -92,8 +93,7 @@ int main(int argc, char* argv[])
 	while (flag)
 	{
 		system("cls");
-		//switch (type_menu())
-		switch(1)
+		switch (type_menu())
 		{
 		case 1:
 		{
@@ -103,12 +103,12 @@ int main(int argc, char* argv[])
 			system("cls");
 			AdminController::main(&admin);
 
-			/*if (lContr.chekAuth(&admin))
+			if (lContr.chekAuth(&admin))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно.\n" << endl;
 				AdminController::main(&admin);
-			}*/
+			}
 			break;
 		}
 		case 2:
@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно." << endl;
-				//UserController(user);
+				UserController(user);
 			}
 			break;
 		}

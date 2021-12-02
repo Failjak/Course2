@@ -62,7 +62,6 @@ inline const std::wstring S2WS(const std::string &s)
 inline std::string WS2S(const std::wstring& wstr)
 {
 	using convert_typeX = codecvt_utf8_utf16<wchar_t>;
-	//wstring_convert<codecvt_utf8_utf16<wchar_t>> converter;
 	wstring_convert<convert_typeX, wchar_t> converterX;
 
 	return converterX.to_bytes(wstr);
@@ -90,6 +89,10 @@ template <class T>
 inline
 int DataBase<T>::existStudent(wstring student_id)
 {
+	/*
+		return: кол-во ответов при запросе student_id	
+	*/
+
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
@@ -171,10 +174,10 @@ int DataBase<T>::exist(T * s)
 
 	if (is_same<T, Admin>::value)
 	{
-		table = "admin";
+		table = admin_table;
 	}
 	else if (is_same<T, User>::value) {
-		table = "user";
+		table = user_table;
 	}
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
@@ -700,13 +703,16 @@ inline Student * DataBase<T>::getStudentById(wstring id)
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
 		string sql("select student_id, first_name, last_name, patronymic, ed_form, email, phone from " + table +
-					"where student_id = '" + WS2S(id) + ";");
+					" where student_id = '" + WS2S(id) + "';");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
 
+		int flag = 1;
+
 		while (sqlite3_column_text(stmt, 0))
 		{
+			flag = 0;
 			s->setStudentId(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0)));
 			s->setName(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
 			s->setSurname(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
@@ -717,8 +723,12 @@ inline Student * DataBase<T>::getStudentById(wstring id)
 
 			sqlite3_step(stmt);
 		}
-
+		if(flag) 
+		{
+			wcout << L"Ошибка считывания студента." << endl;
+		}
 	}
+
 	else
 	{
 		cout << "Failed to open db\n";
