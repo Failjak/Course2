@@ -13,4 +13,7 @@ public:
 	static void ShowMarks(User *);
 	static void StipendManage(User *);
 	static void Editing(User *);
+
+	static void pprintMark(User *, wstring);
+	static void pprintStipend(User *, wstring);
 };

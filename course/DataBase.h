@@ -13,7 +13,6 @@ class Student;
 class User;
 
 /*----------------Class DataBase--------------------*/
-template <class T>
 class DataBase {
 private: 
 	string admin_table = "admin";
@@ -23,13 +22,17 @@ private:
 	string group_table = "groups";
 
 public:
+	template <class T>
 	int exist(T * s);
+
+	template <class T>
+	vector<T*> getObj2V(T s);
+
 	int existStudent(wstring student_id);
 	int existMarks(wstring student_id, int term);
-	vector<T*> getObj2V();
 	
 	/*-----Admin------*/
-	int AddNoteUser(T *s);
+	int AddNoteUser(User *s);
 	/*-----Admin------*/
 
 
@@ -38,10 +41,12 @@ public:
 	int AddNoteStudentGroup(Student *s);
 	int AddMarks(vector<int>, vector<wstring>, wstring);
 	vector<Student*> getStudents2V();
-	map<wstring, vector<wstring>> getGroup2V();
+	map<wstring, vector<wstring>> getGroup2V(wstring student_id = L"");
 	vector<pair<pair<int, bool>, vector<int>>> getMarks2VById(wstring);
 	Student * getStudentById(wstring id);
-	int DelNoteByStydentId(wstring id);
+	wstring getStudentIdByUser(User * s);
+	template <class T>
+	int DelNoteByStydentId(wstring id, T s);
 	/*-----Student------*/
 
 	vector<wstring> getColNames(wstring table);
@@ -85,9 +90,8 @@ inline vector<vector<wstring>> VVS2VVWS(const vector<vector<string>> vvs)
 	return vvws;
 }
 
-template <class T>
 inline
-int DataBase<T>::existStudent(wstring student_id)
+int DataBase::existStudent(wstring student_id)
 {
 	/*
 		return: кол-во ответов при запросе student_id	
@@ -119,8 +123,7 @@ int DataBase<T>::existStudent(wstring student_id)
 	return res;
 }
 
-template<class T>
-inline int DataBase<T>::existMarks(wstring student_id, int term)
+inline int DataBase::existMarks(wstring student_id, int term)
 {
 	/*
 		params: student_id, term
@@ -153,9 +156,9 @@ inline int DataBase<T>::existMarks(wstring student_id, int term)
 	return res;
 }
 
-template <class T>
+template<class T>
 inline
-int DataBase<T>::exist(T * s)
+int DataBase::exist(T * s)
 {
 	/*
 		Func get object and select from DB,
@@ -207,7 +210,7 @@ int DataBase<T>::exist(T * s)
 }
 
 template<class T>
-inline vector<T*> DataBase<T>::getObj2V()
+inline vector<T*> DataBase::getObj2V(T s)
 {
 	/*
 		Func select from DB all T-type objects,
@@ -224,10 +227,10 @@ inline vector<T*> DataBase<T>::getObj2V()
 
 	if (is_same<T, Admin>::value)
 	{
-		table = "admin";
+		table = admin_table;
 	}
 	else if (is_same<T, User>::value) {
-		table = "users";
+		table = user_table;
 	}
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
@@ -272,8 +275,8 @@ inline vector<T*> DataBase<T>::getObj2V()
 	return result;
 }
 
-template<class T>
-inline int DataBase<T>::AddNoteUser(T * s)
+inline 
+int DataBase::AddNoteUser(User * s)
 {
 	/*
 		Func add inf about User to db.
@@ -322,7 +325,7 @@ inline int DataBase<T>::AddNoteUser(T * s)
 
 template<class T>
 inline
-int DataBase<T>::DelNoteByStydentId(wstring id)
+int DataBase::DelNoteByStydentId(wstring id, T s)
 {
 	/*
 		Func delete note from Users or Students, by Student id 	
@@ -366,8 +369,8 @@ int DataBase<T>::DelNoteByStydentId(wstring id)
 	return 1;
 }
 
-template<class T>
-inline int DataBase<T>::AddNoteStudent(Student * s)
+inline 
+int DataBase::AddNoteStudent(Student * s)
 {
 	/*
 		Func add inf about Student to db.
@@ -409,8 +412,8 @@ inline int DataBase<T>::AddNoteStudent(Student * s)
 	return 1;
 }
 
-template<class T>
-inline int DataBase<T>::AddNoteStudentGroup(Student * s)
+inline 
+int DataBase::AddNoteStudentGroup(Student * s)
 {
 	/*
 		Func add inf about Student to db.
@@ -451,8 +454,8 @@ inline int DataBase<T>::AddNoteStudentGroup(Student * s)
 	return 1;
 }
 
-template<class T>
-inline int DataBase<T>::AddMarks(vector<int> marks, vector<wstring> subj, wstring student_id)
+inline 
+int DataBase::AddMarks(vector<int> marks, vector<wstring> subj, wstring student_id)
 {
 	/*
 		Func add inf about Student to db.
@@ -505,13 +508,13 @@ inline int DataBase<T>::AddMarks(vector<int> marks, vector<wstring> subj, wstrin
 	return 1;
 }
 
-template<class T>
-inline vector<Student*> DataBase<T>::getStudents2V()
+inline 
+vector<Student*> DataBase::getStudents2V()
 {
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
-	vector<T*> result;
+	vector<Student*> result;
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
@@ -522,7 +525,7 @@ inline vector<Student*> DataBase<T>::getStudents2V()
 
 		while (sqlite3_column_text(stmt, 0))
 		{
-			T *s = new T();
+			Student *s = new Student();
 			s->setStudentId(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0)));
 			s->setName(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
 			s->setSurname(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
@@ -549,19 +552,27 @@ inline vector<Student*> DataBase<T>::getStudents2V()
 	return result;
 }
 
-template<class T>
-inline map<wstring, vector<wstring>> DataBase<T>::getGroup2V()
+inline 
+map<wstring, vector<wstring>> DataBase::getGroup2V(wstring student_id)
 {
+	/*
+		params: student_id(optional)
+		return: map{student_id, {group, fac, spec, ...}}
+	*/
+
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
 	map<wstring, vector<wstring>> result;
+	string sql;
 
+	if (student_id.length())
+		sql = ("select * from " + group_table + " where student_id = '" + WS2S(student_id) + "';");
+	else
+		sql = ("select * from " + group_table + ";");
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("select * from " + group_table + ";");
-
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
 
@@ -594,8 +605,8 @@ inline map<wstring, vector<wstring>> DataBase<T>::getGroup2V()
 	return result;
 }
 
-template<class T>
-inline vector<pair<pair<int, bool>, vector<int>>> DataBase<T>::getMarks2VById(wstring student_id)
+inline 
+vector<pair<pair<int, bool>, vector<int>>> DataBase::getMarks2VById(wstring student_id)
 {
 	/*
 		Get student_id 
@@ -662,8 +673,8 @@ inline vector<pair<pair<int, bool>, vector<int>>> DataBase<T>::getMarks2VById(ws
 	return result;
 }
 
-template<class T>
-inline vector<wstring> DataBase<T>::getColNames(wstring table)
+inline 
+vector<wstring> DataBase::getColNames(wstring table)
 {
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
@@ -695,19 +706,17 @@ inline vector<wstring> DataBase<T>::getColNames(wstring table)
 	return result;
 }
 
-template<class T>
-inline Student * DataBase<T>::getStudentById(wstring id)
+inline 
+Student * DataBase::getStudentById(wstring id)
 {
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
-
-	string table = "students";
 
 	Student* s = new Student();
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("select student_id, first_name, last_name, patronymic, ed_form, email, phone from " + table +
+		string sql("select student_id, first_name, last_name, patronymic, ed_form, email, phone from " + stud_table +
 					" where student_id = '" + WS2S(id) + "';");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
@@ -730,7 +739,7 @@ inline Student * DataBase<T>::getStudentById(wstring id)
 		}
 		if(flag) 
 		{
-			wcout << L"Ошибка считывания студента." << endl;
+			//wcout << L"Ошибка считывания студента." << endl;
 		}
 	}
 
@@ -744,4 +753,34 @@ inline Student * DataBase<T>::getStudentById(wstring id)
 	sqlite3_close(db);
 
 	return s;
+}
+
+inline wstring DataBase::getStudentIdByUser(User * s)
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	wstring student_id = L"";
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select student_id from " +  user_table +
+			" where login = '" + WS2S(s->getLogin()) + "' and password = '" + WS2S(s->getPassword()) + "';");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		for (; sqlite3_column_text16(stmt, 0); sqlite3_step(stmt))
+			student_id = static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0));
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return student_id;
 }

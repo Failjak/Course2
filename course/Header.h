@@ -9,6 +9,7 @@
 #include <locale>
 #include <vector>
 #include <map>
+#include <iomanip>
 
 
 #define CIN_FLUSH if (std::cin.fail()) {std::cin.clear(); std::cin.ignore();}
@@ -57,5 +58,7 @@ const std::map<std::wstring, std::wstring> DBfield_subj = {
 	{L"OOP", L"ООП"},
 	{L"Philosophy", L"Философия"},
 	{L"CN", L"КС"},
-	{L"Economic", L"Экономика"}
+	{L"Economic", L"Экономика"},
+	{L"term", L"Семестр"},
+	{L"retake", L"Пересдачи"}
 };

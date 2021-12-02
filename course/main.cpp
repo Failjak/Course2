@@ -86,7 +86,12 @@ int main(int argc, char* argv[])
 	_setmode(_fileno(stdin), _O_U16TEXT);
 	_setmode(_fileno(stderr), _O_U16TEXT);
 
-	int flag = 1;
+	int flag = 0;
+
+	User user;
+	user.setLogin(L"gus");
+	user.setPassword(L"123");
+	UserController::main(&user);
 
 	//create_table();
 

@@ -4,23 +4,6 @@
 #include "Admin.h"
 #include "Header.h"
 
-float Admin::getStipendRatio(float avg_mark)
-{
-	using namespace Stipend;
-	float stipend_ratio = -1;
-	wstring key;
-	
-	for (auto it = stipend_condition.begin(); it != stipend_condition.end(); ++it)
-	{
-		if ((*it).second.first <= avg_mark and avg_mark <= (*it).second.second)
-		{
-			key = (*it).first;
-			return stipend_rate.at(key);
-		}
-	}
-	return stipend_ratio;
-}
-
 void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, wstring mode)
 {
 	wstring student_id;
@@ -41,24 +24,10 @@ void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, w
 	}
 }
 
-int Admin::calcCourse(wstring student_id)
-{
-	int course;
-	time_t now = time(0);
-	tm * ltm = localtime(&now);
-	int cur_year = (1900 + ltm->tm_year) % 100;
-	int cur_month = ltm->tm_mon + 1;
-	// 0736002
-	int tmp = student_id.at(0) - 48;
-	course = (cur_year - tmp) % 10 + 1;
-	//course += cur_month >= 6 ? 0.5 : 0;
-	//wcout << course << endl;
-	return course;
-}
 
 vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> subjs)
 {
-	DataBase<Student> db;
+	DataBase db;
 	vector<int> marks;
 	int ch;
 	wstring num =L"";
@@ -164,7 +133,7 @@ vector<Student*> Admin::getStudents2V(wstring student_id)
 	vector<pair<pair<int, bool>, vector<int>>> marks;
 	vector<wstring> subj;
 	vector<bool> retake;
-	DataBase<Student> db;
+	DataBase db;
 
 	if (student_id.length())
 	{
@@ -193,7 +162,7 @@ vector<Student*> Admin::getStudents2V(wstring student_id)
 
 		students.at(i)->setCourse(calcCourse(student_id));
 		students.at(i)->setMarks(marks, subj);
-		calcStipend(students.at(i));
+		students.at(i)->calcStipend(students.at(i));
 	}
 	mergeStGr(&students, groups, L"group");
 
@@ -202,8 +171,8 @@ vector<Student*> Admin::getStudents2V(wstring student_id)
 
 vector<User*> Admin::getUsers2V()
 {
-	DataBase<User> db;
-	vector<User *> users = db.getObj2V();
+	DataBase db;
+	vector<User *> users = db.getObj2V(User());
 
 	for (int i = 0; i < users.size(); i++)
 		users[i]->setStudent(db.getStudentById(users[i]->getStudentId()));
@@ -218,7 +187,7 @@ int Admin::AddUser()
 				0 - faild insert.
 	*/
 
-	DataBase<User> db;
+	DataBase db;
 	wstring login, password, student_id;
 
 	coutTitle(L"Добавление пользователя");
@@ -248,8 +217,8 @@ int Admin::AddUser()
 
 int Admin::DelUser(User * s)
 {
-	DataBase<User> db;
-	if (db.DelNoteByStydentId(s->getStudentId()) == 1)
+	DataBase db;
+	if (db.DelNoteByStydentId(s->getStudentId(), User()) == 1)
 	{
 		return 1;
 	}
@@ -264,7 +233,7 @@ int Admin::AddStudent()
 				0 - faild insert.
 	*/
 
-	DataBase<Student> db;
+	DataBase db;
 	wstring last_name, patr, first_name, student_id, ed_form, email, phone;
 	wstring group, faculty, spec;
 
@@ -309,8 +278,8 @@ int Admin::AddStudent()
 
 int Admin::DelStudent(Student * s)
 {
-	DataBase<Student> db;
-	if (db.DelNoteByStydentId(s->getStudentId()) == 1)
+	DataBase db;
+	if (db.DelNoteByStydentId(s->getStudentId(), Student()) == 1)
 	{
 		return 1;
 	}
@@ -320,7 +289,7 @@ int Admin::DelStudent(Student * s)
 
 int Admin::AddMarksToStudent(Student * s)
 {
-	DataBase<Student> db;
+	DataBase db;
 	wstring student_id = s->getStudentId();
 
 	vector<wstring> cols = db.getColNames(L"marks");
@@ -338,7 +307,7 @@ int Admin::AddMarksToStudent(Student * s)
 
 int Admin::AddMarksToStudent(wstring student_id)
 {
-	DataBase<Student> db;
+	DataBase db;
 
 	if (!db.existStudent(student_id))
 	{
@@ -359,40 +328,4 @@ int Admin::AddMarksToStudent(wstring student_id)
 	}
 
 	return 0;
-}
-
-void Admin::calcStipend(Student * s)
-{
-	using namespace Stipend;
-
-	/*
-		Я получаю студента и набор оценок за все существующие семестры
-
-		Для начала проверяем бюджет или нет. Перебираю все семестры, если
-		была пересдача тогда стипендии нет. Если же нет идем дальше.
-		 если 1-семестр: базовая стипендия
-		 2-семестр: смотрим на первый, средний балл; умножаем на коэфф
-		 3-семест
-	*/
-
-	if (!s->getEdFormInt()) { return; }
-
-	vector<pair<int, float>> stipend;
-
-	vector<pair<pair<int, bool>, float>> marks = s->getAvgMarkByTerm(); // schema: {{ {term, retake}, {marks...} }}	
-	vector<pair<pair<int, bool>, float>>::iterator mark;
-	vector<pair<pair<int, bool>, float>>::iterator prev_mark;
-
-	for (mark = marks.begin(), prev_mark = marks.begin(); mark != marks.end(); prev_mark = mark, mark++)
-	{
-		if ((*mark).first.first == 1) { stipend.push_back(make_pair(1, Stipend::BASE_STIPEND)); continue; }  // add stipend for the first semester
-		
-		float avg_mark = (*prev_mark).second;
-		float ratio = getStipendRatio(avg_mark);
-
-		if ((*prev_mark).first.second) { stipend.push_back(make_pair(1, 0)); continue; } // пересдача
-
-		stipend.push_back(make_pair((*mark).first.first, BASE_STIPEND * ratio));
-	}
-	s->setStipend(stipend);
 }

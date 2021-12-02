@@ -10,9 +10,10 @@
 /*----------------Class Admin--------------------*/
 class Admin : public User{
 private:
-	float getStipendRatio(float avg_mark);
+	//friend float Student::getStipendRatio(float avg_mark);
+	//friend int Student::calcCourse(wstring student_id);
+
 	void mergeStGr(vector<Student *> *, const map<wstring, vector<wstring>>, wstring mode);
-	int calcCourse(wstring student_id);
 	vector<int> addMarks2V(wstring student_id, int course, vector<wstring> subjs);
 
 public:
@@ -31,6 +32,6 @@ public:
 	vector<Student*> getStudents2V(wstring student_id = L"");
 	int AddMarksToStudent(Student *s);
 	int AddMarksToStudent(wstring student_id);
-	void calcStipend(Student *s);
+	friend void Student::calcStipend(Student *s);
 	/*-----Student------*/
 };

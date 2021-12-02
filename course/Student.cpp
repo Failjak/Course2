@@ -1,6 +1,8 @@
 #include "Student.h"
+#include "Header.h"
 
-Student::Student(const Student & tmp)
+
+Student::Student(const Student & tmp) : People(tmp.name, tmp.surname, tmp.patronomic)
 {
 	this->student_id = tmp.student_id;
 	this->group = tmp.group;
@@ -97,4 +99,47 @@ float Student::getAvgMark()
 		sum += avg_marks.at(i).second;
 	}
 	return sum / avg_marks.size();
+}
+
+float Student::getStipendRatio(float avg_mark)
+{
+	using namespace Stipend;
+	float stipend_ratio = -1;
+	wstring key;
+
+	for (auto it = stipend_condition.begin(); it != stipend_condition.end(); ++it)
+	{
+		if ((*it).second.first <= avg_mark and avg_mark <= (*it).second.second)
+		{
+			key = (*it).first;
+			return stipend_rate.at(key);
+		}
+	}
+	return stipend_ratio;
+}
+
+void Student::calcStipend(Student * s)
+{
+	using namespace Stipend;
+
+	if (!s->getEdFormInt()) { return; }
+
+	vector<pair<int, float>> stipend;
+
+	vector<pair<pair<int, bool>, float>> marks = s->getAvgMarkByTerm(); // schema: {{ {term, retake}, {marks...} }}	
+	vector<pair<pair<int, bool>, float>>::iterator mark;
+	vector<pair<pair<int, bool>, float>>::iterator prev_mark;
+
+	for (mark = marks.begin(), prev_mark = marks.begin(); mark != marks.end(); prev_mark = mark, mark++)
+	{
+		if ((*mark).first.first == 1) { stipend.push_back(make_pair(1, Stipend::BASE_STIPEND)); continue; }  // add stipend for the first semester
+
+		float avg_mark = (*prev_mark).second;
+		float ratio = getStipendRatio(avg_mark);
+
+		if ((*prev_mark).first.second) { stipend.push_back(make_pair(1, 0)); continue; } // пересдача
+
+		stipend.push_back(make_pair((*mark).first.first, BASE_STIPEND * ratio));
+	}
+	s->setStipend(stipend);
 }

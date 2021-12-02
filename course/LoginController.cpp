@@ -38,7 +38,7 @@ template <class T>
 bool LoginController<T>::chekAuth(T * s)
 {
 	vector<T> lp;
-	DataBase<T> db;
+	DataBase db;
 	int flag = 1;
 
 	while (flag)

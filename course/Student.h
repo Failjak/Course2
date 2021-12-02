@@ -10,7 +10,7 @@ using namespace std;
 /*----------------Class Student--------------------*/
 class Student : public People {
 private:
-	map<int, map <wstring, int>> marks; // term: (subj: {mark, ...})
+	map<int, map<wstring, int>> marks; // term: (subj: {mark, ...})
 	wstring student_id;
 	wstring group;
 	wstring faculty;
@@ -21,6 +21,8 @@ private:
 	int course;
 
 	vector<pair<int, float>> stipend; // schema: { {term, stipend} }
+
+	float getStipendRatio(float avg_mark);
 
 public:
 	Student() { ; }
@@ -57,4 +59,10 @@ public:
 
 	vector<pair<pair<int, bool>, float>> getAvgMarkByTerm();
 	float getAvgMark();
+	map<int, map<wstring, int>> getMarks() { return marks; }
+
+
+	/*-----friend functions to Admin-----*/
+	void calcStipend(Student *s);
+	/*----- ----- -------- -- ---- -----*/
 };

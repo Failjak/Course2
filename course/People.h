@@ -4,7 +4,7 @@
 
 /*----------------Class People--------------------*/
 class People {
-private:
+protected:
 	std::wstring name;
 	std::wstring surname;
 	std::wstring patronomic;
@@ -14,15 +14,18 @@ private:
 public:
 	People() { ; }
 	People(std::wstring name, std::wstring surname, std::wstring patr) : name(strPPrint(name)), surname(strPPrint(surname)), patronomic(strPPrint(patr)) { ; }
+	People(const People & tmp) {
+		name = tmp.name; surname = tmp.surname; patronomic = tmp.patronomic;
+	}
 
 	virtual void setName(std::wstring name);
 	virtual void setSurname(std::wstring surname);
 	virtual void setPatronomic(std::wstring patr);
 
-	std::wstring getName() { return name; }
-	std::wstring getSurname() { return surname; }
-	std::wstring getPatronomic() { return patronomic; }
-	std::wstring getFullName();
+	virtual std::wstring getName() { return name; }
+	virtual std::wstring getSurname() { return surname; }
+	virtual std::wstring getPatronomic() { return patronomic; }
+	virtual std::wstring getFullName();
 
 	friend std::wostream &operator<<(std::wostream &s, People * p);
 };
