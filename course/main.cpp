@@ -101,8 +101,6 @@ int main(int argc, char* argv[])
 			LoginController<Admin> lContr;
 
 			system("cls");
-			AdminController::main(&admin);
-
 			if (lContr.chekAuth(&admin))
 			{
 				system("cls");
@@ -113,20 +111,20 @@ int main(int argc, char* argv[])
 		}
 		case 2:
 		{
+			User user;
 			LoginController<User> lContr;
 
-			User user;
 			system("cls");
 			if (lContr.chekAuth(&user))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно." << endl;
-				UserController(user);
+				UserController::main(&user);
 			}
 			break;
 		}
 
-		case 3:
+		case 0:
 
 			return 0;
 			break;

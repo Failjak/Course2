@@ -1,4 +1,5 @@
 #include <conio.h>
+#include <ctime>
 
 #include "Admin.h"
 #include "Header.h"
@@ -40,12 +41,32 @@ void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, w
 	}
 }
 
-vector<int> Admin::addMarks2V(wstring student_id, vector<wstring> subjs)
+int Admin::calcCourse(wstring student_id)
+{
+	int course;
+	time_t now = time(0);
+	tm * ltm = localtime(&now);
+	int cur_year = (1900 + ltm->tm_year) % 100;
+	int cur_month = ltm->tm_mon + 1;
+	// 0736002
+	int tmp = student_id.at(0) - 48;
+	course = (cur_year - tmp) % 10 + 1;
+	//course += cur_month >= 6 ? 0.5 : 0;
+	//wcout << course << endl;
+	return course;
+}
+
+vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> subjs)
 {
 	DataBase<Student> db;
 	vector<int> marks;
 	int ch;
 	wstring num =L"";
+
+	if (db.existMarks(student_id, course * 2))
+	{
+		wcout << L"Отметки за все семестры занесены." << endl;
+	}
 
 	wcout << L"Отметки за семестр: ";
 	do
@@ -66,13 +87,14 @@ vector<int> Admin::addMarks2V(wstring student_id, vector<wstring> subjs)
 		}
 		else if (ch >= 48 and ch <= 57)
 		{
-			if (stoi(num + (wchar_t)ch) > 0 and stoi(num + (wchar_t)ch) < 9)
+			if (stoi(num + (wchar_t)ch) > 0 and stoi(num + (wchar_t)ch) <= course * 2)
 			{
 				wcout << (wchar_t)ch;
 				num += (wchar_t)ch;
+				if (!db.existMarks(student_id, stoi(num))) { break; }
 			}
 		}
-	} while (db.existMarks(student_id, stoi(num)) > 0);
+	} while (true);
 	marks.push_back(stoi(num));
 
 	wcout << L"\nПересдачи(1-'да', 0-'нет'): ";
@@ -169,6 +191,7 @@ vector<Student*> Admin::getStudents2V(wstring student_id)
 			subj.erase(subj.begin(), subj.begin() + 3); // del 'student_id'&'term'&'retake' from subjects
 		}
 
+		students.at(i)->setCourse(calcCourse(student_id));
 		students.at(i)->setMarks(marks, subj);
 		calcStipend(students.at(i));
 	}
@@ -303,7 +326,7 @@ int Admin::AddMarksToStudent(Student * s)
 	vector<wstring> cols = db.getColNames(L"marks");
 	cols.erase(cols.begin()); // del 'student_id' from subjects
 	vector<int> marks;
-	marks = addMarks2V(student_id, cols);
+	marks = addMarks2V(student_id, s->getCourse(), cols);
 
 	if (db.AddMarks(marks, cols, student_id))
 	{
@@ -324,9 +347,11 @@ int Admin::AddMarksToStudent(wstring student_id)
 	}
 
 	vector<wstring> cols = db.getColNames(L"marks");
+	Student * student = db.getStudentById(student_id);
+
 	cols.erase(cols.begin()); // del 'student_id' from subjects
 	vector<int> marks;
-	marks = addMarks2V(student_id, cols);
+	marks = addMarks2V(student_id,student->getCourse(),cols);
 
 	if (db.AddMarks(marks, cols, student_id))
 	{

@@ -18,6 +18,7 @@ private:
 	wstring email;
 	wstring phone;
 	wstring education_form;
+	int course;
 
 	vector<pair<int, float>> stipend; // schema: { {term, stipend} }
 
@@ -38,6 +39,7 @@ public:
 	void setEdForm(wstring ed_form) { education_form = ed_form; }
 	void setMarks(vector<pair<pair<int, bool>, vector<int>>>, vector<wstring> subj);
 	void setStipend(vector<pair<int, float>> stipend) { this->stipend = stipend; }
+	void setCourse(int course) { this->course = course; }
 
 	wstring getStudentId() { return student_id; }
 	wstring getGroup() { return group; }
@@ -47,6 +49,7 @@ public:
 	wstring getPhone() { return phone; }
 	vector<pair<int, float>> getStipend() { return stipend; }
 	float getStipendLastTerm();
+	int getCourse() { return course; }
 
 	wstring getEdFormWstr() { return education_form == L"F" ? L"Бюджет" : L"Платно"; }
 	wstring getEdForm() { return education_form; }

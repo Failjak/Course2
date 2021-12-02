@@ -122,6 +122,11 @@ int DataBase<T>::existStudent(wstring student_id)
 template<class T>
 inline int DataBase<T>::existMarks(wstring student_id, int term)
 {
+	/*
+		params: student_id, term
+		return: кол-во совпадний в таблице, с таким student_id and term
+	*/
+
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 

@@ -11,9 +11,9 @@ int type_menu()
 
 	int choice;
 
-	wcout << L"1) Войти как администратор." << endl;
-	wcout << L"2) Войти как студент." << endl;
-	wcout << L"3) Выход." << endl;
+	wcout << L"1) - Войти как администратор." << endl;
+	wcout << L"2) - Войти как студент." << endl;
+	wcout << L"0) - Выход." << endl;
 	CIN_FLUSH;
 	wcin >> choice;
 

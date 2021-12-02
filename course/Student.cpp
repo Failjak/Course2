@@ -10,6 +10,7 @@ Student::Student(const Student & tmp)
 	this->phone = tmp.phone;
 	this->education_form = tmp.education_form;
 	this->marks = tmp.marks;
+	this->course = tmp.course;
 }
 
 void Student::setMarks(vector<pair<pair<int, bool>, vector<int>>> tmp, vector<wstring> subj)

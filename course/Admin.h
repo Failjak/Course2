@@ -12,7 +12,8 @@ class Admin : public User{
 private:
 	float getStipendRatio(float avg_mark);
 	void mergeStGr(vector<Student *> *, const map<wstring, vector<wstring>>, wstring mode);
-	vector<int> addMarks2V(wstring student_id, vector<wstring> subjs);
+	int calcCourse(wstring student_id);
+	vector<int> addMarks2V(wstring student_id, int course, vector<wstring> subjs);
 
 public:
 	Admin() { ; }

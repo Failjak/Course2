@@ -31,11 +31,13 @@ void AdminController::main(Admin * admin)
 		{
 			system("cls");
 			MarksManage(admin);
+			break;
 		}
 		case 4:
 		{
 			system("cls");
 			StipendManage(admin);
+			break;
 		}
 		case 0:
 		{
@@ -121,12 +123,12 @@ int AdminController::marks_menu()
 
 int AdminController::stipend_menu()
 {
-	coutTitle(L"Меню просмтора стипендий");
+	coutTitle(L"Меню просмотра стипендий");
 
 	int choice;
 
 	//wcout << L"1) - Просмотр стипендий для всех студентов." << endl;
-	wcout << L"1) - Вычислить стипендию для студента." << endl;
+	wcout << L"1) - Вычислить стипендию для студента(за послдний семестр)." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
@@ -221,8 +223,8 @@ void AdminController::pprinStudent(std::vector<Student*> students, std::wstring 
 		if (students.at(i)->getEdFormWstr().length() > max_size_ed_form)
 			max_size_ed_form = students.at(i)->getEdFormWstr().size();
 
-		if (students.at(i)->getGroup().length() > max_size_mail)
-			max_size_mail = students.at(i)->getGroup().size();
+		if (students.at(i)->getEmail().length() > max_size_mail)
+			max_size_mail = students.at(i)->getEmail().size();
 
 		if (students.at(i)->getPhone().length() > max_size_phone)
 			max_size_phone = students.at(i)->getPhone().size();

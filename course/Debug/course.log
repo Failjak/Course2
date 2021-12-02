@@ -1,4 +1,269 @@
-﻿  main.cpp
+﻿  Admin.cpp
+h:\studing\course2\course\course\database.h(75): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(78): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(28): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(48): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\time.h(506): note: see declaration of 'localtime'
+h:\studing\course2\course\course\admin.cpp(122): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(183): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admin.cpp(208): warning C4018: '<': signed/unsigned mismatch
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+  h:\studing\course2\course\course\header.h(46): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+  h:\studing\course2\course\course\header.h(40): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+h:\studing\course2\course\course\database.h(381): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(371): note: while compiling class template member function 'int DataBase<Student>::AddNoteStudent(Student *)'
+  h:\studing\course2\course\course\admin.cpp(302): note: see reference to function template instantiation 'int DataBase<Student>::AddNoteStudent(Student *)' being compiled
+  h:\studing\course2\course\course\admin.cpp(61): note: see reference to class template instantiation 'DataBase<Student>' being compiled
+h:\studing\course2\course\course\database.h(424): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(414): note: while compiling class template member function 'int DataBase<Student>::AddNoteStudentGroup(Student *)'
+  h:\studing\course2\course\course\admin.cpp(302): note: see reference to function template instantiation 'int DataBase<Student>::AddNoteStudentGroup(Student *)' being compiled
+h:\studing\course2\course\course\database.h(471): warning C4018: '<': signed/unsigned mismatch
+  h:\studing\course2\course\course\database.h(456): note: while compiling class template member function 'int DataBase<Student>::AddMarks(std::vector<int,std::allocator<_Ty>>,std::vector<std::wstring,std::allocator<std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t>>>>,std::wstring)'
+          with
+          [
+              _Ty=int
+          ]
+  h:\studing\course2\course\course\admin.cpp(331): note: see reference to function template instantiation 'int DataBase<Student>::AddMarks(std::vector<int,std::allocator<_Ty>>,std::vector<std::wstring,std::allocator<std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t>>>>,std::wstring)' being compiled
+          with
+          [
+              _Ty=int
+          ]
+h:\studing\course2\course\course\database.h(477): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(466): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(616): warning C4018: '<': signed/unsigned mismatch
+  h:\studing\course2\course\course\database.h(599): note: while compiling class template member function 'std::vector<std::pair<std::pair<int,bool>,std::vector<int,std::allocator<_Ty>>>,std::allocator<std::pair<std::pair<int,bool>,std::vector<_Ty,std::allocator<_Ty>>>>> DataBase<Student>::getMarks2VById(std::wstring)'
+          with
+          [
+              _Ty=int
+          ]
+  h:\studing\course2\course\course\admin.cpp(187): note: see reference to function template instantiation 'std::vector<std::pair<std::pair<int,bool>,std::vector<int,std::allocator<_Ty>>>,std::allocator<std::pair<std::pair<int,bool>,std::vector<_Ty,std::allocator<_Ty>>>>> DataBase<Student>::getMarks2VById(std::wstring)' being compiled
+          with
+          [
+              _Ty=int
+          ]
+h:\studing\course2\course\course\database.h(620): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(332): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(326): note: while compiling class template member function 'int DataBase<Student>::DelNoteByStydentId(std::wstring)'
+  h:\studing\course2\course\course\admin.cpp(313): note: see reference to function template instantiation 'int DataBase<Student>::DelNoteByStydentId(std::wstring)' being compiled
+h:\studing\course2\course\course\database.h(670): warning C4101: 'err': unreferenced local variable
+  h:\studing\course2\course\course\database.h(667): note: while compiling class template member function 'std::vector<std::wstring,std::allocator<_Ty>> DataBase<Student>::getColNames(std::wstring)'
+          with
+          [
+              _Ty=std::wstring
+          ]
+  h:\studing\course2\course\course\admin.cpp(190): note: see reference to function template instantiation 'std::vector<std::wstring,std::allocator<_Ty>> DataBase<Student>::getColNames(std::wstring)' being compiled
+          with
+          [
+              _Ty=std::wstring
+          ]
+h:\studing\course2\course\course\database.h(287): warning C4101: 'stmt': unreferenced local variable
+  h:\studing\course2\course\course\database.h(277): note: while compiling class template member function 'int DataBase<User>::AddNoteUser(T *)'
+          with
+          [
+              T=User
+          ]
+  h:\studing\course2\course\course\admin.cpp(241): note: see reference to function template instantiation 'int DataBase<User>::AddNoteUser(T *)' being compiled
+          with
+          [
+              T=User
+          ]
+  h:\studing\course2\course\course\admin.cpp(205): note: see reference to class template instantiation 'DataBase<User>' being compiled
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(240): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+  h:\studing\course2\course\course\admin.cpp(388): note: see reference to function template instantiation 'std::pair<int,float>::pair<int,double,0>(std::pair<int,double> &&) noexcept' being compiled
+  h:\studing\course2\course\course\admin.cpp(388): note: see reference to function template instantiation 'std::pair<int,float>::pair<int,double,0>(std::pair<int,double> &&) noexcept' being compiled
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(240): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+  h:\studing\course2\course\course\admin.cpp(393): note: see reference to function template instantiation 'std::pair<int,float>::pair<int,int,0>(std::pair<int,int> &&) noexcept' being compiled
+  h:\studing\course2\course\course\admin.cpp(393): note: see reference to function template instantiation 'std::pair<int,float>::pair<int,int,0>(std::pair<int,int> &&) noexcept' being compiled
+  AdminController.cpp
+h:\studing\course2\course\course\database.h(75): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(78): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(149): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(151): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(153): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(155): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(183): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(206): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(208): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(211): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(214): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(217): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(220): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(223): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(226): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(229): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(269): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(295): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(297): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(300): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(303): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(306): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(338): warning C4018: '<': signed/unsigned mismatch
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+  h:\studing\course2\course\course\header.h(46): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+  h:\studing\course2\course\course\header.h(40): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+  LoginController.cpp
 h:\studing\course2\course\course\database.h(75): warning C4018: '<': signed/unsigned mismatch
 h:\studing\course2\course\course\database.h(78): warning C4018: '<': signed/unsigned mismatch
 c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
@@ -10,13 +275,13 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
           [
               _Ty1=float
           ]
-  h:\studing\course2\course\course\header.h(39): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
               _Other2=double
           ]
-  h:\studing\course2\course\course\header.h(33): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
@@ -40,13 +305,13 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
           [
               _Ty1=float
           ]
-  h:\studing\course2\course\course\header.h(39): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=double,
               _Other2=double
           ]
-  h:\studing\course2\course\course\header.h(33): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=double,
@@ -61,7 +326,7 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
           [
               _Ty2=float
           ]
-  h:\studing\course2\course\course\header.h(47): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+  h:\studing\course2\course\course\header.h(46): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
           with
           [
               _Kty=std::wstring,
@@ -69,7 +334,7 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Other1=const wchar_t (&)[5],
               _Other2=int
           ]
-  h:\studing\course2\course\course\header.h(41): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+  h:\studing\course2\course\course\header.h(40): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
           with
           [
               _Kty=std::wstring,
@@ -77,4 +342,244 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Other1=const wchar_t (&)[5],
               _Other2=int
           ]
+  LoginController.h
+h:\studing\course2\course\course\database.h(75): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(78): warning C4018: '<': signed/unsigned mismatch
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+  h:\studing\course2\course\course\header.h(46): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+  h:\studing\course2\course\course\header.h(40): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+  UserController.cpp
+h:\studing\course2\course\course\database.h(75): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(78): warning C4018: '<': signed/unsigned mismatch
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+  h:\studing\course2\course\course\header.h(46): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+  h:\studing\course2\course\course\header.h(40): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+  main.cpp
+h:\studing\course2\course\course\database.h(75): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(78): warning C4018: '<': signed/unsigned mismatch
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=int,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+  h:\studing\course2\course\course\header.h(38): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+  h:\studing\course2\course\course\header.h(32): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+          with
+          [
+              _Other1=double,
+              _Other2=double
+          ]
+c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(173): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+          and
+          [
+              _Ty2=float
+          ]
+  h:\studing\course2\course\course\header.h(46): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+  h:\studing\course2\course\course\header.h(40): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+          with
+          [
+              _Kty=std::wstring,
+              _Ty=float,
+              _Other1=const wchar_t (&)[5],
+              _Other2=int
+          ]
+  Generating Code...
+Debug\LoginController.obj : warning LNK4042: object specified more than once; extras ignored
+LINK : warning LNK4067: ambiguous entry point; selected 'mainCRTStartup'
   course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe
