@@ -22,14 +22,16 @@ public:
 
 	/*-----Admin------*/
 	int AddUser();
-	vector<User*> getUsers2V();
+	vector<User*> getUsers();
+	vector<User *> getFullUser();
 	int DelUser(User * s);
+	int	EditUser(User * s);
 	/*-----Admin------*/
 
 	/*-----Student------*/
 	int AddStudent();
 	int DelStudent(Student * s);
-	vector<Student*> getStudents2V(wstring student_id = L"");
+	vector<Student*> getStudents(wstring student_id = L"");
 	int AddMarksToStudent(Student *s);
 	int AddMarksToStudent(wstring student_id);
 	friend void Student::calcStipend(Student *s);

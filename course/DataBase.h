@@ -40,7 +40,7 @@ public:
 	int AddNoteStudent(Student *s);
 	int AddNoteStudentGroup(Student *s);
 	int AddMarks(vector<int>, vector<wstring>, wstring);
-	vector<Student*> getStudents2V();
+	vector<Student*> getStudents();
 	map<wstring, vector<wstring>> getGroup2V(wstring student_id = L"");
 	vector<pair<pair<int, bool>, vector<int>>> getMarks2VById(wstring);
 	Student * getStudentById(wstring id);
@@ -175,7 +175,7 @@ int DataBase::exist(T * s)
 	string l, pass;
 
 	l = WS2S(s->getLogin());
-	pass = WS2S(s->getPassword());
+	pass = WS2S(s->getEncrPassword());
 
 	int res = 0;
 	string table;
@@ -302,7 +302,7 @@ int DataBase::AddNoteUser(User * s)
 	{
 		string sql("pragma foreign_keys=on;"
 			"insert into "+ user_table + "(login, password, student_id) values ('" + WS2S(s->getLogin()) +
-			"', '" + WS2S(s->getPassword()) + "', '" + WS2S(s->getStudentId()) + "');");
+			"', '" + WS2S(s->getEncrPassword()) + "', '" + WS2S(s->getStudentId()) + "');");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 
@@ -509,7 +509,7 @@ int DataBase::AddMarks(vector<int> marks, vector<wstring> subj, wstring student_
 }
 
 inline 
-vector<Student*> DataBase::getStudents2V()
+vector<Student*> DataBase::getStudents()
 {
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
@@ -765,7 +765,7 @@ inline wstring DataBase::getStudentIdByUser(User * s)
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
 		string sql("select student_id from " +  user_table +
-			" where login = '" + WS2S(s->getLogin()) + "' and password = '" + WS2S(s->getPassword()) + "';");
+			" where login = '" + WS2S(s->getLogin()) + "' and password = '" + WS2S(s->getEncrPassword()) + "';");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement

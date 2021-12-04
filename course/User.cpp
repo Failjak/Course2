@@ -128,7 +128,7 @@ wostream & operator<<(wostream & wcout, const User & user)
 	wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
 	wcout << L"│"
 		<< setw(max_size_login > MIN_SPACE ? max_size_login + 1 : MIN_SPACE) << left << user.login
-		<< setw(max_size_pass > MIN_SPACE ? max_size_pass + 1 : MIN_SPACE) << left << user.password
+		<< setw(max_size_pass > MIN_SPACE ? max_size_pass + 1 : MIN_SPACE) << left << Encrypt::decrypt(user.password)
 		<< setw(max_size_id > MIN_SPACE ? max_size_id + 1 : MIN_SPACE) << left << user.student_id
 		<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << student.getFullName()
 		<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << student.getFaculty()

@@ -4,6 +4,8 @@
 #include "Admin.h"
 #include "Header.h"
 
+using namespace std;
+
 void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, wstring mode)
 {
 	wstring student_id;
@@ -120,7 +122,7 @@ vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> su
 	return marks;
 }
 
-vector<Student*> Admin::getStudents2V(wstring student_id)
+vector<Student*> Admin::getStudents(wstring student_id)
 {
 	/*
 		schema marks: student_id: {term, retake, subjs ...}
@@ -145,7 +147,7 @@ vector<Student*> Admin::getStudents2V(wstring student_id)
 		students.push_back(db.getStudentById(student_id));
 	}
 	else
-		students = db.getStudents2V();
+		students = db.getStudents();
 
 	groups = db.getGroup2V();
 
@@ -169,13 +171,30 @@ vector<Student*> Admin::getStudents2V(wstring student_id)
 	return students;
 }
 
-vector<User*> Admin::getUsers2V()
+vector<User*> Admin::getUsers()
 {
 	DataBase db;
 	vector<User *> users = db.getObj2V(User());
 
 	for (int i = 0; i < users.size(); i++)
-		users[i]->setStudent(db.getStudentById(users[i]->getStudentId()));
+		users.at(i)->setStudent(db.getStudentById(users.at(i)->getStudentId()));
+
+	return users;
+}
+
+vector<User*> Admin::getFullUser()
+{
+	DataBase db;
+	vector<User *> users = db.getObj2V(User());
+	wstring student_id;
+
+	for (int i = 0; i < users.size(); i++)
+	{
+		student_id = users.at(i)->getStudentId();
+		auto students = getStudents(student_id);
+		if(!students.empty())
+			users[i]->setStudent(students.front());
+	}
 
 	return users;
 }
@@ -223,6 +242,15 @@ int Admin::DelUser(User * s)
 		return 1;
 	}
 
+	return 0;
+}
+
+int Admin::EditUser(User * s)
+{
+	system("cls");
+	coutTitle(L"Редактирование пользователя");
+
+	wcout << *s << endl;
 	return 0;
 }
 

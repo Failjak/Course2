@@ -2,6 +2,7 @@
 #include "Header.h"
 #include "DataBase.h"
 #include <iostream>
+#include <Windows.h>
 #include <iomanip>
 
 using namespace std;
@@ -79,6 +80,7 @@ int AdminController::user_menu()
 	wcout << L"1) - Просмотр пользователей." << endl;
 	wcout << L"2) - Добавить пользователя" << endl;
 	wcout << L"3) - Удалить пользователя." << endl;
+	wcout << L"4) - Редиктировать пользователей." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
@@ -128,7 +130,7 @@ int AdminController::stipend_menu()
 	int choice;
 
 	//wcout << L"1) - Просмотр стипендий для всех студентов." << endl;
-	wcout << L"1) - Вычислить стипендию для студента(за послдний семестр)." << endl;
+	wcout << L"1) - Вычислить стипендию для студента(за последний семестр)." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
@@ -361,7 +363,7 @@ void AdminController::UserManageController(Admin * admin)
 		{
 			system("cls");
 
-			vector<User*> users = admin->getUsers2V();
+			vector<User*> users = admin->getUsers();
 
 			AdminController::pprintUser(users, L"Пользователи");
 
@@ -389,25 +391,60 @@ void AdminController::UserManageController(Admin * admin)
 			system("cls");
 
 			int id;
-			vector<User*> users = admin->getUsers2V();
+			vector<User*> users = admin->getUsers();
 
 			AdminController::pprintUser(users, L"Удаление пользователя");
 			wcout << L"№ пользователя для удаление: ";
 			wcin >> id;
 
-			if (admin->DelUser(users.at(id-1)) == 1)
-			{
-				wcout << L"Удаление выполнено успешно." << endl;
+			try {
+				if (admin->DelUser(users.at(id - 1)) == 1)
+				{
+					wcout << L"Удаление выполнено успешно." << endl;
+				}
+				else {
+					wcout << L"Ошибка удаления." << endl;
+				}
 			}
-			else {
-				wcout << L"Ошибка удаления." << endl;
+			catch (std::out_of_range)
+			{
+				wcout << L"Неверный выбор" << endl;
 			}
 
 			system("pause");
 			system("cls");
 			break;
 		}
+		case 4: // Редактирование пользвателей
+		{
+			system("cls");
 
+			int id;
+			vector<User*> users = admin->getFullUser();
+
+			AdminController::pprintUser(users, L"Редактирование пользователей");
+			wcout << L"№ пользователя для редактирования: ";
+			wcin >> id;
+
+			try
+			{
+				if (admin->EditUser(users.at(id - 1)) == 1)
+				{
+					wcout << L"Редактирование выполнено успешно." << endl;
+				}
+				else {
+					wcout << L"Ошибка редактирования." << endl;
+				}
+			}
+			catch (std::out_of_range)
+			{
+				wcout << L"Неверный выбор" << endl;
+			}
+
+			system("pause");
+			system("cls");
+			break;
+		}
 		case 0:
 			flag = 0;
 			break;
@@ -433,7 +470,7 @@ void AdminController::StudentManageController(Admin * admin)
 		{
 			system("cls");
 
-			vector<Student*> students = admin->getStudents2V();
+			vector<Student*> students = admin->getStudents();
 
 			AdminController::pprinStudent(students, L"Студенты");
 
@@ -444,13 +481,20 @@ void AdminController::StudentManageController(Admin * admin)
 		}
 		case 3: // Добавление студента
 		{
-			if (admin->AddStudent() == 1)
+			try {
+				if (admin->AddStudent() == 1)
+				{
+					wcout << L"Добавление выполнено успешно." << endl;
+				}
+				else {
+					wcout << L"Ошибка добавления." << endl;
+				}
+			}
+			catch (std::out_of_range)
 			{
-				wcout << L"Добавление выполнено успешно." << endl;
+				wcout << L"Неверный выбор" << endl;
 			}
-			else {
-				wcout << L"Ошибка добавления." << endl;
-			}
+
 			system("pause");
 			system("cls");
 			break;
@@ -458,18 +502,25 @@ void AdminController::StudentManageController(Admin * admin)
 		case 4: // Удаление студента
 		{
 			int id;
-			vector<Student*> students = admin->getStudents2V();
+			vector<Student*> students = admin->getStudents();
 
 			AdminController::pprinStudent(students, L"Удаление студента");
 			wcout << L"№ студентя для удаление: ";
 			wcin >> id;
-
-			if (admin->DelStudent(students.at(id - 1)) == 1)
+			
+			try
 			{
-				wcout << L"Удаление выполнено успешно." << endl;
+				if (admin->DelStudent(students.at(id - 1)) == 1)
+				{
+					wcout << L"Удаление выполнено успешно." << endl;
+				}
+				else {
+					wcout << L"Ошибка удаления." << endl;
+				}
 			}
-			else {
-				wcout << L"Ошибка удаления." << endl;
+			catch (std::out_of_range)
+			{
+				wcout << L"Неверный выбор" << endl;
 			}
 
 			system("pause");
@@ -496,18 +547,25 @@ void AdminController::MarksManage(Admin * admin)
 		system("cls");
 
 		int id;
-		vector<Student*> students = admin->getStudents2V();
+		vector<Student*> students = admin->getStudents();
 
 		AdminController::pprinStudent(students, L"Добавление оценок");
 		wcout << L"№ студента: ";
 		wcin >> id;
 
-		if (admin->AddMarksToStudent(students.at(id - 1)) == 1)
+		try
 		{
-			wcout << L"Добавление оценок прошло успешно." << endl;
+			if (admin->AddMarksToStudent(students.at(id - 1)) == 1)
+			{
+				wcout << L"Добавление оценок прошло успешно." << endl;
+			}
+			else {
+				wcout << L"Ошибка добавление оценок." << endl;
+			}
 		}
-		else {
-			wcout << L"Ошибка добавление оценок." << endl;
+		catch (std::out_of_range)
+		{
+			wcout << L"Неверный выбор" << endl;
 		}
 
 		system("pause");
@@ -522,15 +580,21 @@ void AdminController::MarksManage(Admin * admin)
 		coutTitle(L"Добавление оценок");
 
 		wcout << L"ID-студента: ";
-		CIN_FLUSH;
 		wcin >> student_id;
 
-		if (admin->AddMarksToStudent(student_id) == 1)
+		try
 		{
-			wcout << L"Добавление оценок прошло успешно." << endl;
+			if (admin->AddMarksToStudent(student_id) == 1)
+			{
+				wcout << L"Добавление оценок прошло успешно." << endl;
+			}
+			else {
+				wcout << L"Ошибка добавление оценок." << endl;
+			}
 		}
-		else {
-			wcout << L"Ошибка добавление оценок." << endl;
+		catch (std::out_of_range)
+		{
+			wcout << L"Неверный выбор" << endl;
 		}
 
 		system("pause");
@@ -561,7 +625,7 @@ void AdminController::StipendManage(Admin * admin)
 		CIN_FLUSH;
 		wcin >> student_id;
 
-		vector<Student * > students = admin->getStudents2V(student_id);
+		vector<Student * > students = admin->getStudents(student_id);
 		if (!students.size()) { break; }
 
 		pprinStipend(students);
