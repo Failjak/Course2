@@ -62,3 +62,28 @@ const std::map<std::wstring, std::wstring> DBfield_subj = {
 	{L"term", L"Семестр"},
 	{L"retake", L"Пересдачи"}
 };
+
+const std::map<std::wstring, std::wstring> DBfield_cols = {
+	{L"ed_form", L"Форма обучения"},
+	{L"email", L"Почта"},
+	{L"faculty", L"Факультет"},
+	{L"group_number", L"Номер группы"},
+	{L"first_name", L"Имя"},
+	{L"last_name", L"Фамилия"},
+	{L"login", L"Логин"},
+	{L"password", L"Пароль"},
+	{L"patronomic", L"Отчество"},
+	{L"phone", L"Телефон"},
+	{L"spec", L"Специальность"},
+	{L"studnet_id", L"ID студента"}
+};
+
+const std::vector<std::wstring> FACULTIES = {
+		L"ФКП",
+		L"ФИТиУ",
+		L"ФРЭ",
+		L"ФКСиС",
+		L"ФИК",
+		L"ИЭФ",
+		L"ВФ",
+};

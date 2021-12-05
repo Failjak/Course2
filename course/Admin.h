@@ -31,6 +31,13 @@ public:
 	/*-----Student------*/
 	int AddStudent();
 	int DelStudent(Student * s);
+
+	vector<wstring> EnterFIO();
+	wstring EnterFaculty();
+	wstring EnterSpec(wstring faculty);
+	wstring EnterGroup(wstring spec);
+	int EnterEdForm();
+
 	vector<Student*> getStudents(wstring student_id = L"");
 	int AddMarksToStudent(Student *s);
 	int AddMarksToStudent(wstring student_id);

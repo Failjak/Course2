@@ -1,5 +1,6 @@
 #include <conio.h>
 #include <ctime>
+#include <set>
 
 #include "Admin.h"
 #include "Header.h"
@@ -122,6 +123,23 @@ vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> su
 	return marks;
 }
 
+wstring Admin::EnterGroup(wstring spec)
+{
+	system("cls");
+	coutTitle(L"Выбор Группы");
+
+	return wstring();
+}
+
+int Admin::EnterEdForm()
+{
+	int new_value;
+	wcout << L"Новая форма обучения: ";
+	cin >> new_value;
+	
+	return new_value;
+}
+
 vector<Student*> Admin::getStudents(wstring student_id)
 {
 	/*
@@ -141,7 +159,7 @@ vector<Student*> Admin::getStudents(wstring student_id)
 	{
 		if (!db.existStudent(student_id))
 		{
-			wcout << L"Такого студента не существует." << endl;
+			//wcout << L"Такого студента не существует." << endl;
 			return {};
 		}
 		students.push_back(db.getStudentById(student_id));
@@ -247,16 +265,75 @@ int Admin::DelUser(User * s)
 
 int Admin::EditUser(User * s)
 {
+	DataBase db;
+
 	system("cls");
 	coutTitle(L"Редактирование пользователя");
 
 	wcout << *s << endl;
+	/*vector<wstring> columns = db.getColNames(L"users");
+	for (auto table : { L"students", L"groups" })
+	{
+		vector<wstring> tmp_columns = db.getColNames(table);
+		columns.insert(columns.end(), tmp_columns.begin(), tmp_columns.end());
+	}
+	set<wstring> set_cols(columns.begin(), columns.end());*/
+
+	wcout << L"Выберете поле для редактирования." << endl;
+	
+	vector<wstring> columns = {
+		L"Логин", // 1
+		L"Пароль",
+		L"ФИО", // 3
+		L"Факультет", // 4
+		L"Специальность",
+		L"Группа",
+		L"Форма обучения", // 7
+		L"Почта",
+		L"Телефон",
+	};
+
+	int i = 0;
+	int choice;
+
+	for (auto col : columns)
+		wcout << ++i << L") " << col << endl;
+	wcout << L" Ваш выбор: ";
+	CIN_FLUSH;
+	wcin >> choice;
+
+	wstring new_value;
+	if (choice == 3) // Изменение ФИО
+	{
+		vector<wstring> new_fio = EnterFIO();
+	}
+	else if (choice == 4) // Факультет
+	{
+		EnterFaculty();
+		//EnterSpec(L"");
+		//EnterGroup(L"");
+	}
+	else if (choice == 5) // Спец
+	{
+		EnterSpec(L"");
+		EnterGroup(L"");
+	}
+	else if (choice == 6) //группа
+	{
+		EnterGroup(L"");
+	}
+	else if (choice == 7) // ed form
+	{
+		int new_value;
+		new_value = EnterEdForm();
+	}
+
 	return 0;
 }
 
 int Admin::AddStudent()
 {
-	/*
+	/*hot 
 		return: 1 - no exeption;
 				0 - faild insert.
 	*/
@@ -315,6 +392,58 @@ int Admin::DelStudent(Student * s)
 	return 0;
 }
 
+vector<wstring> Admin::EnterFIO()
+{
+	/*
+		return: {column: new_value}	
+	*/
+	system("cls");
+	coutTitle(L"Редактирование ФИО");
+
+	int choice;
+	vector<wstring> columns = { L"Фамилия", L"Имя", L"Отчество" };
+	wcout << L"Какое именно поле надо изменть" << endl;
+
+	int i = 0;
+	for (auto col : columns)
+		wcout << ++i << L") " << col << endl;
+	wcout << L" Ваш выбор: ";
+
+	CIN_FLUSH;
+	wcin >> choice;
+
+	wstring new_value;
+	wcout << L"Введите новое значение для '" << columns.at(choice - 1) << "': ";
+	wcin >> new_value;
+
+	return { columns.at(choice - 1), new_value };
+}
+wstring Admin::EnterFaculty()
+{
+	system("cls");
+	coutTitle(L"Выбор Факультета");
+
+	wstring new_value;
+
+	wcout << L"Выберете новый факультет:" << endl;
+	int i = 0;
+	for (auto fac : FACULTIES)
+		wcout << i++ << L") " << fac << endl;
+	wcout << L" Ваш выбор: ";
+	CIN_FLUSH;
+	wcin >> new_value;
+
+	wcout << new_value;
+
+	return wstring();
+}
+wstring Admin::EnterSpec(wstring faculty)
+{
+	system("cls");
+	coutTitle(L"Выбор Специальности");
+
+	return wstring();
+}
 int Admin::AddMarksToStudent(Student * s)
 {
 	DataBase db;
