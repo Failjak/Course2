@@ -11,6 +11,19 @@
 #include "User.h"
 #include "Menu.h"
 
+/*
+select list_name from university_groups; 
+	-- получить все группы (обязательно int, тк съедается нуль)
+
+
+select list_name from university_groups where 
+list_specialityDepartmentEducationFormId = '20072';
+	-- получить все возможные группы по id специальности
+
+
+select * from university_faculties ;
+	-- получить все факультеты
+*/
 
 using namespace std;
 
@@ -94,6 +107,9 @@ int main(int argc, char* argv[])
 	UserController::main(&user);*/
 
 	//create_table();
+
+	//wstring a = L"043534";
+	//wcout << stoi(a) << endl;
 
 	while (flag)
 	{

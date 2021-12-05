@@ -20,6 +20,9 @@ private:
 	string stud_table = "students";
 	string mark_table = "marks";
 	string group_table = "groups";
+	string univ_group_table = "university_groups";
+	string univ_spec_table = "university_specialities";
+	string univ_fac_table = "university_faculties";
 
 public:
 	template <class T>
@@ -34,7 +37,12 @@ public:
 	/*-----Admin------*/
 	int AddNoteUser(User *s);
 	/*-----Admin------*/
-
+	
+	/*------ University funcs ------*/
+	map<int, pair<wstring, wstring>> getFaculties();
+	//where list_facultyId =
+	map<int, pair<wstring, wstring>> geSpecialities(int fac_id); // TO DO set, גלוסעמ vectot
+	/*------ University funcs ------*/
 
 	/*-----Student------*/
 	int AddNoteStudent(Student *s);
@@ -369,7 +377,90 @@ int DataBase::DelNoteByStydentId(wstring id, T s)
 	return 1;
 }
 
-inline 
+inline map<int, pair<wstring, wstring>> DataBase::getFaculties()
+{
+	/*
+		return: {id, {abbrev, name}}
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string table;
+	map<int, pair<wstring, wstring>> result;
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select id, abbrev, name from " + univ_fac_table + ";");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		while (sqlite3_column_text(stmt, 0))
+		{	
+			pair<wstring, wstring> tmp( static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)),
+				static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)) );
+
+			result[sqlite3_column_int(stmt, 0)] = tmp;
+			sqlite3_step(stmt);
+		}
+
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return result;
+}
+
+inline map<int, pair<wstring, wstring>> DataBase::geSpecialities(int fac_id)
+{
+	/*
+		return: {spec_id, {spec_abbrev, spec_name}},
+		. . .
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string table;
+	map<int, pair<wstring, wstring>> result;
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select id, abbrev, name from " + univ_spec_table + " where facultyId = '" + to_string(fac_id) + "';");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		while (sqlite3_column_text(stmt, 0))
+		{
+			pair<wstring, wstring> tmp(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)),
+				static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
+
+			result[sqlite3_column_int(stmt, 0)] = tmp;
+			sqlite3_step(stmt);
+		}
+
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return result;
+}
+
+inline
 int DataBase::AddNoteStudent(Student * s)
 {
 	/*

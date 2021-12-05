@@ -94,7 +94,7 @@ vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> su
 	for (int i = 2; i < subjs.size(); i++) // skip term and retake
 	{
 		num = L"";
-		wcout << DBfield_subj.at(subjs.at(i)) << L": ";
+		wcout << DB_SUBJS.at(subjs.at(i)) << L": ";
 
 		while (true)
 		{
@@ -309,8 +309,11 @@ int Admin::EditUser(User * s)
 	}
 	else if (choice == 4) // Факультет
 	{
-		EnterFaculty();
-		//EnterSpec(L"");
+		wstring new_fac = EnterFaculty();
+		wcout << L"Возвращенное значение из факультета: " << new_fac << endl;
+		wcout << L"Так как Вы изменили Факультет, треубуется изменить Специальность и Группу." << endl;
+		system("pause");
+		wcout << EnterSpec(new_fac) << endl;
 		//EnterGroup(L"");
 	}
 	else if (choice == 5) // Спец
@@ -423,26 +426,64 @@ wstring Admin::EnterFaculty()
 	system("cls");
 	coutTitle(L"Выбор Факультета");
 
-	wstring new_value;
+	DataBase db;
+	map<int, pair<wstring, wstring>> faculties = db.getFaculties();
+	vector<int> fac_codes;
 
+	int index;
 	wcout << L"Выберете новый факультет:" << endl;
 	int i = 0;
-	for (auto fac : FACULTIES)
-		wcout << i++ << L") " << fac << endl;
+
+	for (const auto& fac : faculties)
+	{
+		wcout << ++i << L") " << fac.second.first << endl;
+		fac_codes.push_back(fac.first);
+	}
+
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
-	wcin >> new_value;
+	wcin >> index;
 
-	wcout << new_value;
-
-	return wstring();
+	int key = fac_codes.at(index - 1);
+	return faculties.at(key).first;
 }
 wstring Admin::EnterSpec(wstring faculty)
 {
 	system("cls");
-	coutTitle(L"Выбор Специальности");
+	wstring title = L"Выбор Специальности (" + faculty + L")";
+	coutTitle(title);
 
-	return wstring();
+	DataBase db;
+	map<int, pair<wstring, wstring>> faculties = db.getFaculties();
+	vector<int> spec_codes;
+	int fac_code;
+
+
+	for (const auto& fac : faculties)
+		if (fac.second.first == faculty)
+		{
+			fac_code = fac.first;
+			break;
+		}
+
+	map<int, pair<wstring, wstring>> specs = db.geSpecialities(fac_code);
+
+	int i = 0;
+	int index;
+	wcout << L"Выберете новую специальность:" << endl;
+
+	for (const auto& spec : specs)
+	{
+		wcout << ++i << L") " << spec.first << L"   " << spec.second.first << L"   " << spec.second.second << endl;
+		spec_codes.push_back(spec.first);
+	}
+
+	wcout << L" Ваш выбор: ";
+	CIN_FLUSH;
+	wcin >> index;
+
+	int key = spec_codes.at(index - 1);
+	return specs.at(key).first;
 }
 int Admin::AddMarksToStudent(Student * s)
 {

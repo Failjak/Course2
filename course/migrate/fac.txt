@@ -1,0 +1,7 @@
+insert into university_faculties ('id', 'abbrev', 'name') values(20000, 'ВФ','Военный Факультет');
+insert into university_faculties ('id', 'abbrev', 'name') values(20005, 'ФИТУ', 'Факультет Информационных Технологий и Управления');
+insert into university_faculties ('id', 'abbrev', 'name') values(20012, 'ИЭФ', 'Инженерно-Экономический Факультет');
+insert into university_faculties ('id', 'abbrev', 'name') values(20017, 'ФКП', 'Факультет Компьютерного Проектирования');
+insert into university_faculties ('id', 'abbrev', 'name') values(20026, 'ФКСиС', 'Факультет Компьютерных Систем и Сетей');
+insert into university_faculties ('id', 'abbrev', 'name') values(20035, 'ФРЭ', 'Факультет Радиотехники и Электроники');
+insert into university_faculties ('id', 'abbrev', 'name') values(20040, 'ФИК', 'Факультет Инфокоммуникаций');

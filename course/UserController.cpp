@@ -157,7 +157,7 @@ void UserController::pprintMark(User * user, wstring title)
 	{
 		for (auto n_it = (*it).second.cbegin(); n_it != (*it).second.cend(); ++n_it)
 		{
-			max_sizes_subjs.push_back(DBfield_subj.count((*n_it).first) ? DBfield_subj.at((*n_it).first).length() : 0);
+			max_sizes_subjs.push_back(DB_SUBJS.count((*n_it).first) ? DB_SUBJS.at((*n_it).first).length() : 0);
 			subjs.push_back((*n_it).first);
 		}
 		break;
@@ -191,7 +191,7 @@ void UserController::pprintMark(User * user, wstring title)
 	wcout << setw(max_size_term > MIN_SPACE ? MIN_SPACE : max_size_term + 1) << left << title_term;
 	for (int i = 0; i < subjs.size(); i ++) // перечисление предметов
 	{
-		wcout << setw(max_sizes_subjs.at(i) > MIN_SPACE ? MIN_SPACE : max_sizes_subjs.at(i) + 1) << left << DBfield_subj.at(subjs.at(i));
+		wcout << setw(max_sizes_subjs.at(i) > MIN_SPACE ? MIN_SPACE : max_sizes_subjs.at(i) + 1) << left << DB_SUBJS.at(subjs.at(i));
 	}
 
 	SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);

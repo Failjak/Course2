@@ -1,0 +1,8 @@
+"name","type","length","leftDigits","rightDigits"
+"list_id","INTEGER","5","5","0"
+"list_name","STRING","225","0","0"
+"list_abbrev","STRING","33","0","0"
+"list_educationForm_id","STRING","1","1","0"
+"list_educationForm_name","STRING","13","0","0"
+"list_facultyId","STRING","5","0","0"
+"list_code","STRING","13","0","0"
