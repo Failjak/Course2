@@ -33,7 +33,7 @@ public:
 	int AddStudent();
 	int DelStudent(Student * s);
 
-	vector<wstring> EnterFIO();
+	pair<wstring, wstring> EnterFIO();
 	wstring EnterFaculty();
 	wstring EnterSpec(wstring faculty);
 	wstring EnterGroup(wstring faculty, wstring spec);

@@ -51,6 +51,7 @@ public:
 	int AddNoteStudent(Student *s);
 	int AddNoteStudentGroup(Student *s);
 	int AddMarks(vector<int>, vector<wstring>, wstring);
+	int updateGroup(wstring student_id, wstring & update_str);
 	vector<Student*> getStudents();
 	map<wstring, vector<wstring>> getGroup2V(wstring student_id = L"");
 	vector<pair<pair<int, bool>, vector<int>>> getMarks2VById(wstring);
@@ -77,7 +78,7 @@ inline const std::wstring S2WS(const std::string &s)
 
 inline std::string WS2S(const std::wstring& wstr)
 {
-	using convert_typeX = codecvt_utf8_utf16<wchar_t>;
+	using convert_typeX = codecvt_utf8<wchar_t>;
 	wstring_convert<convert_typeX, wchar_t> converterX;
 
 	return converterX.to_bytes(wstr);
@@ -291,6 +292,7 @@ inline int DataBase::updateTable(T s, wstring update_str)
 {
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
+	char *err;
 
 	string table;
 	vector<T*> result;
@@ -345,14 +347,6 @@ int DataBase::AddNoteUser(User * s)
 	sqlite3_stmt * stmt;
 	char *err;
 
-	/*if (is_same<T, Admin>::value)
-	{
-		table = "admin";
-	}
-	else if (is_same<T, User>::value) {
-		table = "user";
-	}*/
-
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
 		string sql("pragma foreign_keys=on;"
@@ -370,7 +364,7 @@ int DataBase::AddNoteUser(User * s)
 	else
 	{
 		cout << "Failed to open db\n";
-		return -1;
+		return 0;
 	}
 
 	sqlite3_close(db);
@@ -674,6 +668,38 @@ int DataBase::AddMarks(vector<int> marks, vector<wstring> subj, wstring student_
 		return -1;
 	}
 
+	sqlite3_close(db);
+
+	return 1;
+}
+
+inline int DataBase::updateGroup(wstring student_id, wstring & update_str)
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		wcout << update_str << endl;
+		wcout << S2WS(WS2S(update_str)) << endl;
+		string sql("update " + group_table + " set " + WS2S(update_str) + " where student_id = '" + WS2S(student_id) + "';");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+
+		if (rc != SQLITE_OK)
+		{
+			//wcout << S2WS(err) << endl;
+			return 0;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return -1;
+	}
+
+	sqlite3_finalize(stmt);
 	sqlite3_close(db);
 
 	return 1;

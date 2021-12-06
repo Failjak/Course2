@@ -28,4 +28,6 @@ public:
 	virtual std::wstring getFullName();
 
 	friend std::wostream &operator<<(std::wostream &s, People * p);
+
+	virtual void printRole() = 0;
 };

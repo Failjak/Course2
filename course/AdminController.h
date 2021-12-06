@@ -23,4 +23,5 @@ public:
 	static void StudentManageController(Admin * admin);
 	static void MarksManage(Admin * admin);
 	static void StipendManage(Admin * admin);
+	static void EditManage(Admin * admin);
 };

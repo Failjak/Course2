@@ -40,6 +40,12 @@ void AdminController::main(Admin * admin)
 			StipendManage(admin);
 			break;
 		}
+		case 5: // Редактирование пользвателей
+		{
+			system("cls");
+			EditManage(admin);
+			break;
+		}
 		case 0:
 		{
 			flag = 0;
@@ -63,6 +69,7 @@ int AdminController::menu()
 	wcout << L"2) - Работа со студентами." << endl;
 	wcout << L"3) - Выставить оценки." << endl;
 	wcout << L"4) - Просмотр стпипендий." << endl;
+	wcout << L"5) - Редактирование пользователей." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
@@ -80,7 +87,6 @@ int AdminController::user_menu()
 	wcout << L"1) - Просмотр пользователей." << endl;
 	wcout << L"2) - Добавить пользователя" << endl;
 	wcout << L"3) - Удалить пользователя." << endl;
-	wcout << L"4) - Редиктировать пользователей." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
 	CIN_FLUSH;
@@ -415,41 +421,6 @@ void AdminController::UserManageController(Admin * admin)
 			system("cls");
 			break;
 		}
-		case 4: // Редактирование пользвателей
-		{
-			system("cls");
-
-			int id;
-			vector<User*> users = admin->getFullUser();
-
-			AdminController::pprintUser(users, L"Редактирование пользователей");
-			wcout << L"№ пользователя для редактирования: ";
-			wcin >> id;
-
-			try
-			{
-				int res = admin->EditUser(users.at(id - 1));
-
-				if (res == 1)
-				{
-					wcout << L"Редактирование выполнено успешно." << endl;
-				}
-				else if (res == -1){
-					wcout << L"Отмена редактирования." << endl;
-				}
-				else {
-					wcout << L"Ошибка редактирования." << endl;
-				}
-			}
-			catch (std::out_of_range)
-			{
-				wcout << L"Неверный выбор" << endl;
-			}
-
-			system("pause");
-			system("cls");
-			break;
-		}
 		case 0:
 			flag = 0;
 			break;
@@ -646,4 +617,37 @@ void AdminController::StipendManage(Admin * admin)
 		wcout << L"Неверный выбор." << endl;
 		break;
 	}
+}
+
+void AdminController::EditManage(Admin * admin)
+{
+	int id;
+	vector<User*> users = admin->getFullUser();
+
+	AdminController::pprintUser(users, L"Редактирование пользователей");
+	wcout << L"№ пользователя для редактирования: ";
+	wcin >> id;
+
+	try
+	{
+		int res = admin->EditUser(users.at(id - 1));
+
+		if (res == 1)
+		{
+			wcout << L"Редактирование выполнено успешно." << endl;
+		}
+		else if (res == -1) {
+			wcout << L"Отмена редактирования." << endl;
+		}
+		else {
+			wcout << L"Ошибка редактирования." << endl;
+		}
+	}
+	catch (std::out_of_range)
+	{
+		wcout << L"Неверный выбор" << endl;
+	}
+
+	system("pause");
+	system("cls");
 }

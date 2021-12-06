@@ -138,11 +138,33 @@ int Admin::getGroupExample(int group)
 
 int Admin::EnterEdForm()
 {
-	int new_value;
-	wcout << L"Новая форма обучения: ";
-	cin >> new_value;
+	coutTitle(L"Выбор формы обучения");
+
+	wstring new_value;
+	wchar_t ch;
+
+	wcout << L"1) - Платное обучение.";
+	wcout << L"2) - Бюджетное обучение.";
+	while (true)
+	{
+		new_value = L"";
+		ch = _getch();
+		if (ch == 13 and new_value.length() > 0) { break; }
+		if (ch == 32) { continue; }
+		if (ch == 8 and new_value.length() > 0)
+		{
+			wcout << (wchar_t)8 << ' ' << wchar_t(8);
+			new_value.erase(new_value.length() - 1, new_value.length());
+		}
+		else if (ch == 49 or ch == 50)
+		{
+			wcout << (wchar_t)ch;
+			new_value += (wchar_t)ch;
+			return stoi(new_value) - 1;
+		}
+	}
 	
-	return new_value;
+	return -1;
 }
 
 vector<Student*> Admin::getStudents(wstring student_id)
@@ -302,13 +324,64 @@ int Admin::EditUser(User * u)
 	wcin >> choice;
 
 	wstring new_value;
-	if (choice == 3) // Изменение ФИО
+	if (choice == 1)
 	{
-		vector<wstring> new_fio = EnterFIO();
+		system("cls");
+
+		wstring new_login;
+
+		coutTitle(L"Изменение логина");
+		wcout << L"Введите новый логин" << endl;
+
+		wcin >> new_login;
+
+		u->setLogin(new_login);
+		db.DelNoteByStydentId(u->getStudentId(), *u);
+		db.AddNoteUser(u);
+		db.AddNoteStudentGroup(s);
+
+		return true;
+	}
+	else if (choice == 2)
+	{
+		system("cls");
+
+		wstring new_pass;
+
+		coutTitle(L"Изменение пароля");
+		wcout << L"Введите новый пароль" << endl;
+
+		wcin >> new_pass;
+
+		u->setPassword(new_pass);
+		db.DelNoteByStydentId(u->getStudentId(), *u);
+		db.AddNoteUser(u);
+		db.AddNoteStudentGroup(s);
+
+		return true;
+	}
+	else if (choice == 3) // Изменение ФИО
+	{
+		system("cls");  pair<wstring, wstring> new_fio = EnterFIO();
+		if (new_fio.first == L"Фамилия"){
+			s->setSurname(new_fio.second);
+		}
+		else if (new_fio.first == L"Имя"){
+			s->setName(new_fio.second);
+		}
+		else if (new_fio.first == L"Отчество"){
+			s->setPatronomic(new_fio.second);
+		}
+
+		db.DelNoteByStydentId(u->getStudentId(), *s);
+		db.AddNoteStudent(s);
+		db.AddNoteStudentGroup(s);
+
+		return true;
 	}
 	else if (choice == 4) // Факультет
 	{
-		wstring new_fac = EnterFaculty();
+		system("cls");  wstring new_fac = EnterFaculty();
 
 		if (new_fac == s->getFaculty()) 
 			return -1;
@@ -316,8 +389,8 @@ int Admin::EditUser(User * u)
 		wcout << L"Так как Вы изменили Факультет, треубуется изменить Специальность и Группу." << endl;
 		system("pause");
 
-		wstring new_spec = EnterSpec(new_fac);
-		wstring new_group = EnterGroup(new_fac, new_spec);
+		system("cls");  wstring new_spec = EnterSpec(new_fac); 
+		system("cls");  wstring new_group = EnterGroup(new_fac, new_spec);
 		
 		if (new_group == L"-1") { return -1; }
 
@@ -325,48 +398,98 @@ int Admin::EditUser(User * u)
 		s->setSpec(new_spec);
 		s->setGroup(new_group);
 
-		db.DelNoteByStydentId(s->getStudentId(), *s);
+		db.DelNoteByStydentId(u->getStudentId(), *s);
 		db.AddNoteStudent(s);
 		db.AddNoteStudentGroup(s);
+
+		/*wstring update_group_str = L"faculty = '" + new_fac + L", spec = '" + new_spec + L"' ,group_number = '" + new_group + L"'";
+		db.updateGroup(u->getStudentId(), update_group_str);*/
 
 		return true;
 	}
 	else if (choice == 5) // Спец
 	{
-		wstring new_spec = EnterSpec(s->getFaculty());
-		wstring new_group = EnterGroup(s->getFaculty(), s->getSpec());
+		system("cls");  wstring new_spec = EnterSpec(s->getFaculty());
+		system("cls");  wstring new_group = EnterGroup(s->getFaculty(), new_spec);
 
-		if (new_group == L"-1") { return -1; }
+		if (new_group == L"-1" or new_spec == s->getSpec()) { return -1; }
 
-		wstring update_str = L"spec = '" + new_spec + L"' group_number = '" + new_group + L"'";
+		s->setSpec(new_spec);
+		s->setGroup(new_group);
 
-		//s->setSpec(new_spec);
-		//s->setGroup(new_group);
-
-		db.DelNoteByStydentId(s->getStudentId(), *s);
+		db.DelNoteByStydentId(u->getStudentId(), *s);
+		db.AddNoteStudent(s);
 		db.AddNoteStudentGroup(s);
+
+		/*wstring update_str = L"spec = '" + s->getSpec() + L"', group_number = '" + s->getGroup() + L"'";
+		if (!db.updateGroup(u->getStudentId(), update_str)) { return false; }*/
 
 		return true;
 	}
 	else if (choice == 6) //группа
 	{
-		wstring new_group = EnterGroup(s->getFaculty(), s->getSpec());
+		system("cls");  wstring new_group = EnterGroup(s->getFaculty(), s->getSpec());
 
-		if (new_group == L"-1") { return -1; }
+		if (new_group == L"-1" or new_group == s->getGroup()) { return -1; }
 
 		s->setGroup(new_group);
+		/*wstring update_str = L"group_number = '" + new_group + L"'";
+		if (!db.updateGroup(u->getStudentId(), update_str)) { return false; }*/
 
-		db.DelNoteByStydentId(s->getStudentId(), *s);
+		db.DelNoteByStydentId(u->getStudentId(), *s);
+		db.AddNoteStudent(s);
 		db.AddNoteStudentGroup(s);
 
 		return true;
 	}
 	else if (choice == 7) // ed form
 	{
-		int new_value;
-		new_value = EnterEdForm();
-	}
+		int new_value = EnterEdForm();
+		if (new_value == -1) { return false; }
+		s->setEdForm(new_value);
 
+		db.DelNoteByStydentId(u->getStudentId(), *s);
+		db.AddNoteStudent(s);
+		db.AddNoteStudentGroup(s);
+
+		return true;
+	}
+	else if (choice == 8)
+	{
+		system("cls");
+
+		wstring new_mail;
+
+		coutTitle(L"Изменение эл. почты");
+		wcout << L"Введите новую почту" << endl;
+
+		wcin >> new_mail;
+
+		s->setEmail(new_mail);
+		db.DelNoteByStydentId(u->getStudentId(), *s);
+		db.AddNoteStudent(s);
+		db.AddNoteStudentGroup(s);
+
+		return true;
+	}
+	else if (choice == 9)
+	{
+		system("cls");
+
+		wstring new_phone;
+
+		coutTitle(L"Изменение номера телефона");
+		wcout << L"Введите новый номер телефон" << endl;
+
+		wcin >> new_phone;
+
+		s->setPhone(new_phone);
+		db.DelNoteByStydentId(u->getStudentId(), *s);
+		db.AddNoteStudent(s);
+		db.AddNoteStudentGroup(s);
+
+		return true;
+	}
 	return 0;
 }
 
@@ -391,12 +514,19 @@ int Admin::AddStudent()
 	wcin >> last_name;
 	wcout << L"Введите отчество: ";
 	wcin >> patr;
-	wcout << L"Введите номер группы: ";
-	wcin >> group;
-	wcout << L"Введите факультет: ";
-	wcin >> faculty;
-	wcout << L"Введите специальность: ";
-	wcin >> spec;
+
+	//wcout << L"Введите факультет: ";
+	//wcin >> faculty;
+	faculty = EnterFaculty();
+
+	//wcout << L"Введите специальность: ";
+	//wcin >> spec;
+	spec = EnterSpec(faculty);
+
+	//wcout << L"Введите номер группы: ";
+	//wcin >> group;
+	group = EnterGroup(faculty, spec);
+
 	wcout << L"Введите форму обучения (F - бюджет, С - платно): ";
 	wcin >> ed_form;
 	wcout << L"Введите email: ";
@@ -431,12 +561,11 @@ int Admin::DelStudent(Student * s)
 	return 0;
 }
 
-vector<wstring> Admin::EnterFIO()
+pair<wstring, wstring> Admin::EnterFIO()
 {
 	/*
 		return: {column: new_value}	
 	*/
-	system("cls");
 	coutTitle(L"Редактирование ФИО");
 
 	int choice;
@@ -460,7 +589,6 @@ vector<wstring> Admin::EnterFIO()
 
 wstring Admin::EnterFaculty()
 {
-	system("cls");
 	coutTitle(L"Выбор Факультета");
 
 	DataBase db;
@@ -487,7 +615,6 @@ wstring Admin::EnterFaculty()
 
 wstring Admin::EnterSpec(wstring faculty)
 {
-	system("cls");
 	wstring title = L"Выбор Специальности (" + faculty + L")";
 	coutTitle(title);
 
@@ -526,7 +653,6 @@ wstring Admin::EnterSpec(wstring faculty)
 
 wstring Admin::EnterGroup(wstring faculty, wstring spec)
 {
-	system("cls");
 	wstring title = L"Ввод Группы (" + faculty + + L", " + spec + L")";
 	coutTitle(title);
 
@@ -563,8 +689,7 @@ wstring Admin::EnterGroup(wstring faculty, wstring spec)
 				wcout << L"Неверный формат. Попробуйте еще раз. (0 - выход)" << endl;
 
 			wcin >> group;
-			CIN_FLUSH
-				if (group == L"0") { return L"-1"; }
+			if (group == L"0") { return L"-1"; }
 
 			flag = 0;
 		} while (find(groups.begin(), groups.end(), stoi(group)) == groups.end());

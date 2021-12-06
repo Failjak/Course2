@@ -102,7 +102,7 @@ void UserController::PersonalInfo(User * user)
 		}
 		case 2:
 		{
-
+			Editing(user);
 			break;
 		}
 		case 0:

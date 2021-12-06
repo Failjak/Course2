@@ -39,6 +39,7 @@ public:
 	void setEmail(wstring m) { email = m; }
 	void setPhone(wstring p) { phone = p; }
 	void setEdForm(wstring ed_form) { education_form = ed_form; }
+	void setEdForm(int ed_form) { education_form = ed_form == 1 ? L"Бюджет" : L"Платно"; }
 	void setMarks(vector<pair<pair<int, bool>, vector<int>>>, vector<wstring> subj);
 	void setStipend(vector<pair<int, float>> stipend) { this->stipend = stipend; }
 	void setCourse(int course) { this->course = course; }
@@ -65,4 +66,6 @@ public:
 	/*-----friend functions to Admin-----*/
 	void calcStipend(Student *s);
 	/*----- ----- -------- -- ---- -----*/
+
+	void printRole() { wcout << L"Student" << endl; }
 };
