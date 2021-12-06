@@ -1,4 +1,4 @@
-#include <conio.h>
+п»ї#include <conio.h>
 #include <ctime>
 #include <set>
 
@@ -37,10 +37,10 @@ vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> su
 
 	if (db.existMarks(student_id, course * 2))
 	{
-		wcout << L"Отметки за все семестры занесены." << endl;
+		wcout << L"РћС‚РјРµС‚РєРё Р·Р° РІСЃРµ СЃРµРјРµСЃС‚СЂС‹ Р·Р°РЅРµСЃРµРЅС‹." << endl;
 	}
 
-	wcout << L"Отметки за семестр: ";
+	wcout << L"РћС‚РјРµС‚РєРё Р·Р° СЃРµРјРµСЃС‚СЂ: ";
 	do
 	{
 		if (num.length())
@@ -69,7 +69,7 @@ vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> su
 	} while (true);
 	marks.push_back(stoi(num));
 
-	wcout << L"\nПересдачи(1-'да', 0-'нет'): ";
+	wcout << L"\nРџРµСЂРµСЃРґР°С‡Рё(1-'РґР°', 0-'РЅРµС‚'): ";
 	while (true)
 	{
 		num = L"";
@@ -90,7 +90,7 @@ vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> su
 	}
 	marks.push_back(stoi(num));
 
-	wcout << L"\nВведите оценки по предметам:" << endl;
+	wcout << L"\nР’РІРµРґРёС‚Рµ РѕС†РµРЅРєРё РїРѕ РїСЂРµРґРјРµС‚Р°Рј:" << endl;
 	for (int i = 2; i < subjs.size(); i++) // skip term and retake
 	{
 		num = L"";
@@ -123,18 +123,23 @@ vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> su
 	return marks;
 }
 
-wstring Admin::EnterGroup(wstring spec)
+int Admin::getGroupExample(int group)
 {
-	system("cls");
-	coutTitle(L"Выбор Группы");
-
-	return wstring();
+	if (to_string(group).length() == 5)
+	{
+		// 73601
+		return (group / 100) % 100;
+	}
+	else if (to_string(group).length() == 6)
+	{
+		return (group / 100) % 1000;
+	}
 }
 
 int Admin::EnterEdForm()
 {
 	int new_value;
-	wcout << L"Новая форма обучения: ";
+	wcout << L"РќРѕРІР°СЏ С„РѕСЂРјР° РѕР±СѓС‡РµРЅРёСЏ: ";
 	cin >> new_value;
 	
 	return new_value;
@@ -144,8 +149,8 @@ vector<Student*> Admin::getStudents(wstring student_id)
 {
 	/*
 		schema marks: student_id: {term, retake, subjs ...}
-		get: student_id, условие, по которому надо выбирать студентов
-		return: vector<student *> с заполненными полями (вычислена стипендия, заполнены имеющиеся отметки)
+		get: student_id, СѓСЃР»РѕРІРёРµ, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅР°РґРѕ РІС‹Р±РёСЂР°С‚СЊ СЃС‚СѓРґРµРЅС‚РѕРІ
+		return: vector<student *> СЃ Р·Р°РїРѕР»РЅРµРЅРЅС‹РјРё РїРѕР»СЏРјРё (РІС‹С‡РёСЃР»РµРЅР° СЃС‚РёРїРµРЅРґРёСЏ, Р·Р°РїРѕР»РЅРµРЅС‹ РёРјРµСЋС‰РёРµСЃСЏ РѕС‚РјРµС‚РєРё)
 	*/
 
 	vector<Student *> students;
@@ -159,7 +164,7 @@ vector<Student*> Admin::getStudents(wstring student_id)
 	{
 		if (!db.existStudent(student_id))
 		{
-			//wcout << L"Такого студента не существует." << endl;
+			//wcout << L"РўР°РєРѕРіРѕ СЃС‚СѓРґРµРЅС‚Р° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚." << endl;
 			return {};
 		}
 		students.push_back(db.getStudentById(student_id));
@@ -173,7 +178,7 @@ vector<Student*> Admin::getStudents(wstring student_id)
 	{
 		wstring student_id = students.at(i)->getStudentId();
 
-		marks = db.getMarks2VById(student_id);// получаю вектор с набором семестров и отметок за него
+		marks = db.getMarks2VById(student_id);// РїРѕР»СѓС‡Р°СЋ РІРµРєС‚РѕСЂ СЃ РЅР°Р±РѕСЂРѕРј СЃРµРјРµСЃС‚СЂРѕРІ Рё РѕС‚РјРµС‚РѕРє Р·Р° РЅРµРіРѕ
 		if (marks.size())
 		{
 			subj = db.getColNames(L"marks");
@@ -227,20 +232,20 @@ int Admin::AddUser()
 	DataBase db;
 	wstring login, password, student_id;
 
-	coutTitle(L"Добавление пользователя");
+	coutTitle(L"Р”РѕР±Р°РІР»РµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ");
 
-	wcout << L"Введите логин: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ Р»РѕРіРёРЅ: ";
 	wcin >> login;
-	wcout << L"Введите пароль: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ: ";
 	wcin >> password;
-	wcout << L"Введите номер студенческого: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ СЃС‚СѓРґРµРЅС‡РµСЃРєРѕРіРѕ: ";
 	wcin >> student_id;
 
 	User user(login, password, student_id);
 
 	if (db.exist(&user))
 	{
-		wcout << L"Такой пользователь уже существует." << endl;
+		wcout << L"РўР°РєРѕР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚." << endl;
 		return -1;
 	}
 
@@ -263,34 +268,28 @@ int Admin::DelUser(User * s)
 	return 0;
 }
 
-int Admin::EditUser(User * s)
+int Admin::EditUser(User * u)
 {
+
+	Student * s = u->getStudent();
 	DataBase db;
 
 	system("cls");
-	coutTitle(L"Редактирование пользователя");
+	coutTitle(L"Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ");
 
-	wcout << *s << endl;
-	/*vector<wstring> columns = db.getColNames(L"users");
-	for (auto table : { L"students", L"groups" })
-	{
-		vector<wstring> tmp_columns = db.getColNames(table);
-		columns.insert(columns.end(), tmp_columns.begin(), tmp_columns.end());
-	}
-	set<wstring> set_cols(columns.begin(), columns.end());*/
-
-	wcout << L"Выберете поле для редактирования." << endl;
+	wcout << *u << endl;
+	wcout << L"Р’С‹Р±РµСЂРµС‚Рµ РїРѕР»Рµ РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ." << endl;
 	
 	vector<wstring> columns = {
-		L"Логин", // 1
-		L"Пароль",
-		L"ФИО", // 3
-		L"Факультет", // 4
-		L"Специальность",
-		L"Группа",
-		L"Форма обучения", // 7
-		L"Почта",
-		L"Телефон",
+		L"Р›РѕРіРёРЅ", // 1
+		L"РџР°СЂРѕР»СЊ",
+		L"Р¤РРћ", // 3
+		L"Р¤Р°РєСѓР»СЊС‚РµС‚", // 4
+		L"РЎРїРµС†РёР°Р»СЊРЅРѕСЃС‚СЊ",
+		L"Р“СЂСѓРїРїР°",
+		L"Р¤РѕСЂРјР° РѕР±СѓС‡РµРЅРёСЏ", // 7
+		L"РџРѕС‡С‚Р°",
+		L"РўРµР»РµС„РѕРЅ",
 	};
 
 	int i = 0;
@@ -298,32 +297,69 @@ int Admin::EditUser(User * s)
 
 	for (auto col : columns)
 		wcout << ++i << L") " << col << endl;
-	wcout << L" Ваш выбор: ";
+	wcout << L" Р’Р°С€ РІС‹Р±РѕСЂ: ";
 	CIN_FLUSH;
 	wcin >> choice;
 
 	wstring new_value;
-	if (choice == 3) // Изменение ФИО
+	if (choice == 3) // РР·РјРµРЅРµРЅРёРµ Р¤РРћ
 	{
 		vector<wstring> new_fio = EnterFIO();
 	}
-	else if (choice == 4) // Факультет
+	else if (choice == 4) // Р¤Р°РєСѓР»СЊС‚РµС‚
 	{
 		wstring new_fac = EnterFaculty();
-		wcout << L"Возвращенное значение из факультета: " << new_fac << endl;
-		wcout << L"Так как Вы изменили Факультет, треубуется изменить Специальность и Группу." << endl;
+
+		if (new_fac == s->getFaculty()) 
+			return -1;
+
+		wcout << L"РўР°Рє РєР°Рє Р’С‹ РёР·РјРµРЅРёР»Рё Р¤Р°РєСѓР»СЊС‚РµС‚, С‚СЂРµСѓР±СѓРµС‚СЃСЏ РёР·РјРµРЅРёС‚СЊ РЎРїРµС†РёР°Р»СЊРЅРѕСЃС‚СЊ Рё Р“СЂСѓРїРїСѓ." << endl;
 		system("pause");
-		wcout << EnterSpec(new_fac) << endl;
-		//EnterGroup(L"");
+
+		wstring new_spec = EnterSpec(new_fac);
+		wstring new_group = EnterGroup(new_fac, new_spec);
+		
+		if (new_group == L"-1") { return -1; }
+
+		s->setFaculty(new_fac);
+		s->setSpec(new_spec);
+		s->setGroup(new_group);
+
+		db.DelNoteByStydentId(s->getStudentId(), *s);
+		db.AddNoteStudent(s);
+		db.AddNoteStudentGroup(s);
+
+		return true;
 	}
-	else if (choice == 5) // Спец
+	else if (choice == 5) // РЎРїРµС†
 	{
-		EnterSpec(L"");
-		EnterGroup(L"");
+		wstring new_spec = EnterSpec(s->getFaculty());
+		wstring new_group = EnterGroup(s->getFaculty(), s->getSpec());
+
+		if (new_group == L"-1") { return -1; }
+
+		wstring update_str = L"spec = '" + new_spec + L"' group_number = '" + new_group + L"'";
+
+		//s->setSpec(new_spec);
+		//s->setGroup(new_group);
+
+		db.DelNoteByStydentId(s->getStudentId(), *s);
+		db.AddNoteStudentGroup(s);
+
+		return true;
 	}
-	else if (choice == 6) //группа
+	else if (choice == 6) //РіСЂСѓРїРїР°
 	{
-		EnterGroup(L"");
+		wstring new_group = EnterGroup(s->getFaculty(), s->getSpec());
+
+		if (new_group == L"-1") { return -1; }
+
+		s->setGroup(new_group);
+
+		db.DelNoteByStydentId(s->getStudentId(), *s);
+		db.AddNoteStudentGroup(s);
+
+		return true;
 	}
 	else if (choice == 7) // ed form
 	{
@@ -345,34 +381,34 @@ int Admin::AddStudent()
 	wstring last_name, patr, first_name, student_id, ed_form, email, phone;
 	wstring group, faculty, spec;
 
-	coutTitle(L"Добавление пользователя");
+	coutTitle(L"Р”РѕР±Р°РІР»РµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ");
 
-	wcout << L"Введите ID студента: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ ID СЃС‚СѓРґРµРЅС‚Р°: ";
 	wcin >> student_id;
-	wcout << L"Введите имя: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ РёРјСЏ: ";
 	wcin >> first_name;
-	wcout << L"Введите фамилию: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ С„Р°РјРёР»РёСЋ: ";
 	wcin >> last_name;
-	wcout << L"Введите отчество: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ РѕС‚С‡РµСЃС‚РІРѕ: ";
 	wcin >> patr;
-	wcout << L"Введите номер группы: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ РіСЂСѓРїРїС‹: ";
 	wcin >> group;
-	wcout << L"Введите факультет: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ С„Р°РєСѓР»СЊС‚РµС‚: ";
 	wcin >> faculty;
-	wcout << L"Введите специальность: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ СЃРїРµС†РёР°Р»СЊРЅРѕСЃС‚СЊ: ";
 	wcin >> spec;
-	wcout << L"Введите форму обучения (F - бюджет, С - платно): ";
+	wcout << L"Р’РІРµРґРёС‚Рµ С„РѕСЂРјСѓ РѕР±СѓС‡РµРЅРёСЏ (F - Р±СЋРґР¶РµС‚, РЎ - РїР»Р°С‚РЅРѕ): ";
 	wcin >> ed_form;
-	wcout << L"Введите email: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ email: ";
 	wcin >> email;
-	wcout << L"Введите телефон: ";
+	wcout << L"Р’РІРµРґРёС‚Рµ С‚РµР»РµС„РѕРЅ: ";
 	wcin >> phone;
 
 	Student student(student_id, first_name, last_name, patr, group, faculty, spec, email, phone, ed_form);
 
 	if (db.existStudent(student.getStudentId()))
 	{
-		wcout << L"Такой пользователь уже существует." << endl;
+		wcout << L"РўР°РєРѕР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚." << endl;
 		return -1;
 	}
 
@@ -401,37 +437,38 @@ vector<wstring> Admin::EnterFIO()
 		return: {column: new_value}	
 	*/
 	system("cls");
-	coutTitle(L"Редактирование ФИО");
+	coutTitle(L"Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ Р¤РРћ");
 
 	int choice;
-	vector<wstring> columns = { L"Фамилия", L"Имя", L"Отчество" };
-	wcout << L"Какое именно поле надо изменть" << endl;
+	vector<wstring> columns = { L"Р¤Р°РјРёР»РёСЏ", L"РРјСЏ", L"РћС‚С‡РµСЃС‚РІРѕ" };
+	wcout << L"РљР°РєРѕРµ РёРјРµРЅРЅРѕ РїРѕР»Рµ РЅР°РґРѕ РёР·РјРµРЅС‚СЊ" << endl;
 
 	int i = 0;
 	for (auto col : columns)
 		wcout << ++i << L") " << col << endl;
-	wcout << L" Ваш выбор: ";
+	wcout << L" Р’Р°С€ РІС‹Р±РѕСЂ: ";
 
 	CIN_FLUSH;
 	wcin >> choice;
 
 	wstring new_value;
-	wcout << L"Введите новое значение для '" << columns.at(choice - 1) << "': ";
+	wcout << L"Р’РІРµРґРёС‚Рµ РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ '" << columns.at(choice - 1) << "': ";
 	wcin >> new_value;
 
 	return { columns.at(choice - 1), new_value };
 }
+
 wstring Admin::EnterFaculty()
 {
 	system("cls");
-	coutTitle(L"Выбор Факультета");
+	coutTitle(L"Р’С‹Р±РѕСЂ Р¤Р°РєСѓР»СЊС‚РµС‚Р°");
 
 	DataBase db;
 	map<int, pair<wstring, wstring>> faculties = db.getFaculties();
 	vector<int> fac_codes;
 
 	int index;
-	wcout << L"Выберете новый факультет:" << endl;
+	wcout << L"Р’С‹Р±РµСЂРµС‚Рµ РЅРѕРІС‹Р№ С„Р°РєСѓР»СЊС‚РµС‚:" << endl;
 	int i = 0;
 
 	for (const auto& fac : faculties)
@@ -440,17 +477,18 @@ wstring Admin::EnterFaculty()
 		fac_codes.push_back(fac.first);
 	}
 
-	wcout << L" Ваш выбор: ";
+	wcout << L" Р’Р°С€ РІС‹Р±РѕСЂ: ";
 	CIN_FLUSH;
 	wcin >> index;
 
 	int key = fac_codes.at(index - 1);
 	return faculties.at(key).first;
 }
+
 wstring Admin::EnterSpec(wstring faculty)
 {
 	system("cls");
-	wstring title = L"Выбор Специальности (" + faculty + L")";
+	wstring title = L"Р’С‹Р±РѕСЂ РЎРїРµС†РёР°Р»СЊРЅРѕСЃС‚Рё (" + faculty + L")";
 	coutTitle(title);
 
 	DataBase db;
@@ -470,21 +508,75 @@ wstring Admin::EnterSpec(wstring faculty)
 
 	int i = 0;
 	int index;
-	wcout << L"Выберете новую специальность:" << endl;
+	wcout << L"Р’С‹Р±РµСЂРµС‚Рµ РЅРѕРІСѓСЋ СЃРїРµС†РёР°Р»СЊРЅРѕСЃС‚СЊ:" << endl;
 
 	for (const auto& spec : specs)
 	{
-		wcout << ++i << L") " << spec.first << L"   " << spec.second.first << L"   " << spec.second.second << endl;
+		wcout << ++i << L") " << spec.second.first << endl;
 		spec_codes.push_back(spec.first);
 	}
 
-	wcout << L" Ваш выбор: ";
+	wcout << L" Р’Р°С€ РІС‹Р±РѕСЂ: ";
 	CIN_FLUSH;
 	wcin >> index;
 
 	int key = spec_codes.at(index - 1);
 	return specs.at(key).first;
 }
+
+wstring Admin::EnterGroup(wstring faculty, wstring spec)
+{
+	system("cls");
+	wstring title = L"Р’РІРѕРґ Р“СЂСѓРїРїС‹ (" + faculty + + L", " + spec + L")";
+	coutTitle(title);
+
+	DataBase db;
+	map<int, pair<wstring, wstring>> faculties = db.getFaculties();
+	int fac_code, spec_code;
+	wstring group;
+
+	for (const auto& fac : faculties)
+		if (fac.second.first == faculty)
+		{
+			fac_code = fac.first;
+			break;
+		}
+	map<int, pair<wstring, wstring>> specs = db.geSpecialities(fac_code);
+	for (const auto& sp : specs)
+		if (sp.second.first == spec)
+		{
+			spec_code = sp.first;
+			break;
+		}
+
+	auto groups = db.getGroups(fac_code, spec_code);
+	int ex_group = getGroupExample(groups.at(0));
+
+	int flag = 1;
+	wcout << L"Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Р№ РЅРѕРјРµСЂ РіСЂСѓРїРїС‹ (Г—" + to_wstring(ex_group) + L"Г—Г—): " << endl;
+
+	try
+	{
+		do {
+
+			if (!flag)
+				wcout << L"РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚. РџРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰Рµ СЂР°Р·. (0 - РІС‹С…РѕРґ)" << endl;
+
+			wcin >> group;
+			CIN_FLUSH
+				if (group == L"0") { return L"-1"; }
+
+			flag = 0;
+		} while (find(groups.begin(), groups.end(), stoi(group)) == groups.end());
+	}
+	catch (std::invalid_argument)
+	{
+		wcout << L"РћС€РёР±РѕС‡РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ." << endl;
+	}
+
+	return group;
+}
+
 int Admin::AddMarksToStudent(Student * s)
 {
 	DataBase db;
@@ -509,7 +601,7 @@ int Admin::AddMarksToStudent(wstring student_id)
 
 	if (!db.existStudent(student_id))
 	{
-		wcout << L"Такого студента не существует." << endl;
+		wcout << L"РўР°РєРѕРіРѕ СЃС‚СѓРґРµРЅС‚Р° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚." << endl;
 		return -1;
 	}
 

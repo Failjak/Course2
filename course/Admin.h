@@ -15,6 +15,7 @@ private:
 
 	void mergeStGr(vector<Student *> *, const map<wstring, vector<wstring>>, wstring mode);
 	vector<int> addMarks2V(wstring student_id, int course, vector<wstring> subjs);
+	int getGroupExample(int group);
 
 public:
 	Admin() { ; }
@@ -35,7 +36,7 @@ public:
 	vector<wstring> EnterFIO();
 	wstring EnterFaculty();
 	wstring EnterSpec(wstring faculty);
-	wstring EnterGroup(wstring spec);
+	wstring EnterGroup(wstring faculty, wstring spec);
 	int EnterEdForm();
 
 	vector<Student*> getStudents(wstring student_id = L"");

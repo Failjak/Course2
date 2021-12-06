@@ -428,9 +428,14 @@ void AdminController::UserManageController(Admin * admin)
 
 			try
 			{
-				if (admin->EditUser(users.at(id - 1)) == 1)
+				int res = admin->EditUser(users.at(id - 1));
+
+				if (res == 1)
 				{
 					wcout << L"Редактирование выполнено успешно." << endl;
+				}
+				else if (res == -1){
+					wcout << L"Отмена редактирования." << endl;
 				}
 				else {
 					wcout << L"Ошибка редактирования." << endl;

@@ -31,6 +31,9 @@ public:
 	template <class T>
 	vector<T*> getObj2V(T s);
 
+	template <class T>
+	int updateTable(T s, wstring update_str);
+
 	int existStudent(wstring student_id);
 	int existMarks(wstring student_id, int term);
 	
@@ -40,8 +43,8 @@ public:
 	
 	/*------ University funcs ------*/
 	map<int, pair<wstring, wstring>> getFaculties();
-	//where list_facultyId =
-	map<int, pair<wstring, wstring>> geSpecialities(int fac_id); // TO DO set, גלוסעמ vectot
+	map<int, pair<wstring, wstring>> geSpecialities(int fac_id);
+	vector<int> getGroups(int fac_id, int spec_id);
 	/*------ University funcs ------*/
 
 	/*-----Student------*/
@@ -283,6 +286,50 @@ inline vector<T*> DataBase::getObj2V(T s)
 	return result;
 }
 
+template<class T>
+inline int DataBase::updateTable(T s, wstring update_str)
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string table;
+	vector<T*> result;
+
+	if (is_same<T, Admin>::value)
+	{
+		table = admin_table;
+	}
+	else if (is_same<T, User>::value) {
+		table = user_table;
+	}
+	else if (is_same<T, Student>::value) {
+		table = stud_table;
+	}
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("update " + table + " set " +  WS2S(update_str) + " student_id = '" + WS2S(s.getStudentId()) + "';");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+
+		if (rc != SQLITE_OK)
+		{
+			wcout << S2WS(err) << endl;
+			return -1;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return result;
+}
+
 inline 
 int DataBase::AddNoteUser(User * s)
 {
@@ -433,7 +480,7 @@ inline map<int, pair<wstring, wstring>> DataBase::geSpecialities(int fac_id)
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("select id, abbrev, name from " + univ_spec_table + " where facultyId = '" + to_string(fac_id) + "';");
+		string sql("select id, abbrev, name from " + univ_spec_table + " where facultyId = " + to_string(fac_id) + ";");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
@@ -447,6 +494,39 @@ inline map<int, pair<wstring, wstring>> DataBase::geSpecialities(int fac_id)
 			sqlite3_step(stmt);
 		}
 
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return result;
+}
+
+inline vector<int> DataBase::getGroups(int fac_id, int spec_id)
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string table;
+	vector<int> result;
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select name from " + univ_group_table + " where facultyId = " + to_string(fac_id) + " and specialityId = " + to_string(spec_id) + ";");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		while (sqlite3_column_text(stmt, 0))
+		{
+			result.push_back(sqlite3_column_int(stmt, 0));
+			sqlite3_step(stmt);
+		}
 	}
 	else
 	{
