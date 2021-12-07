@@ -254,7 +254,6 @@ inline vector<T*> DataBase::getObj2V(T s)
 
 		while (sqlite3_column_text(stmt, 0))
 		{
-			// static_cast<const char*>(sqlite3_column_text16(statement, index))
 			T *s = new T;
 			s->setLogin(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0)));
 			s->setPassword(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
@@ -262,13 +261,6 @@ inline vector<T*> DataBase::getObj2V(T s)
 			if (sqlite3_column_text(stmt, 2)) {
 				s->setStudentId(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
 			}
-
-			/*s->setLogin(S2WS(string((char *)sqlite3_column_text(stmt, 0))));
-			s->setPassword(S2WS(string((char *)sqlite3_column_text(stmt, 1))));
-
-			if (sqlite3_column_text(stmt, 2)){ 
-				s->setStudentId(S2WS(string((char *)sqlite3_column_text(stmt, 2))));
-			}*/
 
 			result.push_back(s);
 			sqlite3_step(stmt);
@@ -604,7 +596,7 @@ int DataBase::AddNoteStudentGroup(Student * s)
 
 		if (rc != SQLITE_OK)
 		{
-			wcout << S2WS(err) << endl;
+			//wcout << S2WS(err) << endl;
 			return 0;
 		}
 	}

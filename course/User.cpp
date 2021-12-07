@@ -42,8 +42,16 @@ void User::setStudent()
 
 	this->student = *db.getStudentById(student_id);
 
-	group = db.getGroup2V(student_id).at(student_id);
-	marks = db.getMarks2VById(student_id);
+	try
+	{
+		group = db.getGroup2V(student_id).at(student_id);
+		marks = db.getMarks2VById(student_id);
+	}
+	catch (std::out_of_range)
+	{
+
+
+	}
 	if (marks.size())
 	{
 		subj = db.getColNames(L"marks");

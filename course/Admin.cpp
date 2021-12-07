@@ -353,7 +353,7 @@ int Admin::EditUser(User * u)
 
 		wcin >> new_pass;
 
-		u->setPassword(new_pass);
+		u->setPassword(new_pass, 1);
 		db.DelNoteByStydentId(u->getStudentId(), *u);
 		db.AddNoteUser(u);
 		db.AddNoteStudentGroup(s);
