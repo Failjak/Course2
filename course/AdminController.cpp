@@ -63,7 +63,8 @@ int AdminController::menu()
 {
 	coutTitle(L"Меню Администратора");
 
-	int choice;
+	bool flag = true;
+	wstring choice;
 
 	wcout << L"1) - Работа с пользователями." << endl;
 	wcout << L"2) - Работа со студентами." << endl;
@@ -71,35 +72,51 @@ int AdminController::menu()
 	wcout << L"4) - Просмотр стпипендий." << endl;
 	wcout << L"5) - Редактирование пользователей." << endl;
 	wcout << L"0) - Назад." << endl;
-	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
 
-	wcin >> choice;
-	return choice;
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"0" && choice <= L"5") flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
+
+	return stoi(choice);
 }
 
 int AdminController::user_menu()
 {
 	coutTitle(L"Меню управления пользователями");
 
-	int choice;
+	bool flag = true;
+	wstring choice;
 
 	wcout << L"1) - Просмотр пользователей." << endl;
 	wcout << L"2) - Добавить пользователя" << endl;
 	wcout << L"3) - Удалить пользователя." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"0" && choice <= L"3") flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
 
-	wcin >> choice;
-	return choice;
+	return stoi(choice);
 }
 
 int AdminController::stud_menu()
 {
 	coutTitle(L"Меню управления студентами");
 
-	int choice;
+	bool flag = true;
+	wstring choice;
 
 	wcout << L"1) - Просмотр студентов." << endl;
 	wcout << L"2) - Рейтинг студентов." << endl;
@@ -107,42 +124,64 @@ int AdminController::stud_menu()
 	wcout << L"4) - Удалить студена." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"0" && choice <= L"4") flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
 
-	wcin >> choice;
-	return choice;
+	return stoi(choice);
 }
 
 int AdminController::marks_menu()
 {
 	coutTitle(L"Меню добавления оценок");
 
-	int choice;
+	bool flag = true;
+	wstring choice;
 
 	wcout << L"1) - Выбор студента." << endl;
 	wcout << L"2) - Добавление по id студента." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"0" && choice <= L"2") flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
 
-	wcin >> choice;
-	return choice;
+	return stoi(choice);
 }
 
 int AdminController::stipend_menu()
 {
 	coutTitle(L"Меню просмотра стипендий");
 
-	int choice;
+	bool flag = true;
+	wstring choice;
 
-	//wcout << L"1) - Просмотр стипендий для всех студентов." << endl;
 	wcout << L"1) - Вычислить стипендию для студента(за последний семестр)." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"0" && choice <= L"1") flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
 
-	wcin >> choice;
-	return choice;
+	return stoi(choice);
 }
 
 void AdminController::pprintUser(vector<User*> array, wstring title)
@@ -560,13 +599,15 @@ void AdminController::MarksManage(Admin * admin)
 
 		try
 		{
-			if (admin->AddMarksToStudent(student_id) == 1)
+			int res = admin->AddMarksToStudent(student_id);
+			if (res == 1)
 			{
 				wcout << L"Добавление оценок прошло успешно." << endl;
 			}
-			else {
+			else if(!res){
 				wcout << L"Ошибка добавление оценок." << endl;
 			}
+			else if (res == -1) {}
 		}
 		catch (std::out_of_range)
 		{

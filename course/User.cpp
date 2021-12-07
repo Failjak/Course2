@@ -35,7 +35,7 @@ void User::setStudent()
 	{
 		if (!db.existStudent(student_id))
 		{
-			wcout << L"Ошибка. Такого студента не существует." << endl;
+			//wcout << L"Ошибка. Такого студента не существует." << endl;
 			return;
 		}
 	}
@@ -44,24 +44,32 @@ void User::setStudent()
 
 	try
 	{
-		group = db.getGroup2V(student_id).at(student_id);
 		marks = db.getMarks2VById(student_id);
+		group = db.getGroup2V(student_id).at(student_id);
 	}
 	catch (std::out_of_range)
 	{
-
-
+		//wcout << L"Отсутствуют записи о Студенте или Группе." << endl;
 	}
+
 	if (marks.size())
 	{
 		subj = db.getColNames(L"marks");
 		subj.erase(subj.begin(), subj.begin() + 3); // del 'student_id'&'term'&'retake' from subjects
 	}
 
-	this->student.setGroup(group.at(0));
-	this->student.setFaculty(group.at(1));
-	this->student.setSpec(group.at(2));
 
+	try
+	{
+		this->student.setGroup(group.at(0));
+		this->student.setFaculty(group.at(1));
+		this->student.setSpec(group.at(2));
+	}
+	catch (std::out_of_range)
+	{
+		//wcout << L"Отсутствуют записи о Студенте или Группе." << endl;
+	}
+		
 	this->student.setCourse(calcCourse(student_id));
 	this->student.setMarks(marks, subj);
 	this->student.calcStipend(&student);

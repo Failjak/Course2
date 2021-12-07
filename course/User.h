@@ -31,8 +31,8 @@ public:
 	Student * getStudent() { return &student; }
 
 	void setLogin(std::wstring login) { this->login = login; }
-	void setPassword(std::wstring pass, int mode) { this->password = Encrypt::encrypt(pass); } // 1 -вкл шифрование
-	void setPassword(std::wstring pass) { this->password = pass; }
+	void setPassword(std::wstring pass, int mode = 0) { this->password = mode ? Encrypt::encrypt(pass) : pass; } // 1 - on encryption
+	//void setPassword(std::wstring pass) { this->password = pass; }
 	void setStudentId(std::wstring st_id) { this->student_id = st_id; }
 	void setStudent(Student * tmp) { student = *tmp; }
 	void setStudent();

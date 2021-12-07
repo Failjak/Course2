@@ -36,7 +36,6 @@ void UserController::main(User * user)
 		case 4:
 		{
 			system("cls");
-			Editing(user);
 			break;
 		}
 		case 0:
@@ -54,34 +53,73 @@ int UserController::menu()
 {
 	coutTitle(L"Меню Студента");
 
-	int choice;
+	bool flag = true;
+	wstring choice;
 
-	wcout << L"1) - Просмотр персональной информации." << endl;
+	wcout << L"1) - Персональная информация." << endl;
 	wcout << L"2) - Просмотр оценок." << endl;
 	wcout << L"3) - Стипендия." << endl;
 	wcout << L"4) - Рейтинг студентов" << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
 
-	wcin >> choice;
-	return choice;
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"0" && choice <= L"4") flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
+
+	return stoi(choice);
 }
 
 int UserController::personal_menu()
 {
 	coutTitle(L"Персональная информация");
 
-	int choice;
+	bool flag = true;
+	wstring choice;
 
 	wcout << L"1) - Просмотр." << endl;
 	wcout << L"2) - Редактирование." << endl;
 	wcout << L"0) - Назад." << endl;
 	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
 
-	wcin >> choice;
-	return choice;
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"0" && choice <= L"2") flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
+
+	return stoi(choice);
+}
+
+int UserController::choice_column(vector<wstring> columns)
+{
+	bool flag = true;
+	wstring choice;
+	int i = 0;
+
+	for (auto col : columns)
+		wcout << ++i << L") " << col << endl;
+	wcout << L" Ваш выбор: ";
+	
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"0" && choice <= L"2") flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
 }
 
 void UserController::PersonalInfo(User * user)
@@ -102,7 +140,19 @@ void UserController::PersonalInfo(User * user)
 		}
 		case 2:
 		{
-			Editing(user);
+			system("cls");
+
+			auto res = Editing(user);
+
+			if (res == 1)
+				wcout << L"Редактирование выполнено успешно." << endl;
+			else if (!res)
+				wcout << L"Ошибка добавления данных." << endl;
+			else if (res == -1)
+				wcout << L"Выход." << endl;
+
+			system("pause");
+			system("cls");
 			break;
 		}
 		case 0:
@@ -136,8 +186,63 @@ void UserController::StipendManage(User * user)
 	system("cls");
 }
 
-void UserController::Editing(User *)
+int UserController::Editing(User * user)
 {
+	DataBase db;
+	vector<wstring> columns = {
+		L"Логин",
+		L"Пароль",
+	};
+
+	coutTitle(L"Редактирование пользователя");
+	wcout << *user << endl;
+
+	wcout << L"Выберете поле для редактирования." << endl;
+
+	int choice = choice_column(columns);
+
+	if (choice == 1)
+	{
+		system("cls");
+
+		wstring new_login;
+
+		coutTitle(L"Изменение логина");
+		wcout << L"Введите новый логин" << endl;
+
+		wcin >> new_login;
+		user->setLogin(new_login);
+
+		if (db.DelNoteByStydentId(user->getStudentId(), *user) != 1 
+			or !db.AddNoteUser(user) != 1 
+			or !db.AddNoteStudentGroup(user->getStudent()) != 1) 
+		{ return 0; }
+
+		return 1;
+	}
+	else if (choice == 2)
+	{
+		system("cls");
+
+		wstring new_pass;
+
+		coutTitle(L"Изменение пароля");
+		wcout << L"Введите новый пароль" << endl;
+
+		wcin >> new_pass;
+		user->setPassword(new_pass, 1);
+
+		if (db.DelNoteByStydentId(user->getStudentId(), *user) != 1
+			or !db.AddNoteUser(user) != 1
+			or !db.AddNoteStudentGroup(user->getStudent()) != 1)
+		{ return 0; }
+
+
+		return 1;
+	}
+	
+
+	return -1;
 }
 
 void UserController::pprintMark(User * user, wstring title)

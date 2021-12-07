@@ -349,7 +349,7 @@ int DataBase::AddNoteUser(User * s)
 
 		if (rc != SQLITE_OK)
 		{
-			//wcout << S2WS(err) << endl;
+			wcout << S2WS(err) << endl;
 			return -1;
 		}
 	}
@@ -403,7 +403,7 @@ int DataBase::DelNoteByStydentId(wstring id, T s)
 	else
 	{
 		cout << "Failed to open db\n";
-		return -1;
+		return 0;
 	}
 
 	sqlite3_close(db);
@@ -596,14 +596,14 @@ int DataBase::AddNoteStudentGroup(Student * s)
 
 		if (rc != SQLITE_OK)
 		{
-			//wcout << S2WS(err) << endl;
-			return 0;
+			wcout << S2WS(err) << endl;
+			return -1;
 		}
 	}
 	else
 	{
 		cout << "Failed to open db\n";
-		return -1;
+		return 0;
 	}
 
 	sqlite3_close(db);

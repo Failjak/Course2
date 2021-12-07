@@ -101,16 +101,6 @@ int main(int argc, char* argv[])
 
 	int flag = 1;
 
-	/*User user;
-	user.setLogin(L"gus");
-	user.setPassword(L"123");
-	UserController::main(&user);*/
-
-	//create_table();
-
-	//wstring a = L"043534";
-	//wcout << stoi(a) << endl;
-
 	while (flag)
 	{
 		system("cls");
@@ -144,15 +134,15 @@ int main(int argc, char* argv[])
 			}
 			break;
 		}
-
 		case 0:
-
-			return 0;
-			break;
-
+		{
+			
+		}
 		default:
+		{
 			wcout << L"Неверный выбор." << endl;
 			break;
+		}
 		}
 	}
 
