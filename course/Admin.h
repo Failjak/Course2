@@ -4,7 +4,7 @@
 
 #include "User.h"
 #include "DataBase.h"
-
+#include "AbstractHandler.h"
 
 
 /*----------------Class Admin--------------------*/
@@ -37,11 +37,12 @@ public:
 	wstring EnterFaculty();
 	wstring EnterSpec(wstring faculty);
 	wstring EnterGroup(wstring faculty, wstring spec);
+	//wstring EnterGroupSuggested(wstring faculty, wstring spec);
 	int EnterEdForm();
 
 	vector<Student*> getStudents(wstring student_id = L"");
 	int AddMarksToStudent(Student *s);
 	int AddMarksToStudent(wstring student_id);
-	friend void Student::calcStipend(Student *s);
+	//friend void Admin::calcStipend(Student *s);
 	/*-----Student------*/
 };

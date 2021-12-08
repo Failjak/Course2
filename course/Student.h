@@ -7,6 +7,8 @@
 
 using namespace std;
 
+class Admin;
+
 /*----------------Class Student--------------------*/
 class Student : public People {
 private:
@@ -62,10 +64,10 @@ public:
 	float getAvgMark();
 	map<int, map<wstring, int>> getMarks() { return marks; }
 
-
-	/*-----friend functions to Admin-----*/
-	void calcStipend(Student *s);
+	/*-----friend class Admin-----*/
+	friend class Admin;
 	/*----- ----- -------- -- ---- -----*/
 
+	void calcStipend(Student *s);
 	void printRole() { wcout << L"Student" << endl; }
 };

@@ -6,23 +6,24 @@
 #include "Admin.h"
 #include "User.h"
 
-class AdminController{
-public:
-	static void main(Admin * admin);
+namespace AdminController{
+	void main(Admin * admin);
 
-	static int menu();
-	static int user_menu();
-	static int stud_menu();
-	static int marks_menu();
-	static int stipend_menu();
+	int menu();
+	int user_menu();
+	int stud_menu();
+	int marks_menu();
+	int stipend_menu();
 
-	static void pprintUser(std::vector<User*>, std::wstring title=L"");
-	static void pprinStudent(std::vector<Student*>, std::wstring title = L"");
-	static void pprinStipend(std::vector<Student*>, std::wstring title = L"");
-	
-	static void UserManageController(Admin * admin);
-	static void StudentManageController(Admin * admin);
-	static void MarksManage(Admin * admin);
-	static void StipendManage(Admin * admin);
-	static void EditManage(Admin * admin);
+	void pprintUser(std::vector<User*>, std::wstring title=L"");
+	void pprinStudent(std::vector<Student*>, std::wstring title = L"");
+	void pprinStipend(std::vector<Student*>, std::wstring title = L"");
+
+	void StudentRating(Admin * s = new Admin());
+
+	void UserManageController(Admin * admin);
+	void StudentManageController(Admin * admin);
+	void MarksManage(Admin * admin);
+	void StipendManage(Admin * admin);
+	void EditManage(Admin * admin);
 };

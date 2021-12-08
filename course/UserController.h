@@ -1,21 +1,19 @@
 #pragma once
 
-#include "AbstractHandler.h"
 #include "User.h"
 
-class UserController{
-public:
-	static void main(User * user);
+namespace UserController
+{
+	void main(User * user);
 	
-	static int menu();
-	static int personal_menu();
-	static int choice_column(vector<wstring>);
+	int menu();
+	int personal_menu();
 
-	static void PersonalInfo(User *);
-	static void ShowMarks(User *);
-	static void StipendManage(User *);
-	static int Editing(User *);
+	void PersonalInfo(User *);
+	void ShowMarks(User *);
+	void StipendManage(User *);
+	int Editing(User *);
 
-	static void pprintMark(User *, wstring); // пока есть только в одном
-	static void pprintStipend(User *, wstring); //
-};
+	void pprintMark(User *, wstring);
+	void pprintStipend(User *, wstring);
+}

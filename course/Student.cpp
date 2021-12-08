@@ -1,4 +1,4 @@
-#include "Student.h"
+п»ї#include "Student.h"
 #include "Header.h"
 
 
@@ -137,7 +137,7 @@ void Student::calcStipend(Student * s)
 		float avg_mark = (*prev_mark).second;
 		float ratio = getStipendRatio(avg_mark);
 
-		if ((*prev_mark).first.second) { stipend.push_back(make_pair(1, 0)); continue; } // пересдача
+		if ((*prev_mark).first.second) { stipend.push_back(make_pair(1, 0)); continue; } // РїРµСЂРµСЃРґР°С‡Р°
 
 		stipend.push_back(make_pair((*mark).first.first, BASE_STIPEND * ratio));
 	}

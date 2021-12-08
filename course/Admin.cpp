@@ -314,14 +314,7 @@ int Admin::EditUser(User * u)
 		L"Телефон",
 	};
 
-	int i = 0;
-	int choice;
-
-	for (auto col : columns)
-		wcout << ++i << L") " << col << endl;
-	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
-	wcin >> choice;
+	int choice = AbstractHandler::choice_column(columns);
 
 	wstring new_value;
 	if (choice == 1)
@@ -570,17 +563,10 @@ pair<wstring, wstring> Admin::EnterFIO()
 	*/
 	coutTitle(L"Редактирование ФИО");
 
-	int choice;
 	vector<wstring> columns = { L"Фамилия", L"Имя", L"Отчество" };
 	wcout << L"Какое именно поле надо изменть" << endl;
 
-	int i = 0;
-	for (auto col : columns)
-		wcout << ++i << L") " << col << endl;
-	wcout << L" Ваш выбор: ";
-
-	CIN_FLUSH;
-	wcin >> choice;
+	int choice = AbstractHandler::choice_column(columns);
 
 	wstring new_value;
 	wcout << L"Введите новое значение для '" << columns.at(choice - 1) << "': ";
@@ -719,6 +705,7 @@ wstring Admin::EnterGroup(wstring faculty, wstring spec)
 
 	return group;
 }
+
 
 int Admin::AddMarksToStudent(Student * s)
 {

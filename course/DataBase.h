@@ -5,12 +5,12 @@
 
 #include "Header.h"
 #include "sqlite/sqlite3.h"
-
+#include "User.h"
 using namespace std;
 
 class Admin;
 class Student;
-class User;
+//class User;
 
 /*----------------Class DataBase--------------------*/
 class DataBase {
@@ -44,7 +44,7 @@ public:
 	/*------ University funcs ------*/
 	map<int, pair<wstring, wstring>> getFaculties();
 	map<int, pair<wstring, wstring>> geSpecialities(int fac_id);
-	vector<int> getGroups(int fac_id, int spec_id);
+	vector<int> getGroups(int fac_id = -1, int spec_id = -1);
 	/*------ University funcs ------*/
 
 	/*-----Student------*/
@@ -498,12 +498,21 @@ inline vector<int> DataBase::getGroups(int fac_id, int spec_id)
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
-	string table;
+	string sql;
 	vector<int> result;
+
+	if (fac_id == -1 and spec_id == -1)
+	{
+		sql = "select name from " + univ_group_table + ";";
+	}
+	else
+	{
+		sql = "select name from " + univ_group_table + " where facultyId = " + to_string(fac_id) + " and specialityId = " + to_string(spec_id) + ";";
+
+	}
 
 	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
 	{
-		string sql("select name from " + univ_group_table + " where facultyId = " + to_string(fac_id) + " and specialityId = " + to_string(spec_id) + ";");
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
