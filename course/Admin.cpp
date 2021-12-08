@@ -338,6 +338,7 @@ int Admin::EditUser(User * u)
 		u->setLogin(new_login);
 		db.DelNoteByStydentId(u->getStudentId(), *u);
 		db.AddNoteUser(u);
+		db.AddNoteStudent(u->getStudent());
 		db.AddNoteStudentGroup(s);
 
 		return true;
@@ -356,6 +357,7 @@ int Admin::EditUser(User * u)
 		u->setPassword(new_pass, 1);
 		db.DelNoteByStydentId(u->getStudentId(), *u);
 		db.AddNoteUser(u);
+		db.AddNoteStudent(u->getStudent());
 		db.AddNoteStudentGroup(s);
 
 		return true;
@@ -595,7 +597,9 @@ wstring Admin::EnterFaculty()
 	map<int, pair<wstring, wstring>> faculties = db.getFaculties();
 	vector<int> fac_codes;
 
-	int index;
+	bool flag = true;
+	wstring choice;
+
 	wcout << L"Выберете новый факультет:" << endl;
 	int i = 0;
 
@@ -606,10 +610,17 @@ wstring Admin::EnterFaculty()
 	}
 
 	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
-	wcin >> index;
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"1" && choice <= to_wstring(faculties.size())) flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
 
-	int key = fac_codes.at(index - 1);
+	int key = fac_codes.at(stoi(choice)- 1);
 	return faculties.at(key).first;
 }
 
@@ -623,7 +634,6 @@ wstring Admin::EnterSpec(wstring faculty)
 	vector<int> spec_codes;
 	int fac_code;
 
-
 	for (const auto& fac : faculties)
 		if (fac.second.first == faculty)
 		{
@@ -633,8 +643,9 @@ wstring Admin::EnterSpec(wstring faculty)
 
 	map<int, pair<wstring, wstring>> specs = db.geSpecialities(fac_code);
 
+	bool flag = true;
+	wstring choice;
 	int i = 0;
-	int index;
 	wcout << L"Выберете новую специальность:" << endl;
 
 	for (const auto& spec : specs)
@@ -644,10 +655,17 @@ wstring Admin::EnterSpec(wstring faculty)
 	}
 
 	wcout << L" Ваш выбор: ";
-	CIN_FLUSH;
-	wcin >> index;
+	while (flag)
+	{
+		getline(wcin, choice);
+		if (choice >= L"1" && choice <= to_wstring(faculties.size())) flag = false;
+		else {
+			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+			choice = L"";
+		}
+	}
 
-	int key = spec_codes.at(index - 1);
+	int key = spec_codes.at(stoi(choice) - 1);
 	return specs.at(key).first;
 }
 

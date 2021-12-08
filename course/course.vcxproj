@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractHandler.cpp" />
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="AdminController.cpp" />
     <ClCompile Include="Encryption.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="UserController.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractHandler.h" />
     <ClInclude Include="Admin.h" />
     <ClInclude Include="AdminController.h" />
     <ClInclude Include="DataBase.h" />

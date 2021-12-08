@@ -1,8 +1,9 @@
 #pragma once
 
+#include "AbstractHandler.h"
 #include "User.h"
 
-class UserController {
+class UserController{
 public:
 	static void main(User * user);
 	
@@ -15,6 +16,6 @@ public:
 	static void StipendManage(User *);
 	static int Editing(User *);
 
-	static void pprintMark(User *, wstring);
-	static void pprintStipend(User *, wstring);
+	static void pprintMark(User *, wstring); // пока есть только в одном
+	static void pprintStipend(User *, wstring); //
 };

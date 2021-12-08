@@ -93,11 +93,39 @@ using namespace std;
 //	sqlite3_close(db);
 //}
 
+void test()
+{
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	string s = "Никита";
+
+	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	{
+		string sql("select * from students where first_name like '" + s + "';");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		for (; sqlite3_column_text16(stmt, 0); sqlite3_step(stmt))
+			wcout << static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0)) << endl;
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+}
+
 int main(int argc, char* argv[])
 {
 	_setmode(_fileno(stdout), _O_U16TEXT);
 	_setmode(_fileno(stdin), _O_U16TEXT);
 	_setmode(_fileno(stderr), _O_U16TEXT);
+
+	//test();
 
 	int flag = 1;
 
@@ -136,7 +164,7 @@ int main(int argc, char* argv[])
 		}
 		case 0:
 		{
-			
+			return 0;
 		}
 		default:
 		{

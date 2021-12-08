@@ -36,6 +36,7 @@ void UserController::main(User * user)
 		case 4:
 		{
 			system("cls");
+			//Rating(user);
 			break;
 		}
 		case 0:
@@ -65,6 +66,7 @@ int UserController::menu()
 
 	while (flag)
 	{
+		rewind(stdin);
 		getline(wcin, choice);
 		if (choice >= L"0" && choice <= L"4") flag = false;
 		else {
@@ -120,6 +122,8 @@ int UserController::choice_column(vector<wstring> columns)
 			choice = L"";
 		}
 	}
+
+	return stoi(choice);
 }
 
 void UserController::PersonalInfo(User * user)
@@ -232,13 +236,12 @@ int UserController::Editing(User * user)
 		wcin >> new_pass;
 		user->setPassword(new_pass, 1);
 
-		if (db.DelNoteByStydentId(user->getStudentId(), *user) != 1
-			or !db.AddNoteUser(user) != 1
-			or !db.AddNoteStudentGroup(user->getStudent()) != 1)
-		{ return 0; }
-
-
-		return 1;
+		if (db.DelNoteByStydentId(user->getStudentId(), *user) == 1
+			and db.AddNoteUser(user) == 1
+			and db.AddNoteStudent(user->getStudent()) == 1
+			and db.AddNoteStudentGroup(user->getStudent()) == 1)
+		{ return 1; }
+		else { return 0; }
 	}
 	
 

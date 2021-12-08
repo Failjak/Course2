@@ -551,7 +551,6 @@ int DataBase::AddNoteStudent(Student * s)
 			"insert into " + stud_table + " values (" +  WS2S(info) + ");");
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
-
 		if (rc != SQLITE_OK)
 		{
 			wcout << S2WS(err) << endl;

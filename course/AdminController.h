@@ -2,10 +2,11 @@
 #include <vector>
 #include <string>
 
+#include "AbstractHandler.h"
 #include "Admin.h"
 #include "User.h"
 
-class AdminController {
+class AdminController{
 public:
 	static void main(Admin * admin);
 
