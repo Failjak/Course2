@@ -16,8 +16,6 @@
 
 #define CIN_FLUSH if (std::cin.fail()) {std::cin.clear(); std::cin.ignore();}
 
-constexpr auto DB_PATH = "migrate/main.db";
-
 constexpr auto HEADER_SPACE = 32;
 
 inline void coutTitle(std::wstring title) {

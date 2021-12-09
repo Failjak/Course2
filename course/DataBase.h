@@ -6,6 +6,9 @@
 #include "Header.h"
 #include "sqlite/sqlite3.h"
 #include "User.h"
+#include "Convert.h"
+
+using namespace Convert;
 using namespace std;
 
 class Admin;
@@ -15,6 +18,8 @@ class Student;
 /*----------------Class DataBase--------------------*/
 class DataBase {
 private: 
+	string db_path = "migrate/main.db";
+
 	string admin_table = "admin";
 	string user_table = "users";
 	string stud_table = "students";
@@ -25,6 +30,10 @@ private:
 	string univ_fac_table = "university_faculties";
 
 public:
+	//DataBase() { db_path = "migrate\main.db"; }
+
+	string getDBPath() { return db_path; }
+
 	template <class T>
 	int exist(T * s);
 
@@ -66,41 +75,6 @@ public:
 };
 /*----------------End Class DataBase----------------*/
 
-inline const std::wstring S2WS(const std::string &s)
-{
-	wstring ws;
-	std::wstring wsTmp(s.begin(), s.end());
-
-	ws = wsTmp;
-
-	return ws;
-}
-
-inline std::string WS2S(const std::wstring& wstr)
-{
-	using convert_typeX = codecvt_utf8<wchar_t>;
-	wstring_convert<convert_typeX, wchar_t> converterX;
-
-	return converterX.to_bytes(wstr);
-}
-
-inline vector<vector<wstring>> VVS2VVWS(const vector<vector<string>> vvs)
-{
-	vector<vector<wstring>> vvws;
-	wstring ws;
-
-	for (int i = 0; i < vvs.size(); i++)
-	{
-		vvws.push_back(vector<wstring>());
-		for (int j = 0; j < vvs[i].size(); j++)
-		{
-			std::wstring wsTmp(vvs[i][j].begin(), vvs[i][j].end());
-			ws = wsTmp;
-			vvws[i].push_back(ws);
-		}
-	}
-	return vvws;
-}
 
 inline
 int DataBase::existStudent(wstring student_id)
@@ -114,7 +88,7 @@ int DataBase::existStudent(wstring student_id)
 
 	int res = 0;
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("select count(*) from " + stud_table + " where student_id like '" + WS2S(student_id) + "';");
 
@@ -147,7 +121,7 @@ inline int DataBase::existMarks(wstring student_id, int term)
 
 	int res = 0;
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("select count(*) from " + mark_table + " where student_id like '" + WS2S(student_id) + "' and term =" + to_string(term) + ";");
 
@@ -200,7 +174,7 @@ int DataBase::exist(T * s)
 		table = user_table;
 	}
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("select count(*) from " + table + " where login like '" + l + "' and password like '" + pass + "';");
 
@@ -245,7 +219,7 @@ inline vector<T*> DataBase::getObj2V(T s)
 		table = user_table;
 	}
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("select * from " + table + ";");
 
@@ -300,7 +274,7 @@ inline int DataBase::updateTable(T s, wstring update_str)
 		table = stud_table;
 	}
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("update " + table + " set " +  WS2S(update_str) + " student_id = '" + WS2S(s.getStudentId()) + "';");
 
@@ -339,7 +313,7 @@ int DataBase::AddNoteUser(User * s)
 	sqlite3_stmt * stmt;
 	char *err;
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("pragma foreign_keys=on;"
 			"insert into "+ user_table + "(login, password, student_id) values ('" + WS2S(s->getLogin()) +
@@ -387,7 +361,7 @@ int DataBase::DelNoteByStydentId(wstring id, T s)
 		table = stud_table;
 	}
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("pragma foreign_keys=on;"
 			"delete from " + table + " where student_id = '" + WS2S(id) + "';");
@@ -422,7 +396,7 @@ inline map<int, pair<wstring, wstring>> DataBase::getFaculties()
 	string table;
 	map<int, pair<wstring, wstring>> result;
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("select id, abbrev, name from " + univ_fac_table + ";");
 
@@ -464,7 +438,7 @@ inline map<int, pair<wstring, wstring>> DataBase::geSpecialities(int fac_id)
 	string table;
 	map<int, pair<wstring, wstring>> result;
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("select id, abbrev, name from " + univ_spec_table + " where facultyId = " + to_string(fac_id) + ";");
 
@@ -511,7 +485,7 @@ inline vector<int> DataBase::getGroups(int fac_id, int spec_id)
 
 	}
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
@@ -551,7 +525,7 @@ int DataBase::AddNoteStudent(Student * s)
 	char *err;
 
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		wstring info = L"'" +  s->getStudentId() + L"'," + L"'" + s->getName() + L"'," + L"'" + s->getSurname() + L"'," + L"'" + s->getPatronomic() +
 			L"'," + L"'" + s->getEdForm() + L"'," + L"'" + s->getEmail() + L"'," + L"'" + s->getPhone() + L"'";
@@ -593,7 +567,7 @@ int DataBase::AddNoteStudentGroup(Student * s)
 	char *err;
 
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		wstring info = L"'" + s->getStudentId() + L"'," + L"'" + s->getGroup() + L"'," + L"'" + s->getFaculty() + L"'," + L"'" + s->getSpec() +  L"'";
 
@@ -649,7 +623,7 @@ int DataBase::AddMarks(vector<int> marks, vector<wstring> subj, wstring student_
 		}
 	}
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("pragma foreign_keys=on;"
 			"insert into " + mark_table + " (student_id, " + str_cols + ") values('" + WS2S(student_id) + "', " + str_marks + ");");
@@ -679,7 +653,7 @@ inline int DataBase::updateGroup(wstring student_id, wstring & update_str)
 	sqlite3_stmt * stmt;
 	char *err;
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		wcout << update_str << endl;
 		wcout << S2WS(WS2S(update_str)) << endl;
@@ -713,7 +687,7 @@ vector<Student*> DataBase::getStudents()
 
 	vector<Student*> result;
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("select student_id, first_name, last_name, patronymic, ed_form, email, phone from " + stud_table + ";");
 
@@ -768,7 +742,7 @@ map<wstring, vector<wstring>> DataBase::getGroup2V(wstring student_id)
 	else
 		sql = ("select * from " + group_table + ";");
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
 		sqlite3_step(stmt); //executing the statement
@@ -829,7 +803,7 @@ vector<pair<pair<int, bool>, vector<int>>> DataBase::getMarks2VById(wstring stud
 			str_cols = str_cols + L",";
 	}
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		//"select * from students as s inner join marks as m on s.student_id = m.student_id where s.student_id like '07360022';"
 		string sql("select " + WS2S(str_cols) + " from " + stud_table + " as s inner join " + mark_table + " on s.student_id = marks.student_id where s.student_id = '" + WS2S(student_id) + "';");
@@ -879,7 +853,7 @@ vector<wstring> DataBase::getColNames(wstring table)
 
 	vector<wstring> result;
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("pragma table_info(" + WS2S(table) + ");");
 
@@ -911,7 +885,7 @@ Student * DataBase::getStudentById(wstring id)
 
 	Student* s = new Student();
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("select student_id, first_name, last_name, patronymic, ed_form, email, phone from " + stud_table +
 					" where student_id = '" + WS2S(id) + "';");
@@ -959,7 +933,7 @@ inline wstring DataBase::getStudentIdByUser(User * s)
 
 	wstring student_id = L"";
 
-	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
 		string sql("select student_id from " +  user_table +
 			" where login = '" + WS2S(s->getLogin()) + "' and password = '" + WS2S(s->getEncrPassword()) + "';");

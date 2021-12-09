@@ -126,6 +126,8 @@
     <ClCompile Include="AbstractHandler.cpp" />
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="AdminController.cpp" />
+    <ClCompile Include="Convert.cpp" />
+    <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="Encryption.cpp" />
     <ClCompile Include="Encryption.h" />
     <ClCompile Include="LoginController.cpp" />
@@ -142,6 +144,7 @@
     <ClInclude Include="AbstractHandler.h" />
     <ClInclude Include="Admin.h" />
     <ClInclude Include="AdminController.h" />
+    <ClInclude Include="Convert.h" />
     <ClInclude Include="DataBase.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Menu.h" />

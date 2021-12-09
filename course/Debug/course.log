@@ -1,37 +1,13 @@
-﻿  AdminController.cpp
-h:\studing\course2\course\course\database.h(92): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(95): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(339): warning C4101: 'stmt': unreferenced local variable
-h:\studing\course2\course\course\database.h(550): warning C4101: 'stmt': unreferenced local variable
-h:\studing\course2\course\course\database.h(592): warning C4101: 'stmt': unreferenced local variable
-h:\studing\course2\course\course\database.h(639): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(645): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(634): warning C4101: 'stmt': unreferenced local variable
-h:\studing\course2\course\course\database.h(824): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(828): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\database.h(878): warning C4101: 'err': unreferenced local variable
-h:\studing\course2\course\course\admincontroller.cpp(213): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(215): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(217): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(219): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(247): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(270): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(272): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(275): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(278): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(281): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(284): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(287): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(290): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(293): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(333): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(359): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(361): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(364): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(367): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(370): warning C4018: '>': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(402): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\admincontroller.cpp(647): warning C4018: '<=': signed/unsigned mismatch
+﻿  main.cpp
+h:\studing\course2\course\course\database.h(320): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(531): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(573): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(620): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(626): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(615): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(805): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(809): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(859): warning C4101: 'err': unreferenced local variable
 c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
           with
           [
@@ -41,13 +17,13 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
           [
               _Ty1=float
           ]
-  h:\studing\course2\course\course\header.h(41): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  h:\studing\course2\course\course\header.h(39): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
               _Other2=double
           ]
-  h:\studing\course2\course\course\header.h(35): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  h:\studing\course2\course\course\header.h(33): note: see reference to function template instantiation 'std::pair<float,float>::pair<int,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
@@ -71,13 +47,13 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
           [
               _Ty1=float
           ]
-  h:\studing\course2\course\course\header.h(41): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  h:\studing\course2\course\course\header.h(39): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=double,
               _Other2=double
           ]
-  h:\studing\course2\course\course\header.h(35): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
+  h:\studing\course2\course\course\header.h(33): note: see reference to function template instantiation 'std::pair<float,float>::pair<double,double,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=double,
@@ -92,7 +68,7 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
           [
               _Ty2=float
           ]
-  h:\studing\course2\course\course\header.h(49): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+  h:\studing\course2\course\course\header.h(47): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
           with
           [
               _Kty=std::wstring,
@@ -100,7 +76,7 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Other1=const wchar_t (&)[5],
               _Other2=int
           ]
-  h:\studing\course2\course\course\header.h(43): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
+  h:\studing\course2\course\course\header.h(41): note: see reference to function template instantiation 'std::pair<const _Kty,_Ty>::pair<const wchar_t(&)[5],int,0>(_Other1,_Other2 &&) noexcept(false)' being compiled
           with
           [
               _Kty=std::wstring,
