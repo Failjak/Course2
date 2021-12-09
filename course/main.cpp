@@ -4,7 +4,6 @@
 #include <fcntl.h>
 
 #include "LoginController.h"
-#include "LoginController.cpp"
 #include "AdminController.h"
 #include "UserController.h"
 #include "Admin.h"
@@ -111,10 +110,9 @@ int main(int argc, char* argv[])
 		case 1:
 		{
 			Admin admin;
-			LoginController<Admin> lContr;
 
 			system("cls");
-			if (lContr.chekAuth(&admin))
+			if (LoginController::checkAuth<Admin>(&admin))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно.\n" << endl;
@@ -125,10 +123,9 @@ int main(int argc, char* argv[])
 		case 2:
 		{
 			User user;
-			LoginController<User> lContr;
 
 			system("cls");
-			if (lContr.chekAuth(&user))
+			if (LoginController::checkAuth<User>(&user))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно." << endl;

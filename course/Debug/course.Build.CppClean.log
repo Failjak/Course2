@@ -7,7 +7,6 @@ h:\studing\course2\course\course\debug\people.obj
 h:\studing\course2\course\course\debug\main.obj
 h:\studing\course2\course\course\debug\logincontroller.obj
 h:\studing\course2\course\course\debug\encryption.obj
-h:\studing\course2\course\course\debug\database.obj
 h:\studing\course2\course\course\debug\convert.obj
 h:\studing\course2\course\course\debug\admincontroller.obj
 h:\studing\course2\course\course\debug\admin.obj
@@ -18,12 +17,10 @@ h:\studing\course2\course\debug\course.pdb
 h:\studing\course2\course\course\debug\course.tlog\cl.command.1.tlog
 h:\studing\course2\course\course\debug\course.tlog\cl.read.1.tlog
 h:\studing\course2\course\course\debug\course.tlog\cl.write.1.tlog
-h:\studing\course2\course\course\debug\course.tlog\link.6928-cvtres.read.1.tlog
-h:\studing\course2\course\course\debug\course.tlog\link.6928-cvtres.write.1.tlog
-h:\studing\course2\course\course\debug\course.tlog\link.6928-rc.read.1.tlog
-h:\studing\course2\course\course\debug\course.tlog\link.6928-rc.write.1.tlog
-h:\studing\course2\course\course\debug\course.tlog\link.6928.read.1.tlog
-h:\studing\course2\course\course\debug\course.tlog\link.6928.write.1.tlog
+h:\studing\course2\course\course\debug\course.tlog\link-cvtres.read.1.tlog
+h:\studing\course2\course\course\debug\course.tlog\link-cvtres.write.1.tlog
+h:\studing\course2\course\course\debug\course.tlog\link-rc.read.1.tlog
+h:\studing\course2\course\course\debug\course.tlog\link-rc.write.1.tlog
 h:\studing\course2\course\course\debug\course.tlog\link.command.1.tlog
 h:\studing\course2\course\course\debug\course.tlog\link.read.1.tlog
 h:\studing\course2\course\course\debug\course.tlog\link.write.1.tlog

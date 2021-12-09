@@ -127,7 +127,6 @@
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="AdminController.cpp" />
     <ClCompile Include="Convert.cpp" />
-    <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="Encryption.cpp" />
     <ClCompile Include="Encryption.h" />
     <ClCompile Include="LoginController.cpp" />
