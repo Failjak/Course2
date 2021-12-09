@@ -41,7 +41,7 @@ public:
 	void setEmail(wstring m) { email = m; }
 	void setPhone(wstring p) { phone = p; }
 	void setEdForm(wstring ed_form) { education_form = ed_form; }
-	void setEdForm(int ed_form) { education_form = ed_form == 1 ? L"Бюджет" : L"Платно"; }
+	void setEdForm(int ed_form) { education_form = ed_form == 1 ? L"F" : L"C"; }
 	void setMarks(vector<pair<pair<int, bool>, vector<int>>>, vector<wstring> subj);
 	void setStipend(vector<pair<int, float>> stipend) { this->stipend = stipend; }
 	void setCourse(int course) { this->course = course; }
@@ -56,9 +56,9 @@ public:
 	float getStipendLastTerm();
 	int getCourse() { return course; }
 
-	wstring getEdFormWstr() { return education_form == L"F" ? L"Бюджет" : L"Платно"; }
+	wstring getEdFormWstr() { return education_form == L"F" ? L"Бюджет" : L"Платное"; }
 	wstring getEdForm() { return education_form; }
-	int getEdFormInt() { return education_form == L"F" ? 1 : 0; } //if f -> 1, else 0
+	int getEdFormInt() { return education_form == L"F" ? 1 : 0; } //if f -> 1, else -> 0
 
 	vector<pair<pair<int, bool>, float>> getAvgMarkByTerm();
 	float getAvgMark();

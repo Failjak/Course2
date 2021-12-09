@@ -26,4 +26,7 @@ namespace AdminController{
 	void MarksManage(Admin * admin);
 	void StipendManage(Admin * admin);
 	void EditManage(Admin * admin);
+	void ManageData(Admin * admin);
+	void FilterManage(Admin * admin, vector<User*> users);
+	void SearchManage(Admin * admin, vector<User*> users);
 };

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <Windows.h>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
@@ -34,11 +35,15 @@ namespace AdminController
 			{
 				system("cls");
 				MarksManage(admin);
+
+				system("pause");
+				system("cls");
 				break;
 			}
 			case 4:
 			{
 				system("cls");
+
 				StipendManage(admin);
 				break;
 			}
@@ -46,6 +51,9 @@ namespace AdminController
 			{
 				system("cls");
 				EditManage(admin);
+
+				system("pause");
+				system("cls");
 				break;
 			}
 			case 0:
@@ -77,6 +85,7 @@ namespace AdminController
 
 		while (flag)
 		{
+			rewind(stdin);
 			getline(wcin, choice);
 			if (choice >= L"0" && choice <= L"5") flag = false;
 			else {
@@ -102,6 +111,7 @@ namespace AdminController
 		wcout << L" Ваш выбор: ";
 		while (flag)
 		{
+			rewind(stdin);
 			getline(wcin, choice);
 			if (choice >= L"0" && choice <= L"3") flag = false;
 			else {
@@ -124,12 +134,15 @@ namespace AdminController
 		wcout << L"2) - Рейтинг студентов." << endl;
 		wcout << L"3) - Добавить студента" << endl;
 		wcout << L"4) - Удалить студена." << endl;
+		wcout << L"5) - Фильтры|Поиск." << endl;
 		wcout << L"0) - Назад." << endl;
 		wcout << L" Ваш выбор: ";
+
 		while (flag)
 		{
+			rewind(stdin);
 			getline(wcin, choice);
-			if (choice >= L"0" && choice <= L"4") flag = false;
+			if (choice >= L"0" && choice <= L"5") flag = false;
 			else {
 				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
 				choice = L"";
@@ -152,6 +165,7 @@ namespace AdminController
 		wcout << L" Ваш выбор: ";
 		while (flag)
 		{
+			rewind(stdin);
 			getline(wcin, choice);
 			if (choice >= L"0" && choice <= L"2") flag = false;
 			else {
@@ -175,6 +189,7 @@ namespace AdminController
 		wcout << L" Ваш выбор: ";
 		while (flag)
 		{
+			rewind(stdin);
 			getline(wcin, choice);
 			if (choice >= L"0" && choice <= L"1") flag = false;
 			else {
@@ -391,8 +406,12 @@ namespace AdminController
 				<< setw(max_size_id > MIN_SPACE ? max_size_id + 1 : MIN_SPACE) << left << students[j]->getStudentId()
 				<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << students[j]->getFullName()
 				<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << std::fixed << std::setprecision(2) << students[j]->getAvgMark()
-				<< setw(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) << left << std::fixed << std::setprecision(2) << students[j]->getStipendLastTerm()
-				<< left << L"│" << endl;
+				<< setw(max_size_stipend > MIN_SPACE ? max_size_stipend + 1 : MIN_SPACE) << left << std::fixed;
+			if (students[j]->getEdFormInt())
+				wcout << std::setprecision(2) << students[j]->getStipendLastTerm();
+			else
+				wcout << students[j]->getEdFormWstr();
+			wcout << left << L"│" << endl;
 		}
 		wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
 	}
@@ -510,6 +529,7 @@ namespace AdminController
 
 				vector<Student*> students = admin->getStudents();
 
+				sort(students.begin(), students.end(), AbstractHandler::ScompByFIO);
 				AdminController::pprinStudent(students, L"Студенты");
 
 				system("pause");
@@ -519,6 +539,8 @@ namespace AdminController
 			}
 			case 2:
 			{
+				system("cls");
+
 				StudentRating(admin);
 
 				system("pause");
@@ -568,6 +590,16 @@ namespace AdminController
 				{
 					wcout << L"Неверный выбор" << endl;
 				}
+
+				system("pause");
+				system("cls");
+				break;
+			}
+			case 5:
+			{
+				system("cls");
+
+				ManageData(admin);
 
 				system("pause");
 				system("cls");
@@ -720,7 +752,113 @@ namespace AdminController
 			wcout << L"Неверный выбор" << endl;
 		}
 
-		system("pause");
+		return;
+	}
+	
+	void ManageData(Admin * admin)
+	{
+		DataBase db;
+
 		system("cls");
+		coutTitle(L"Сортировка пользователей");
+
+		vector<User*> users = admin->getFullUser();
+
+		wcout << L"Фильтрация или Поиск? (1 & 2):" << endl;
+		int choice = AbstractHandler::choice_column({L"Фильтры", L"Поиск"});
+
+		if (choice == 1)
+		{
+			FilterManage(admin, users);
+		}
+		else if (choice == 2)
+		{
+			SearchManage(admin, users);
+		}
+
+		return;
+	}
+
+	void FilterManage(Admin * admin, vector<User*> users)
+	{
+		vector<User*> req_users;
+
+		coutTitle(L"Применение фильтров к данным");
+		wcout << L"Вывести выборку по:" << endl;
+
+		vector<wstring> columns = {
+			L"Факульету",
+			L"Специальности",
+			L"Группе",
+			L"Форме обучения"
+		};
+		int choice = AbstractHandler::choice_column(columns);
+
+		if (choice == 1)
+		{
+			 wstring fac = admin->EnterFaculty();
+
+			 req_users = AbstractHandler::filterByFSG(users, fac);
+		}
+		else if (choice == 2)
+		{
+			wstring fac = admin->EnterFaculty();
+			wstring spec = admin->EnterSpec(fac);
+
+			req_users = AbstractHandler::filterByFSG(users, fac, spec);
+		}
+		else if (choice == 3)
+		{
+			wstring fac = admin->EnterFaculty();
+			wstring spec = admin->EnterSpec(fac);
+			wstring group = admin->EnterGroup(fac, spec);
+
+			req_users = AbstractHandler::filterByFSG(users, fac, spec, group);
+		}
+		else if (choice == 4)
+		{
+			int ed_form = admin->EnterEdForm();
+		}
+
+		for (auto user : req_users)
+			wcout << *user << endl;
+
+		return;
+	}
+
+	void SearchManage(Admin * admin, vector<User*> users)
+	{
+		vector<User*> req_users;
+
+		coutTitle(L"Поиск в данных");
+		wcout << L"Поиск по: " << endl;
+
+		vector<wstring> columns = {
+			L"Фамилии",
+			L"Имени"
+		};
+		int choice = AbstractHandler::choice_column(columns);
+
+		wstring srch_value;
+
+		if (choice == 1)
+		{
+			wcout << L"Искомая Фамилия: ";
+			wcin >> srch_value;
+
+			req_users = AbstractHandler::searchSurname(users, srch_value);
+		}
+		else if (choice == 2)
+		{
+			wcout << L"Искомое Имя: ";
+			wcin >> srch_value;
+
+			req_users = AbstractHandler::searchName(users, srch_value);
+		}
+
+		for (auto user : req_users)
+			wcout << *user << endl;
+
+		return;
 	}
 }

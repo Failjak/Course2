@@ -1,6 +1,7 @@
 ﻿#include <conio.h>
 #include <ctime>
 #include <set>
+#include <sstream>
 
 #include "Admin.h"
 #include "Header.h"
@@ -143,8 +144,8 @@ int Admin::EnterEdForm()
 	wstring new_value;
 	wchar_t ch;
 
-	wcout << L"1) - Платное обучение.";
-	wcout << L"2) - Бюджетное обучение.";
+	wcout << L"1) - Платное обучение." << endl;
+	wcout << L"2) - Бюджетное обучение." << endl;
 	while (true)
 	{
 		new_value = L"";
@@ -164,6 +165,8 @@ int Admin::EnterEdForm()
 		}
 	}
 	
+	wcout << endl;
+
 	return -1;
 }
 
@@ -496,8 +499,9 @@ int Admin::AddStudent()
 	*/
 
 	DataBase db;
-	wstring last_name, patr, first_name, student_id, ed_form, email, phone;
+	wstring last_name, patr, first_name, student_id, email, phone;
 	wstring group, faculty, spec;
+	int ed_form;
 
 	coutTitle(L"Добавление пользователя");
 
@@ -510,26 +514,17 @@ int Admin::AddStudent()
 	wcout << L"Введите отчество: ";
 	wcin >> patr;
 
-	//wcout << L"Введите факультет: ";
-	//wcin >> faculty;
 	faculty = EnterFaculty();
-
-	//wcout << L"Введите специальность: ";
-	//wcin >> spec;
 	spec = EnterSpec(faculty);
-
-	//wcout << L"Введите номер группы: ";
-	//wcin >> group;
 	group = EnterGroup(faculty, spec);
-
-	wcout << L"Введите форму обучения (F - бюджет, С - платно): ";
-	wcin >> ed_form;
+	ed_form = EnterEdForm();
 	wcout << L"Введите email: ";
 	wcin >> email;
 	wcout << L"Введите телефон: ";
 	wcin >> phone;
 
-	Student student(student_id, first_name, last_name, patr, group, faculty, spec, email, phone, ed_form);
+	Student student(student_id, first_name, last_name, patr, group, faculty, spec, email, phone, L"");
+	student.setEdForm(ed_form);
 
 	if (db.existStudent(student.getStudentId()))
 	{
@@ -588,6 +583,7 @@ wstring Admin::EnterFaculty()
 
 	wcout << L"Выберете новый факультет:" << endl;
 	int i = 0;
+	int key;
 
 	for (const auto& fac : faculties)
 	{
@@ -598,15 +594,27 @@ wstring Admin::EnterFaculty()
 	wcout << L" Ваш выбор: ";
 	while (flag)
 	{
+		rewind(stdin);
 		getline(wcin, choice);
-		if (choice >= L"1" && choice <= to_wstring(faculties.size())) flag = false;
+		if (choice >= L"1" && choice <= L"9") {
+			try
+			{
+				key = fac_codes.at(stoi(choice) - 1);
+				flag = false;
+			}
+			catch (std::out_of_range)
+			{
+				flag = true;
+				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+				choice = L"";
+			}
+		}
 		else {
 			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
 			choice = L"";
 		}
 	}
 
-	int key = fac_codes.at(stoi(choice)- 1);
 	return faculties.at(key).first;
 }
 
@@ -632,6 +640,7 @@ wstring Admin::EnterSpec(wstring faculty)
 	bool flag = true;
 	wstring choice;
 	int i = 0;
+	int key;
 	wcout << L"Выберете новую специальность:" << endl;
 
 	for (const auto& spec : specs)
@@ -640,18 +649,35 @@ wstring Admin::EnterSpec(wstring faculty)
 		spec_codes.push_back(spec.first);
 	}
 
+	wostringstream fac_s;
+	fac_s << faculties.size();
+	wstring s = fac_s.str();
+
 	wcout << L" Ваш выбор: ";
 	while (flag)
 	{
+		rewind(stdin);
 		getline(wcin, choice);
-		if (choice >= L"1" && choice <= to_wstring(faculties.size())) flag = false;
+		if (choice >= L"1" && choice <= L"9") { 
+			try
+			{
+				key = spec_codes.at(stoi(choice) - 1);
+				flag = false;
+			}
+			catch (std::out_of_range)
+			{
+				flag = true;
+				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+				choice = L"";
+			}
+		}
 		else {
 			wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
 			choice = L"";
 		}
 	}
 
-	int key = spec_codes.at(stoi(choice) - 1);
+	
 	return specs.at(key).first;
 }
 

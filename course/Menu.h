@@ -17,6 +17,7 @@ int type_menu()
 
 	while (flag)
 	{
+		rewind(stdin);
 		getline(wcin, choice);
 		if (choice >= L"0" && choice <= L"2") flag = false;
 		else {

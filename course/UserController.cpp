@@ -96,6 +96,7 @@ namespace UserController
 
 		while (flag)
 		{
+			rewind(stdin);
 			getline(wcin, choice);
 			if (choice >= L"0" && choice <= L"2") flag = false;
 			else {
@@ -246,6 +247,8 @@ namespace UserController
 		vector<int> max_sizes_subjs;
 		wstring title_term = L"Семестр";
 
+		max_sizes_subjs.push_back(title_term.length());
+
 		for (auto it = all_marks.cbegin(); it != all_marks.cend(); ++it)
 		{
 			for (auto n_it = (*it).second.cbegin(); n_it != (*it).second.cend(); ++n_it)
@@ -275,35 +278,55 @@ namespace UserController
 		SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 		wcout << wstring((table_width - user->getStudent()->getFullName().length()) / 2, L' ')
 			<< left << user->getStudent()->getFullName()
-			<< wstring((table_width - user->getStudent()->getFullName().length()) / 2, L' ')
+			<< wstring((table_width - user->getStudent()->getFullName().length()) / 2 + 1, L' ')
 			<< left << L"│" << endl;
 		wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
 
 		wcout << left << L"│";
 		SetConsoleTextAttribute(hCon, FOREGROUND_INTENSITY);
-		wcout << setw(max_size_term > MIN_SPACE ? MIN_SPACE : max_size_term + 1) << left << title_term;
+		wcout << setw(max_size_term > MIN_SPACE ? MIN_SPACE : max_size_term + 1) << left << title_term << L"│";
 		for (int i = 0; i < subjs.size(); i++) // перечисление предметов
 		{
-			wcout << setw(max_sizes_subjs.at(i) > MIN_SPACE ? MIN_SPACE : max_sizes_subjs.at(i) + 1) << left << DB_SUBJS.at(subjs.at(i));
+			wcout << setw(max_sizes_subjs.at(i) > MIN_SPACE ? MIN_SPACE : max_sizes_subjs.at(i) + 1) << left << DB_SUBJS.at(subjs.at(i)) << L"│";
 		}
 
 		SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 		wcout << left << L"│" << endl;
 
+		wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
+
 		for (auto it = all_marks.cbegin(); it != all_marks.cend(); ++it)
 		{
-			wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
-			wcout << L"│" << setw(max_size_term > MIN_SPACE ? MIN_SPACE : max_size_term) << left << (*it).first;
+			if (it != all_marks.cbegin())
+			{
+				wcout << endl << L"├";
+				for (auto size : max_sizes_subjs)
+					wcout << wstring(size - 1, L'─') << L"┼";
+				wcout << L"┤" << endl;
+			}
+
+			wcout << left << L"│" << setw(max_size_term) << left << (*it).first;
 			int i = 0;
 			for (auto n_it = (*it).second.cbegin(); n_it != (*it).second.cend(); ++n_it, i++)
 			{
-				wcout
+					
+
+				wcout 
+					<< right << L"│"
 					<< setw(max_sizes_subjs.at(i))
-					<< left << (*n_it).second;
+					<< left << (*n_it).second ;
 			}
-			wcout << left << L"│" << endl;
+			/*wcout << endl << L"├";
+			for (auto size : max_sizes_subjs)
+				wcout << wstring(size - 1, L'─') << L"┼";
+			wcout << L"┤" << endl;*/
 		}
-		wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
+
+		wcout << endl << L"└";
+		for (auto size : max_sizes_subjs)
+			wcout << wstring(size - 1, L'─') << L"┴";
+		wcout << L"┘" << endl;
+		
 	}
 
 	void pprintStipend(User * user, wstring title)

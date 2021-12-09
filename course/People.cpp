@@ -5,7 +5,7 @@
 
 using namespace std;
 
-std::wstring People::strPPrint(std::wstring word)
+wstring People::strPPrint(std::wstring word)
 {
 	if (word.length() > 0)
 	{
