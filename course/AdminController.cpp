@@ -1,9 +1,6 @@
 ﻿#include "AdminController.h"
 #include "Header.h"
 #include "DataBase.h"
-#include <iostream>
-#include <Windows.h>
-#include <iomanip>
 #include <algorithm>
 
 using namespace std;
@@ -45,9 +42,12 @@ namespace AdminController
 				system("cls");
 
 				StipendManage(admin);
+
+				system("pause");
+				system("cls");
 				break;
 			}
-			case 5: // Редактирование пользвателей
+			case 5:
 			{
 				system("cls");
 				EditManage(admin);
@@ -79,7 +79,7 @@ namespace AdminController
 		wcout << L"1) - Работа с пользователями." << endl;
 		wcout << L"2) - Работа со студентами." << endl;
 		wcout << L"3) - Выставить оценки." << endl;
-		wcout << L"4) - Просмотр стпипендий." << endl;
+		wcout << L"4) - Просмотр стипендий." << endl;
 		wcout << L"5) - Редактирование пользователей." << endl;
 		wcout << L"0) - Назад." << endl;
 
@@ -428,13 +428,13 @@ namespace AdminController
 		wcout << L"Выберете следующие поля: " << endl;
 
 		fac = s->EnterFaculty();
+		if (fac == L"-1") { wcout << L"Отмена"; return; }
 		spec = s->EnterSpec(fac);
+		if (spec == L"-1") { wcout << L"Отмена"; return; }
 		group = s->EnterGroup(fac, spec);
+		if (group == L"0") { wcout << L"Отмена"; return; }
 
 		AbstractHandler::StudentRating(students, {fac, spec, group});
-
-		system("pause");
-		system("cls");
 	}
 
 	void UserManageController(Admin * admin)
@@ -624,30 +624,58 @@ namespace AdminController
 		{
 			system("cls");
 
-			int id;
+			int id, ch;
+			wstring num;
 			vector<Student*> students = admin->getStudents();
-
-			AdminController::pprinStudent(students, L"Добавление оценок");
-			wcout << L"№ студента: ";
-			wcin >> id;
-
-			try
+			
+			while (true)
 			{
-				if (admin->AddMarksToStudent(students.at(id - 1)) == 1)
+				AdminController::pprinStudent(students, L"Добавление оценок");
+				wcout << L"№ студента: ";
+
+				while (true)
 				{
-					wcout << L"Добавление оценок прошло успешно." << endl;
+					num = L"";
+					ch = _getch();
+					if (ch == 13 and num.length() > 0) { break; }
+					if (ch == 32) { continue; }
+					if (ch == 8 and num.length() > 0)
+					{
+						wcout << (wchar_t)8 << ' ' << wchar_t(8);
+						num.erase(num.length() - 1, num.length());
+					}
+					else if (ch >= 48 and ch <= (48 + students.size()))
+					{
+						wcout << (wchar_t)ch;
+						num += (wchar_t)ch;
+						wcout << endl;
+						break;
+					}
 				}
-				else {
-					wcout << L"Ошибка добавление оценок." << endl;
-				}
-			}
-			catch (std::out_of_range)
-			{
-				wcout << L"Неверный выбор" << endl;
-			}
 
-			system("pause");
-			system("cls");
+				id = stoi(num);
+				if (!id) { break; }
+
+				try
+				{
+					int res = admin->AddMarksToStudent(students.at(id - 1));
+					if (res == 1)
+					{
+						wcout << L"Добавление оценок прошло успешно." << endl;
+					}
+					else if(res == -1) {
+						wcout << L"Ошибка добавление оценок." << endl;
+					}
+					else if (res == 0) {
+						wcout << L"Отмена добавления оценок." << endl;
+						break;
+					}
+				}
+				catch (std::out_of_range)
+				{
+					wcout << L"Неверный выбор" << endl;
+				}
+			}
 			break;
 		}
 		case 2: // Добавляем по id
@@ -676,9 +704,6 @@ namespace AdminController
 			{
 				wcout << L"Неверный выбор" << endl;
 			}
-
-			system("pause");
-			system("cls");
 			break;
 		}
 		case 0:
@@ -856,8 +881,11 @@ namespace AdminController
 			req_users = AbstractHandler::searchName(users, srch_value);
 		}
 
-		for (auto user : req_users)
-			wcout << *user << endl;
+		if (!req_users.size()) { wcout << L"Ничего не найдено" << endl; }
+		else {
+			for (auto user : req_users)
+				wcout << *user << endl;
+		}
 
 		return;
 	}

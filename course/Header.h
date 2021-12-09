@@ -9,6 +9,7 @@
 #include <locale>
 #include <vector>
 #include <map>
+#include <conio.h>
 #include <string>
 #include <iomanip>
 

@@ -1,6 +1,5 @@
 ﻿#include <conio.h>
 #include <ctime>
-#include <set>
 #include <sstream>
 
 #include "Admin.h"
@@ -39,6 +38,7 @@ vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> su
 	if (db.existMarks(student_id, course * 2))
 	{
 		wcout << L"Отметки за все семестры занесены." << endl;
+		return {};
 	}
 
 	wcout << L"Отметки за семестр: ";
@@ -161,10 +161,10 @@ int Admin::EnterEdForm()
 		{
 			wcout << (wchar_t)ch;
 			new_value += (wchar_t)ch;
+			wcout << endl;
 			return stoi(new_value) - 1;
 		}
 	}
-	
 	wcout << endl;
 
 	return -1;
@@ -596,6 +596,8 @@ wstring Admin::EnterFaculty()
 	{
 		rewind(stdin);
 		getline(wcin, choice);
+		if (choice == L"0") { return L"-1"; }
+
 		if (choice >= L"1" && choice <= L"9") {
 			try
 			{
@@ -658,6 +660,8 @@ wstring Admin::EnterSpec(wstring faculty)
 	{
 		rewind(stdin);
 		getline(wcin, choice);
+		if (choice == L"0") { return L"-1"; }
+
 		if (choice >= L"1" && choice <= L"9") { 
 			try
 			{
@@ -732,7 +736,6 @@ wstring Admin::EnterGroup(wstring faculty, wstring spec)
 	return group;
 }
 
-
 int Admin::AddMarksToStudent(Student * s)
 {
 	DataBase db;
@@ -743,12 +746,10 @@ int Admin::AddMarksToStudent(Student * s)
 	vector<int> marks;
 	marks = addMarks2V(student_id, s->getCourse(), cols);
 
-	if (db.AddMarks(marks, cols, student_id))
-	{
-		return 1;
-	}
+	if (!marks.size()) { return 0; }
+	if (db.AddMarks(marks, cols, student_id)) { return 1; }
 
-	return 0;
+	return -1;
 }
 
 int Admin::AddMarksToStudent(wstring student_id)
