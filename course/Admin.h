@@ -10,7 +10,7 @@
 /*----------------Class Admin--------------------*/
 class Admin : public User{
 private:
-	//friend float Student::getStipendRatio(float avg_mark);
+	//zfriend float Student::getStipendRatio(float avg_mark);
 	//friend int Student::calcCourse(wstring student_id);
 
 	void mergeStGr(vector<Student *> *, const map<wstring, vector<wstring>>, wstring mode);
@@ -34,9 +34,9 @@ public:
 	int DelStudent(Student * s);
 
 	pair<wstring, wstring> EnterFIO();
-	wstring EnterFaculty();
-	wstring EnterSpec(wstring faculty);
-	wstring EnterGroup(wstring faculty, wstring spec);
+	Faculty * EnterFaculty();
+	Speciality * EnterSpec(Faculty faculty);
+	Group * EnterGroup(Faculty faculty, Speciality spec);
 	//wstring EnterGroupSuggested(wstring faculty, wstring spec);
 	int EnterEdForm();
 

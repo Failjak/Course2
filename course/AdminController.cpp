@@ -272,14 +272,14 @@ namespace AdminController
 			if (students.at(i)->getFullName().length() > max_size_FN)
 				max_size_FN = students.at(i)->getFullName().size();
 
-			if (students.at(i)->getFaculty().length() > max_size_fac)
-				max_size_fac = students.at(i)->getFaculty().size();
+			if (students.at(i)->getFaculty().getAbbrev().length() > max_size_fac)
+				max_size_fac = students.at(i)->getFaculty().getAbbrev().size();
 
-			if (students.at(i)->getSpec().length() > max_size_spec)
-				max_size_spec = students.at(i)->getSpec().size();
+			if (students.at(i)->getSpec().getAbbrev().length() > max_size_spec)
+				max_size_spec = students.at(i)->getSpec().getAbbrev().size();
 
-			if (students.at(i)->getGroup().length() > max_size_group)
-				max_size_group = students.at(i)->getGroup().size();
+			if (students.at(i)->getGroup().getName().length() > max_size_group)
+				max_size_group = students.at(i)->getGroup().getName().size();
 
 			if (to_string(students.at(i)->getAvgMark()).length() > max_size_av_mark)
 				max_size_av_mark = to_string(students.at(i)->getAvgMark()).length();
@@ -335,9 +335,9 @@ namespace AdminController
 			wcout << L"│"
 				<< setw(5) << j + 1
 				<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << students[j]->getFullName()
-				<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << students[j]->getFaculty()
-				<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << students[j]->getSpec()
-				<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << students[j]->getGroup()
+				<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << students[j]->getFaculty().getAbbrev()
+				<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << students[j]->getSpec().getAbbrev()
+				<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << students[j]->getGroup().getName()
 				<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << students[j]->getAvgMark()
 				<< setw(max_size_ed_form > MIN_SPACE ? max_size_ed_form + 1 : MIN_SPACE) << left << students[j]->getEdFormWstr()
 				<< setw(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) << left << students[j]->getEmail()
@@ -420,7 +420,10 @@ namespace AdminController
 	{
 		coutTitle(L"Рейтинг студентов");
 
-		wstring fac, spec, group;
+		Faculty * fac;
+		Speciality * spec;
+		Group *group;
+
 		DataBase db;
 		//vector<Student *> students = db.getStudents();
 		vector<Student *>students = s->getStudents();
@@ -428,13 +431,13 @@ namespace AdminController
 		wcout << L"Выберете следующие поля: " << endl;
 
 		fac = s->EnterFaculty();
-		if (fac == L"-1") { wcout << L"Отмена"; return; }
-		spec = s->EnterSpec(fac);
-		if (spec == L"-1") { wcout << L"Отмена"; return; }
-		group = s->EnterGroup(fac, spec);
-		if (group == L"0") { wcout << L"Отмена"; return; }
+		if (fac->getId() < 0) { wcout << L"Отмена"; return; }
+		spec = s->EnterSpec(*fac);
+		if (spec->getAbbrev() == L"-1") { wcout << L"Отмена"; return; }
+		group = s->EnterGroup(*fac, *spec);
+		if (group->getName() == L"0") { wcout << L"Отмена"; return; }
 
-		AbstractHandler::StudentRating(students, {fac, spec, group});
+		AbstractHandler::StudentRating(students, {fac->getAbbrev(), spec->getAbbrev(), group->getName()});
 	}
 
 	void UserManageController(Admin * admin)
@@ -631,7 +634,7 @@ namespace AdminController
 			while (true)
 			{
 				AdminController::pprinStudent(students, L"Добавление оценок");
-				wcout << L"№ студента: ";
+				wcout << L"№ студента(0 - Выход): ";
 
 				while (true)
 				{
@@ -821,24 +824,24 @@ namespace AdminController
 
 		if (choice == 1)
 		{
-			 wstring fac = admin->EnterFaculty();
+			Faculty * fac = admin->EnterFaculty();
 
-			 req_users = AbstractHandler::filterByFSG(users, fac);
+			 req_users = AbstractHandler::filterByFSG(users, fac->getAbbrev());
 		}
 		else if (choice == 2)
 		{
-			wstring fac = admin->EnterFaculty();
-			wstring spec = admin->EnterSpec(fac);
+			Faculty * fac = admin->EnterFaculty();
+			Speciality * spec = admin->EnterSpec(*fac);
 
-			req_users = AbstractHandler::filterByFSG(users, fac, spec);
+			req_users = AbstractHandler::filterByFSG(users, fac->getAbbrev(), spec->getAbbrev());
 		}
 		else if (choice == 3)
 		{
-			wstring fac = admin->EnterFaculty();
-			wstring spec = admin->EnterSpec(fac);
-			wstring group = admin->EnterGroup(fac, spec);
+			Faculty * fac = admin->EnterFaculty();
+			Speciality * spec = admin->EnterSpec(*fac);
+			Group * group = admin->EnterGroup(*fac, *spec);
 
-			req_users = AbstractHandler::filterByFSG(users, fac, spec, group);
+			req_users = AbstractHandler::filterByFSG(users, fac->getAbbrev(), spec->getAbbrev(), group->getName());
 		}
 		else if (choice == 4)
 		{
@@ -860,7 +863,10 @@ namespace AdminController
 
 		vector<wstring> columns = {
 			L"Фамилии",
-			L"Имени"
+			L"Имени",
+			L"Логину",
+			L"Эл. почте",
+			L"Телефону"
 		};
 		int choice = AbstractHandler::choice_column(columns);
 
@@ -880,6 +886,28 @@ namespace AdminController
 
 			req_users = AbstractHandler::searchName(users, srch_value);
 		}
+		else if (choice == 3)
+		{
+			wcout << L"Искомый Логин: ";
+			wcin >> srch_value;
+
+			req_users = AbstractHandler::searchLogin(users, srch_value);
+		}
+		else if (choice == 4)
+		{
+			wcout << L"Искомую почту: ";
+			wcin >> srch_value;
+
+			req_users = AbstractHandler::searchMail(users, srch_value);
+		}
+		else if (choice == 5)
+		{
+			wcout << L"Искомый номер телефонв: ";
+			wcin >> srch_value;
+
+			req_users = AbstractHandler::searchPhone(users, srch_value);
+		}
+
 
 		if (!req_users.size()) { wcout << L"Ничего не найдено" << endl; }
 		else {

@@ -10,6 +10,7 @@ protected:
 	std::wstring patronomic;
 
 	std::wstring strPPrint(std::wstring);
+	std::wstring strPPrintL(std::wstring);
 
 public:
 	People() { ; }
@@ -23,6 +24,7 @@ public:
 	virtual void setPatronomic(std::wstring patr);
 
 	virtual std::wstring getName() { return name; }
+	virtual std::wstring getNameL() { return strPPrintL(name); }
 	virtual std::wstring getSurname() { return surname; }
 	virtual std::wstring getPatronomic() { return patronomic; }
 	virtual std::wstring getFullName();

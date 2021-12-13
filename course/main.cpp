@@ -110,9 +110,10 @@ int main(int argc, char* argv[])
 		case 1:
 		{
 			Admin admin;
+			LoginController<Admin> lC;
 
 			system("cls");
-			if (LoginController::checkAuth<Admin>(&admin))
+			if (lC.checkAuth(&admin))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно.\n" << endl;
@@ -123,9 +124,10 @@ int main(int argc, char* argv[])
 		case 2:
 		{
 			User user;
+			LoginController<User> lC;
 
 			system("cls");
-			if (LoginController::checkAuth<User>(&user))
+			if (lC.checkAuth(&user))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно." << endl;

@@ -18,6 +18,15 @@ wstring People::strPPrint(std::wstring word)
 	return word;
 }
 
+std::wstring People::strPPrintL(std::wstring word)
+{
+	if (word.length() > 0)
+		for (int i = 0; i < word.length(); i++)
+			word[i] = _towlower_l(word[i], _create_locale(LC_ALL, "Russian"));
+
+	return word;
+}
+
 void People::setName(std::wstring name)
 {
 	this->name = strPPrint(name);

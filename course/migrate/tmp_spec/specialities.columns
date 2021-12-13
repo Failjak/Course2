@@ -6,3 +6,124 @@
 "list_educationForm_name","STRING","13","0","0"
 "list_facultyId","STRING","5","0","0"
 "list_code","STRING","13","0","0"
+
+
+- marks: map<int, map<wstring, int>>
+- student_id: wstring
+- faculty: wstring
+- group: wstring
+- spec: wstring
+- email: wstring
+- phone: wstring
+- education_form: wstring
+- course: int
+- stipend: vector<pair<int, float>>
+- getStipendRatio(avg_mark: float): float
++ Student()
++ Student(student_id: wstring, first_name: wstring, last_name: wstring, patr: wstring, group: wstring,
+		faculty: wstring, spec: wstring, email: wstring, phone: wstring, ed_form: wstring)
++ Student(tmp: const Student &)
++ setStudentId(student_id: wstring)
++ setGroup(group: wstring)
++ setSpec(spec: wstring)
++ setFaculty(fac: wstring)
++ setEmail(email: wstring)
++ setPhone(phone: wstring)
++ setEdForm(rorm: wstring)
++ setEdForm(form: int)
++ setMarks(marks: vector<pair<pair<int, bool>, vector<int>>>, subj: vector<wstring>)
++ setStipend(stipend: wstring)
++ setCourse(course: wstring)
++ getStudentId(): wstring
++ getGroup(): wstring
++ getFaculty(): wstring
++ getSpec(): wstring
++ wstring getEmail(): wstring
++ wstring getPhone(): wstring
++ getStipend(): vector<pair<int, float>> 
++ getStipendLastTerm(): float
++ getCourse(): int
++ getEdFormWstr(): wstring
++ getEdForm(): wstring
++ getEdFormInt(): int
++ getAvgMarkByTerm(): vector<pair<pair<int, bool>, float>>
++ getAvgMark(): float
++ getMarks(): map<int, map<wstring, int>>
++ calcStipend(s: Student *)
++ printRole()
+
+
+
+- login: wstring
+- password: wstring
+- student_id: wstring
+- student: Student
+# calcCourse(student_id: wstring): int
++ User()
++ User(login, pass, st_id)
++ User(tmp: const User &)
++ getLogin(): wstring
++ getEncrPassword(): wstring
++ getPassword(): wstring
++ getStudentId(): wstring
++ getStudent(): Student
++ setLogin(login: wstring)
++ setPassword(pass: wstring)
++ setStudentId(id: wstring)
++ setStudent(tmp: Student*)
++ setStudent()
++ operator<<(wcout: wostream& , user: const User &): wostream&
+
+
+- void mergeStGr(st: vector<Student *> *, b: const map<wstring, vector<wstring>>, mode: wstring);
+- addMarks2V(student_id: wstring , course:int, subjs; vector<wstring>): vector<int> 
+- getGroupExample(group: int): int
++ Admin()
++ Admin(login: wstring, pass: wstring)
++ int AddUser();
++ getUsers(): vector<User*> 
++ getFullUser(): vector<User *>
++ DelUser(User * s): int
++ EditUser(User * s): int
++ AddStudent(): int 
++ DelStudent(Student * s): int 
++ EnterFIO(): pair<wstring, wstring> 
++ EnterFaculty(): wstring 
++ EnterSpec(faculty: wstring): wstring 
++ EnterGroup(faculty: wstring, spec: wstring): wstring 
++ EnterEdForm(): int
++ getStudents(student_id: wstring): vector<Student*> 
++ AddMarksToStudent(s: Student *): int 
++ AddMarksToStudent(student_id: wstring): int 
+
+
+- db_path: string
+- admin_table: string
+- user_table: string
+- stud_table: string
+- mark_table: string
+- group_table: string
+- univ_group_table: string
+- univ_spec_table: string
+- univ_fac_table: string
++ getDBPath(): string
++ exist(s: T *): int
++ getObj2V(s: t): vector<T*> 
++ updateTable(s: T, update_str: wstring): int
++ existStudent(student_id: wstring): int
++ existMarks(student_id: wstring, term: int): int
++ AddNoteUser(s: User *): int
++ getFaculties(): map<int, pair<wstring, wstring>> 
++ geSpecialities(fac_id: int): map<int, pair<wstring, wstring>> 
++ getGroups(fac_id: int, spec_id: int): vector<int> 
++ AddNoteStudent(Student *s): int
++ AddNoteStudentGroup(Student *s): int
++ AddMarks(vector<int>, vector<wstring>, wstring): int
++ updateGroup(wstring student_id, wstring & update_str): int
++ getStudents(): vector<Student*>
++ getGroup2V(wstring student_id = L""): map<wstring, vector<wstring>>
++ getMarks2VById(wstring): vector<pair<pair<int, bool>, vector<int>>> 
++ getStudentById(wstring id): Student * 
++ getStudentIdByUser(User * s): wstring
++ DelNoteByStydentId(wstring id, T s): int
++ vector<wstring> getColNames(wstring table);

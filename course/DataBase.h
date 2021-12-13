@@ -51,9 +51,9 @@ public:
 	/*-----Admin------*/
 	
 	/*------ University funcs ------*/
-	map<int, pair<wstring, wstring>> getFaculties();
-	map<int, pair<wstring, wstring>> geSpecialities(int fac_id);
-	vector<int> getGroups(int fac_id = -1, int spec_id = -1);
+	vector<Faculty *> getFaculties();
+	vector<Speciality *> geSpecialities(int fac_id);
+	vector<Group *> getGroups(int fac_id = -1, int spec_id = -1);
 	/*------ University funcs ------*/
 
 	/*-----Student------*/
@@ -384,7 +384,7 @@ int DataBase::DelNoteByStydentId(wstring id, T s)
 	return 1;
 }
 
-inline map<int, pair<wstring, wstring>> DataBase::getFaculties()
+inline vector<Faculty *> DataBase::getFaculties()
 {
 	/*
 		return: {id, {abbrev, name}}
@@ -394,7 +394,7 @@ inline map<int, pair<wstring, wstring>> DataBase::getFaculties()
 	sqlite3_stmt * stmt;
 
 	string table;
-	map<int, pair<wstring, wstring>> result;
+	vector<Faculty *> result;
 
 	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
@@ -405,10 +405,14 @@ inline map<int, pair<wstring, wstring>> DataBase::getFaculties()
 
 		while (sqlite3_column_text(stmt, 0))
 		{	
-			pair<wstring, wstring> tmp( static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)),
-				static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)) );
+			Faculty * fac = new Faculty;
 
-			result[sqlite3_column_int(stmt, 0)] = tmp;
+			fac->setId(sqlite3_column_int(stmt, 0));
+			fac->setAbbrev(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
+			fac->setName(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
+
+			result.push_back(fac);
+
 			sqlite3_step(stmt);
 		}
 
@@ -425,7 +429,7 @@ inline map<int, pair<wstring, wstring>> DataBase::getFaculties()
 	return result;
 }
 
-inline map<int, pair<wstring, wstring>> DataBase::geSpecialities(int fac_id)
+inline vector<Speciality *> DataBase::geSpecialities(int fac_id)
 {
 	/*
 		return: {spec_id, {spec_abbrev, spec_name}},
@@ -436,7 +440,7 @@ inline map<int, pair<wstring, wstring>> DataBase::geSpecialities(int fac_id)
 	sqlite3_stmt * stmt;
 
 	string table;
-	map<int, pair<wstring, wstring>> result;
+	vector<Speciality *> result;
 
 	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
@@ -447,13 +451,16 @@ inline map<int, pair<wstring, wstring>> DataBase::geSpecialities(int fac_id)
 
 		while (sqlite3_column_text(stmt, 0))
 		{
-			pair<wstring, wstring> tmp(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)),
-				static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
+			Speciality * spec = new Speciality;
 
-			result[sqlite3_column_int(stmt, 0)] = tmp;
+			spec->setId(sqlite3_column_int(stmt, 0));
+			spec->setAbbrev(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
+			spec->setName(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 2)));
+
+			result.push_back(spec);
+
 			sqlite3_step(stmt);
 		}
-
 	}
 	else
 	{
@@ -467,17 +474,17 @@ inline map<int, pair<wstring, wstring>> DataBase::geSpecialities(int fac_id)
 	return result;
 }
 
-inline vector<int> DataBase::getGroups(int fac_id, int spec_id)
+inline vector<Group *> DataBase::getGroups(int fac_id, int spec_id)
 {
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
 
 	string sql;
-	vector<int> result;
+	vector<Group *> result;
 
 	if (fac_id == -1 and spec_id == -1)
 	{
-		sql = "select name from " + univ_group_table + ";";
+		sql = "select name, course from " + univ_group_table + ";";
 	}
 	else
 	{
@@ -493,7 +500,11 @@ inline vector<int> DataBase::getGroups(int fac_id, int spec_id)
 
 		while (sqlite3_column_text(stmt, 0))
 		{
-			result.push_back(sqlite3_column_int(stmt, 0));
+			Group * gr = new Group;
+
+			gr->setName(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 0)));
+
+			result.push_back(gr);
 			sqlite3_step(stmt);
 		}
 	}
@@ -569,7 +580,7 @@ int DataBase::AddNoteStudentGroup(Student * s)
 
 	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
-		wstring info = L"'" + s->getStudentId() + L"'," + L"'" + s->getGroup() + L"'," + L"'" + s->getFaculty() + L"'," + L"'" + s->getSpec() +  L"'";
+		wstring info = L"'" + s->getStudentId() + L"'," + L"'" + s->getGroup().getName() + L"'," + L"'" + s->getFaculty().getAbbrev() + L"'," + L"'" + s->getSpec().getAbbrev() +  L"'";
 
 		string sql("pragma foreign_keys=on;"
 			"insert into " + group_table + " values (" + WS2S(info) + ");");

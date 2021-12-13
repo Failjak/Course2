@@ -18,6 +18,9 @@ namespace AbstractHandler
 
 	vector<User *> searchSurname(vector<User *> users, wstring surname);
 	vector<User *> searchName(vector<User *> users, wstring name);
+	vector<User *> searchLogin(vector<User *> users, wstring name);
+	vector<User *> searchMail(vector<User *> users, wstring name);
+	vector<User *> searchPhone(vector<User *> users, wstring name);
 
 	vector<User *> filterByEdForm(vector<User *> users, int form);
 	vector<User *> filterByFSG(vector<User *>, wstring fac);

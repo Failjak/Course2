@@ -93,9 +93,9 @@ wostream & operator<<(wostream & wcout, const User & user)
 	max_size_pass = user.password.length();
 	max_size_id = user.student_id.length();
 	max_size_FN = student.getFullName().length();
-	max_size_fac = student.getFaculty().length();
-	max_size_spec = student.getSpec().length();
-	max_size_group = student.getGroup().length();
+	max_size_fac = student.getFaculty().getAbbrev().length();
+	max_size_spec = student.getSpec().getAbbrev().length();
+	max_size_group = student.getGroup().getName().length();
 	max_size_av_mark = to_string(student.getAvgMark()).length();
 	max_size_ed_form = student.getEdFormWstr().length();
 	max_size_mail = student.getEmail().length();
@@ -147,9 +147,9 @@ wostream & operator<<(wostream & wcout, const User & user)
 		<< setw(max_size_pass > MIN_SPACE ? max_size_pass + 1 : MIN_SPACE) << left << Encrypt::decrypt(user.password)
 		<< setw(max_size_id > MIN_SPACE ? max_size_id + 1 : MIN_SPACE) << left << user.student_id
 		<< setw(max_size_FN > MIN_SPACE ? max_size_FN + 1 : MIN_SPACE) << left << student.getFullName()
-		<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << student.getFaculty()
-		<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << student.getSpec()
-		<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << student.getGroup()
+		<< setw(max_size_fac > MIN_SPACE ? max_size_fac + 1 : MIN_SPACE) << left << student.getFaculty().getAbbrev()
+		<< setw(max_size_spec > MIN_SPACE ? max_size_spec + 1 : MIN_SPACE) << left << student.getSpec().getAbbrev()
+		<< setw(max_size_group > MIN_SPACE ? max_size_group + 1 : MIN_SPACE) << left << student.getGroup().getName()
 		<< setw(max_size_av_mark > MIN_SPACE ? max_size_av_mark + 1 : MIN_SPACE) << left << student.getAvgMark()
 		<< setw(max_size_ed_form > MIN_SPACE ? max_size_ed_form + 1 : MIN_SPACE) << left << student.getEdFormWstr()
 		<< setw(max_size_mail > MIN_SPACE ? max_size_mail + 1 : MIN_SPACE) << left << student.getEmail()

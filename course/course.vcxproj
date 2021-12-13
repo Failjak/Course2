@@ -129,10 +129,13 @@
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Encryption.cpp" />
     <ClCompile Include="Encryption.h" />
+    <ClCompile Include="Faculty.cpp" />
+    <ClCompile Include="Group.cpp" />
     <ClCompile Include="LoginController.cpp" />
     <ClCompile Include="LoginController.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="People.cpp" />
+    <ClCompile Include="Speciality.cpp" />
     <ClCompile Include="sqlite\shell.c" />
     <ClCompile Include="sqlite\sqlite3.c" />
     <ClCompile Include="Student.cpp" />
@@ -145,9 +148,12 @@
     <ClInclude Include="AdminController.h" />
     <ClInclude Include="Convert.h" />
     <ClInclude Include="DataBase.h" />
+    <ClInclude Include="Faculty.h" />
+    <ClInclude Include="Group.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="People.h" />
+    <ClInclude Include="Speciality.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="UserController.h" />

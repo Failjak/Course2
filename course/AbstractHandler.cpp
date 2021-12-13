@@ -1,5 +1,8 @@
 ﻿#include "AbstractHandler.h"
+#include "Convert.h"
 #include <algorithm>
+
+using namespace Convert;
 
 namespace AbstractHandler
 {
@@ -84,6 +87,24 @@ namespace AbstractHandler
 		return req_user;
 	}
 
+	int pos(const wchar_t *s, const wchar_t *c, int n)
+	{
+		int i, j;
+		int lenC, lenS; 
+
+		for (lenC = 0; c[lenC]; lenC++);
+		for (lenS = 0; s[lenS]; lenS++);
+
+		for (i = 0; i <= lenS - lenC; i++) {
+			for (j = 0; s[i + j] == c[j]; j++); 
+			if (j - lenC == 1 && i == lenS - lenC && !(n - 1)) return i;
+			if (j == lenC)
+				if (n - 1) n--;
+				else return i;
+		}
+		return -1;
+	}
+
 	vector<User *> searchName(vector<User *> users, wstring name) 
 	{
 		vector<User *> req_user;
@@ -93,7 +114,53 @@ namespace AbstractHandler
 		{
 			Student * stud = user->getStudent();
 
-			size_t pos = stud->getName().find(name);
+			size_t pos = ppWstring(stud->getName()).find(name);
+			if (pos != std::string::npos)
+				req_user.push_back(user);
+		}
+
+		return req_user;
+	}
+
+	vector<User*> searchLogin(vector<User*> users, wstring login)
+	{
+		vector<User *> req_user;
+
+		for (auto user : users)
+		{
+			size_t pos = user->getLogin().find(login);
+			if (pos != std::string::npos)
+				req_user.push_back(user);
+		}
+
+		return req_user;
+	}
+
+	vector<User*> searchMail(vector<User*> users, wstring mail)
+	{
+		vector<User *> req_user;
+
+		for (auto user : users)
+		{
+			Student * stud = user->getStudent();
+
+			size_t pos = stud->getEmail().find(mail);
+			if (pos != std::string::npos)
+				req_user.push_back(user);
+		}
+
+		return req_user;
+	}
+
+	vector<User*> searchPhone(vector<User*> users, wstring phone)
+	{
+		vector<User *> req_user;
+
+		for (auto user : users)
+		{
+			Student * stud = user->getStudent();
+
+			size_t pos = stud->getPhone().find(phone);
 			if (pos != std::string::npos)
 				req_user.push_back(user);
 		}
@@ -102,7 +169,7 @@ namespace AbstractHandler
 	}
 
 	vector<User *> filterByEdForm(vector<User *> users, int form)
-	{
+	{	
 		vector<User *> req_users;
 
 		for (auto user : users)
@@ -125,7 +192,7 @@ namespace AbstractHandler
 		{
 			Student * stud = user->getStudent();
 
-			if (stud->getFaculty() == fac) {
+			if (stud->getFaculty().getAbbrev() == fac) {
 				req_users.push_back(user);
 			}
 		}
@@ -141,8 +208,8 @@ namespace AbstractHandler
 		{
 			Student * stud = user->getStudent();
 
-			if (stud->getFaculty() == fac and 
-				stud->getSpec() == spec) {
+			if (stud->getFaculty().getAbbrev() == fac and 
+				stud->getSpec().getAbbrev() == spec) {
 				req_users.push_back(user);
 			}
 		}
@@ -158,9 +225,9 @@ namespace AbstractHandler
 		{
 			Student * stud = user->getStudent();
 
-			if (stud->getFaculty() == fac and 
-				stud->getSpec() == spec and 
-				stud->getGroup() == group) {
+			if (stud->getFaculty().getAbbrev() == fac and 
+				stud->getSpec().getAbbrev() == spec and 
+				stoi(stud->getGroup().getName()) == stoi(group)) {
 				req_users.push_back(user);
 			}
 		}
@@ -176,9 +243,9 @@ namespace AbstractHandler
 
 		for (auto stud : students)
 		{
-			if (stud->getFaculty() == fac_spec_group.at(0) and
-				stud->getSpec() == fac_spec_group.at(1) and
-				stud->getGroup() == fac_spec_group.at(2)) {	req_stud.push_back(stud); }
+			if (stud->getFaculty().getAbbrev() == fac_spec_group.at(0) and
+				stud->getSpec().getAbbrev() == fac_spec_group.at(1) and
+				stud->getGroup().getName() == fac_spec_group.at(2)) {	req_stud.push_back(stud); }
 		}
 		sort(req_stud.begin(), req_stud.end(), compByAvgMark);
 		
@@ -239,7 +306,7 @@ namespace AbstractHandler
 			for (int i = 0; i < word.length(); i++) {
 				word[i] = _towlower_l(word[i], _create_locale(LC_ALL, "Russian"));
 			}
-			word[0] = _towupper_l(word[0], _create_locale(LC_ALL, "Russian"));
+			//word[0] = _towupper_l(word[0], _create_locale(LC_ALL, "Russian"));
 		}
 
 		return word;

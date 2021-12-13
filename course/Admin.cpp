@@ -379,22 +379,22 @@ int Admin::EditUser(User * u)
 	}
 	else if (choice == 4) // Факультет
 	{
-		system("cls");  wstring new_fac = EnterFaculty();
+		system("cls");  Faculty * fac = EnterFaculty();
 
-		if (new_fac == s->getFaculty()) 
+		if (fac->getId() == s->getFaculty().getId()) 
 			return -1;
 
 		wcout << L"Так как Вы изменили Факультет, треубуется изменить Специальность и Группу." << endl;
 		system("pause");
 
-		system("cls");  wstring new_spec = EnterSpec(new_fac); 
-		system("cls");  wstring new_group = EnterGroup(new_fac, new_spec);
+		system("cls");  Speciality * new_spec = EnterSpec(*fac); 
+		system("cls");  Group * new_group = EnterGroup(*fac, *new_spec);
 		
-		if (new_group == L"-1") { return -1; }
+		if (new_group->getName() == L"-1") { return -1; }
 
-		s->setFaculty(new_fac);
-		s->setSpec(new_spec);
-		s->setGroup(new_group);
+		s->setFaculty(*fac);
+		s->setSpec(*new_spec);
+		s->setGroup(*new_group);
 
 		db.DelNoteByStydentId(u->getStudentId(), *s);
 		db.AddNoteStudent(s);
@@ -407,13 +407,13 @@ int Admin::EditUser(User * u)
 	}
 	else if (choice == 5) // Спец
 	{
-		system("cls");  wstring new_spec = EnterSpec(s->getFaculty());
-		system("cls");  wstring new_group = EnterGroup(s->getFaculty(), new_spec);
+		system("cls");  Speciality * new_spec = EnterSpec(s->getFaculty());
+		system("cls");  Group * new_group = EnterGroup(s->getFaculty(), *new_spec);
 
-		if (new_group == L"-1" or new_spec == s->getSpec()) { return -1; }
+		if (new_group->getName() == L"-1" or *new_spec == s->getSpec()) { return -1; }
 
-		s->setSpec(new_spec);
-		s->setGroup(new_group);
+		s->setSpec(*new_spec);
+		s->setGroup(*new_group);
 
 		db.DelNoteByStydentId(u->getStudentId(), *s);
 		db.AddNoteStudent(s);
@@ -426,11 +426,11 @@ int Admin::EditUser(User * u)
 	}
 	else if (choice == 6) //группа
 	{
-		system("cls");  wstring new_group = EnterGroup(s->getFaculty(), s->getSpec());
+		system("cls");  Group * new_group = EnterGroup(s->getFaculty(), s->getSpec());
 
-		if (new_group == L"-1" or new_group == s->getGroup()) { return -1; }
+		if (new_group->getName() == L"-1" or *new_group == s->getGroup()) { return -1; }
 
-		s->setGroup(new_group);
+		s->setGroup(*new_group);
 		/*wstring update_str = L"group_number = '" + new_group + L"'";
 		if (!db.updateGroup(u->getStudentId(), update_str)) { return false; }*/
 
@@ -500,7 +500,9 @@ int Admin::AddStudent()
 
 	DataBase db;
 	wstring last_name, patr, first_name, student_id, email, phone;
-	wstring group, faculty, spec;
+	Group * group;
+	Speciality * spec;
+	Faculty * faculty;
 	int ed_form;
 
 	coutTitle(L"Добавление пользователя");
@@ -515,15 +517,15 @@ int Admin::AddStudent()
 	wcin >> patr;
 
 	faculty = EnterFaculty();
-	spec = EnterSpec(faculty);
-	group = EnterGroup(faculty, spec);
+	spec = EnterSpec(*faculty);
+	group = EnterGroup(*faculty, *spec);
 	ed_form = EnterEdForm();
 	wcout << L"Введите email: ";
 	wcin >> email;
 	wcout << L"Введите телефон: ";
 	wcin >> phone;
 
-	Student student(student_id, first_name, last_name, patr, group, faculty, spec, email, phone, L"");
+	Student student(student_id, first_name, last_name, patr, *group, *faculty, *spec, email, phone, L"");
 	student.setEdForm(ed_form);
 
 	if (db.existStudent(student.getStudentId()))
@@ -570,12 +572,12 @@ pair<wstring, wstring> Admin::EnterFIO()
 	return { columns.at(choice - 1), new_value };
 }
 
-wstring Admin::EnterFaculty()
+Faculty * Admin::EnterFaculty()
 {
 	coutTitle(L"Выбор Факультета");
 
 	DataBase db;
-	map<int, pair<wstring, wstring>> faculties = db.getFaculties();
+	vector<Faculty *> faculties = db.getFaculties();
 	vector<int> fac_codes;
 
 	bool flag = true;
@@ -586,22 +588,19 @@ wstring Admin::EnterFaculty()
 	int key;
 
 	for (const auto& fac : faculties)
-	{
-		wcout << ++i << L") " << fac.second.first << endl;
-		fac_codes.push_back(fac.first);
-	}
+		wcout << ++i << L") " << fac->getAbbrev() << endl;
 
 	wcout << L" Ваш выбор: ";
 	while (flag)
 	{
 		rewind(stdin);
 		getline(wcin, choice);
-		if (choice == L"0") { return L"-1"; }
+		if (choice == L"0") { return new Faculty(L"-1"); }
 
 		if (choice >= L"1" && choice <= L"9") {
 			try
 			{
-				key = fac_codes.at(stoi(choice) - 1);
+				return faculties.at(stoi(choice) - 1);
 				flag = false;
 			}
 			catch (std::out_of_range)
@@ -617,27 +616,27 @@ wstring Admin::EnterFaculty()
 		}
 	}
 
-	return faculties.at(key).first;
+	return faculties.at(key);
 }
 
-wstring Admin::EnterSpec(wstring faculty)
+Speciality * Admin::EnterSpec(Faculty faculty)
 {
-	wstring title = L"Выбор Специальности (" + faculty + L")";
+	wstring title = L"Выбор Специальности (" + faculty.getAbbrev() + L")";
 	coutTitle(title);
 
 	DataBase db;
-	map<int, pair<wstring, wstring>> faculties = db.getFaculties();
+	vector<Faculty *> faculties = db.getFaculties();
 	vector<int> spec_codes;
 	int fac_code;
 
 	for (const auto& fac : faculties)
-		if (fac.second.first == faculty)
+		if (fac->getAbbrev() == faculty.getAbbrev())
 		{
-			fac_code = fac.first;
+			fac_code = fac->getId();
 			break;
 		}
 
-	map<int, pair<wstring, wstring>> specs = db.geSpecialities(fac_code);
+	vector<Speciality *> specs = db.geSpecialities(fac_code);
 
 	bool flag = true;
 	wstring choice;
@@ -647,8 +646,7 @@ wstring Admin::EnterSpec(wstring faculty)
 
 	for (const auto& spec : specs)
 	{
-		wcout << ++i << L") " << spec.second.first << endl;
-		spec_codes.push_back(spec.first);
+		wcout << ++i << L") " << spec->getAbbrev() << endl;
 	}
 
 	wostringstream fac_s;
@@ -660,12 +658,12 @@ wstring Admin::EnterSpec(wstring faculty)
 	{
 		rewind(stdin);
 		getline(wcin, choice);
-		if (choice == L"0") { return L"-1"; }
+		if (choice == L"0") { return new Speciality(L"-1"); }
 
 		if (choice >= L"1" && choice <= L"9") { 
 			try
 			{
-				key = spec_codes.at(stoi(choice) - 1);
+				return specs.at(stoi(choice) - 1);
 				flag = false;
 			}
 			catch (std::out_of_range)
@@ -680,37 +678,41 @@ wstring Admin::EnterSpec(wstring faculty)
 			choice = L"";
 		}
 	}
-
-	
-	return specs.at(key).first;
+	//return res;
 }
 
-wstring Admin::EnterGroup(wstring faculty, wstring spec)
+Group * Admin::EnterGroup(Faculty faculty, Speciality spec)
 {
-	wstring title = L"Ввод Группы (" + faculty + + L", " + spec + L")";
+	wstring title = L"Ввод Группы (" + faculty.getAbbrev() + + L", " + spec.getAbbrev() + L")";
 	coutTitle(title);
 
 	DataBase db;
-	map<int, pair<wstring, wstring>> faculties = db.getFaculties();
+	vector<Faculty *> faculties = db.getFaculties();
 	int fac_code, spec_code;
 	wstring group;
 
 	for (const auto& fac : faculties)
-		if (fac.second.first == faculty)
+		if (fac->getAbbrev() == faculty.getAbbrev())
 		{
-			fac_code = fac.first;
-			break;
-		}
-	map<int, pair<wstring, wstring>> specs = db.geSpecialities(fac_code);
-	for (const auto& sp : specs)
-		if (sp.second.first == spec)
-		{
-			spec_code = sp.first;
+			fac_code = fac->getId();
 			break;
 		}
 
-	auto groups = db.getGroups(fac_code, spec_code);
-	int ex_group = getGroupExample(groups.at(0));
+	vector<Speciality *> specs = db.geSpecialities(fac_code);
+	for (const auto& sp : specs)
+		if (sp->getAbbrev() == spec.getAbbrev())
+		{
+			spec_code = sp->getId();
+			break;
+		}
+
+	vector<Group *> groups = db.getGroups(fac_code, spec_code);
+	vector<int> int_groups;
+
+	for (auto gr : groups)
+		int_groups.push_back(stoi(gr->getName()));
+
+	int ex_group = getGroupExample(stoi(groups.at(0)->getName()));
 
 	int flag = 1;
 	wcout << L"Введите новый номер группы (×" + to_wstring(ex_group) + L"××): " << endl;
@@ -723,17 +725,18 @@ wstring Admin::EnterGroup(wstring faculty, wstring spec)
 				wcout << L"Неверный формат. Попробуйте еще раз. (0 - выход)" << endl;
 
 			wcin >> group;
-			if (group == L"0") { return L"-1"; }
+			if (group == L"0") { return new Group(L"-1"); }
 
 			flag = 0;
-		} while (find(groups.begin(), groups.end(), stoi(group)) == groups.end());
+
+		} while (find(int_groups.begin(), int_groups.end(), stoi(group)) == int_groups.end());
 	}
 	catch (std::invalid_argument)
 	{
 		wcout << L"Ошибочное значение." << endl;
 	}
 
-	return group;
+	return new Group(group);
 }
 
 int Admin::AddMarksToStudent(Student * s)
