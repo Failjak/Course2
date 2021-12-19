@@ -103,7 +103,7 @@ float Student::getAvgMark()
 
 float Student::getStipendRatio(float avg_mark)
 {
-	using namespace Stipend;
+	using namespace StipendConsts;
 	float stipend_ratio = -1;
 	wstring key;
 
@@ -120,7 +120,7 @@ float Student::getStipendRatio(float avg_mark)
 
 void Student::calcStipend(Student * s)
 {
-	using namespace Stipend;
+	using namespace StipendConsts;
 
 	if (!s->getEdFormInt()) { return; }
 
@@ -132,7 +132,7 @@ void Student::calcStipend(Student * s)
 
 	for (mark = marks.begin(), prev_mark = marks.begin(); mark != marks.end(); prev_mark = mark, mark++)
 	{
-		if ((*mark).first.first == 1) { stipend.push_back(make_pair(1, Stipend::BASE_STIPEND)); continue; }  // add stipend for the first semester
+		if ((*mark).first.first == 1) { stipend.push_back(make_pair(1, StipendConsts::BASE_STIPEND)); continue; }  // add stipend for the first semester
 
 		float avg_mark = (*prev_mark).second;
 		float ratio = getStipendRatio(avg_mark);

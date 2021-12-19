@@ -30,13 +30,15 @@ using namespace std;
 
 //void create_table() 
 //{
+//	DataBase s;
+//
 //	sqlite3 *db;
 //	sqlite3_stmt * stmt;
 //	char *err;
 //
 //	string table = "user";
 //
-//	if (sqlite3_open(DB_PATH, &db) == SQLITE_OK)
+//	if (sqlite3_open(s.getDBPath().c_str(), &db) == SQLITE_OK)
 //	{
 //		/*string sql("create table students_marks("
 //			"student_id text not null,"
@@ -68,7 +70,7 @@ using namespace std;
 //			"FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE"
 //			");");*/
 //
-//		string sql("create table marks("
+//		/*string sql("create table marks("
 //					"student_id text CHECK(length(student_id) = 8),"
 //					"term INTEGER not null,"
 //					"retake INTEGER not null,"
@@ -77,7 +79,14 @@ using namespace std;
 //					"Philosophy INTEGER not null,"
 //					"CN INTEGER not null,"
 //					"Economic INTEGER not null"
-//					");");
+//					");");*/
+//
+//		string sql("create table additional_stipend("
+//			"id int not null,"
+//			"name text not null,"
+//			"ratio real not null,"
+//			"primary key(id)"
+//			");");
 //
 //		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
 //
@@ -105,7 +114,7 @@ int main(int argc, char* argv[])
 	while (flag)
 	{
 		system("cls");
-		switch (type_menu())
+		switch (1)
 		{
 		case 1:
 		{
@@ -113,7 +122,8 @@ int main(int argc, char* argv[])
 			LoginController<Admin> lC;
 
 			system("cls");
-			if (lC.checkAuth(&admin))
+			//if (lC.checkAuth(&admin))
+			if (1)
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно.\n" << endl;

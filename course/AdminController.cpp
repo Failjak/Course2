@@ -1,6 +1,5 @@
 ﻿#include "AdminController.h"
 #include "Header.h"
-#include "DataBase.h"
 #include <algorithm>
 
 using namespace std;
@@ -193,6 +192,57 @@ namespace AdminController
 			rewind(stdin);
 			getline(wcin, choice);
 			if (choice >= L"0" && choice <= L"2") flag = false;
+			else {
+				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+				choice = L"";
+			}
+		}
+
+		return stoi(choice);
+	}
+
+	int stipend_menu()
+	{
+		coutTitle(L"Меню управления стипендиями");
+
+		bool flag = true;
+		wstring choice;
+
+		wcout << L"1) - Просмотреть стипендии." << endl;
+		wcout << L"2) - Дополнительные стипендии." << endl;
+		wcout << L"0) - Назад." << endl;
+		wcout << L" Ваш выбор: ";
+		while (flag)
+		{
+			rewind(stdin);
+			getline(wcin, choice);
+			if (choice >= L"0" && choice <= L"2") flag = false;
+			else {
+				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+				choice = L"";
+			}
+		}
+
+		return stoi(choice);
+	}
+
+	int additional_stipend_menu()
+	{
+		coutTitle(L"Меню управления дополнительными стипендиями");
+
+		bool flag = true;
+		wstring choice;
+
+		wcout << L"1) - Просмотр дополнительных стипендий." << endl;
+		wcout << L"2) - Добавить стипендию." << endl;
+		wcout << L"3) - Редактировать стипендию." << endl;
+		wcout << L"0) - Назад." << endl;
+		wcout << L" Ваш выбор: ";
+		while (flag)
+		{
+			rewind(stdin);
+			getline(wcin, choice);
+			if (choice >= L"0" && choice <= L"3") flag = false;
 			else {
 				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
 				choice = L"";
@@ -412,6 +462,59 @@ namespace AdminController
 				wcout << std::setprecision(2) << students[j]->getStipendLastTerm();
 			else
 				wcout << students[j]->getEdFormWstr();
+			wcout << left << L"│" << endl;
+		}
+		wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
+	}
+
+	void pprinAdditStipend(std::vector<Stipend*> stipends, std::wstring title)
+	{
+		int space_subjects = 5;
+		int MIN_SPACE = 14;
+		HANDLE hCon;
+		hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		int max_size_name = 0, max_size_ratio = 0;
+
+		for (int i = 0; i < stipends.size(); i++)
+		{
+			if (stipends.at(i)->getName().length() > max_size_name)
+				max_size_name = stipends.at(i)->getName().length();
+
+			if (to_string(stipends.at(i)->getRatio()).length() > max_size_ratio)
+				max_size_ratio = to_string(stipends.at(i)->getRatio()).length();
+		}
+
+		int table_width = space_subjects + (
+			(max_size_name > MIN_SPACE ? max_size_name + 1 : MIN_SPACE) +
+			(max_size_ratio > MIN_SPACE ? max_size_ratio + 1 : MIN_SPACE));
+
+
+		if (title.length())
+		{
+			int title_table_widht = (table_width - title.length()) / 2;
+			wcout << wstring(title_table_widht, L'─') << title << wstring(title_table_widht, L'─') << endl;
+		}
+
+		wcout << L"┌" << wstring(table_width, L'─') << L"┐" << endl;
+		wcout << L"│";
+		SetConsoleTextAttribute(hCon, FOREGROUND_INTENSITY);
+
+		wcout
+			<< setw(5) << left << L"№"
+			<< setw(max_size_name > MIN_SPACE ? max_size_name + 1 : MIN_SPACE) << left << L"Стипендия им."
+			<< setw(max_size_ratio > MIN_SPACE ? max_size_ratio + 1 : MIN_SPACE) << left << L"Коэфф.";
+
+
+		SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+		wcout << L"│" << endl;
+
+		for (int j = 0; j < stipends.size(); j++) {
+			wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
+			wcout << L"│"
+				<< setw(5) << j + 1
+				<< setw(max_size_name > MIN_SPACE ? max_size_name + 1 : MIN_SPACE) << left << stipends[j]->getName()
+				<< setw(max_size_ratio > MIN_SPACE ? max_size_ratio + 1 : MIN_SPACE) << left << stipends[j]->getRatio();
 			wcout << left << L"│" << endl;
 		}
 		wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
@@ -711,6 +814,7 @@ namespace AdminController
 			break;
 		}
 		case 0:
+			system("cls");
 			break;
 
 		default:
@@ -721,7 +825,75 @@ namespace AdminController
 
 	void StipendManage(Admin * admin)
 	{
+		while (true)
+		{
+			switch (stipend_menu())
+			{
+			case 1:
+			{
+				system("cls");
 
+				StipendOutput(admin);
+				break;
+			}
+			case 2:
+			{
+				system("cls");
+
+				AdditionalStipend(admin);
+				break;
+			}
+			case 0:
+				system("cls");
+				return;
+
+			default:
+				wcout << L"Неверный выбор." << endl;
+				break;
+			}
+		}
+	}
+
+	void AdditionalStipend(Admin * admin)
+	{
+		DataBase db;
+
+		switch (additional_stipend_menu())
+		{
+		case 1: // просмотр
+		{
+			system("cls");
+
+			vector<Stipend *> stipends = db.getAdditStipend();
+			pprinAdditStipend(stipends);
+
+			system("pause");
+			system("cls");
+			break;
+		}
+		case 2: // добавить
+		{
+			system("cls");
+
+			system("pause");
+			system("cls");
+			break;
+		}
+		case 3: // редактировать
+		{
+			system("cls");
+	
+			system("pause");
+			system("cls");
+			break;
+		}
+		case 0:
+			system("cls");
+			break;
+		default:
+			wcout << L"Неверный выбор." << endl;
+			break;
+		}
 	}
 
 	void StipendOutput(Admin * admin)
@@ -745,6 +917,9 @@ namespace AdminController
 			sort(students.begin(), students.end(), AbstractHandler::ScompByFIO);
 
 			pprinStipend(students);
+
+			system("pause");
+			system("cls");
 			break;
 		}
 		case 2:
@@ -758,9 +933,13 @@ namespace AdminController
 			if (!students.size()) { break; }
 
 			pprinStipend(students);
+
+			system("pause");
+			system("cls");
 			break;
 		}
 		case 0:
+			system("cls");
 			break;
 
 		default:

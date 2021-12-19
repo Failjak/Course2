@@ -6,6 +6,7 @@
 #include "Header.h"
 #include "sqlite/sqlite3.h"
 #include "User.h"
+#include "Stipend.h"
 #include "Convert.h"
 
 using namespace Convert;
@@ -13,7 +14,6 @@ using namespace std;
 
 class Admin;
 class Student;
-//class User;
 
 /*----------------Class DataBase--------------------*/
 class DataBase {
@@ -28,6 +28,7 @@ private:
 	string univ_group_table = "university_groups";
 	string univ_spec_table = "university_specialities";
 	string univ_fac_table = "university_faculties";
+	string addit_stipend = "additional_stipend";
 
 public:
 	string getDBPath() { return db_path; }
@@ -67,6 +68,10 @@ public:
 	template <class T>
 	int DelNoteByStydentId(wstring id, T s);
 	/*-----Student------*/
+
+	/*-----Additiontal stipends------*/
+	vector<Stipend*> getAdditStipend();
+	/*-----Additiontal stipends------*/
 
 	vector<wstring> getColNames(wstring table);
 
@@ -854,6 +859,55 @@ vector<pair<pair<int, bool>, vector<int>>> DataBase::getMarks2VById(wstring stud
 }
 
 inline 
+vector<Stipend*> DataBase::getAdditStipend()
+{
+	/*
+		params: no
+		return: vector of Stipend objs
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	vector<Stipend *> result;
+	string sql;
+
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
+	{
+		string sql("select id, name, ratio from " + addit_stipend + ";");
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); //executing the statement
+
+		while (sqlite3_column_text(stmt, 0))
+		{
+			Stipend * tmp_st = new Stipend;
+
+			tmp_st->setId(sqlite3_column_int(stmt, 0));
+			tmp_st->setName(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
+			tmp_st->setRatio(sqlite3_column_double(stmt, 2));
+
+			result.push_back(tmp_st);
+			sqlite3_step(stmt);
+		}
+		if (!result.size())
+		{
+			//wcout << L"SELECT ERROR: Table '" << S2WS(group_table) << "' is Empty.'" << endl;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return result;
+}
+
+inline
 vector<wstring> DataBase::getColNames(wstring table)
 {
 	sqlite3 *db;
@@ -881,6 +935,7 @@ vector<wstring> DataBase::getColNames(wstring table)
 		cout << "Failed to open db\n";
 	}
 
+	sqlite3_finalize(stmt);
 	sqlite3_close(db);
 
 	return result;

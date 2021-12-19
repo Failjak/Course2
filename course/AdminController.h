@@ -5,6 +5,8 @@
 #include "AbstractHandler.h"
 #include "Admin.h"
 #include "User.h"
+#include "Stipend.h"
+#include "DataBase.h"
 
 namespace AdminController{
 	void main(Admin * admin);
@@ -15,18 +17,25 @@ namespace AdminController{
 	int marks_menu();
 	int stipend_out_menu();
 	int stipend_menu();
+	int additional_stipend_menu();
+
 
 	void pprintUser(std::vector<User*>, std::wstring title=L"");
 	void pprinStudent(std::vector<Student*>, std::wstring title = L"");
 	void pprinStipend(std::vector<Student*>, std::wstring title = L"");
+	void pprinAdditStipend(std::vector<Stipend*>, std::wstring title = L"");
+
 
 	void StudentRating(Admin * s = new Admin());
 
 	void UserManageController(Admin * admin);
 	void StudentManageController(Admin * admin);
 	void MarksManage(Admin * admin);
+
 	void StipendManage(Admin * admin);
+	void AdditionalStipend(Admin * admin);
 	void StipendOutput(Admin * admin);
+
 	void EditManage(Admin * admin);
 	void ManageData(Admin * admin);
 	void FilterManage(Admin * admin, vector<User*> users);

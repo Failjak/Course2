@@ -25,7 +25,7 @@ inline void coutTitle(std::wstring title) {
 		<< std::wstring(title_table_widht, L'─') << L"\n" << std::endl;
 }
 
-namespace Stipend
+namespace StipendConsts
 {
 	constexpr auto BASE_STIPEND = 96.37;
 	constexpr auto MIN_LIVING_STANDART = 321.22;

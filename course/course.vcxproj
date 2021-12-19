@@ -138,6 +138,7 @@
     <ClCompile Include="Speciality.cpp" />
     <ClCompile Include="sqlite\shell.c" />
     <ClCompile Include="sqlite\sqlite3.c" />
+    <ClCompile Include="Stipend.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="UserController.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="People.h" />
     <ClInclude Include="Speciality.h" />
+    <ClInclude Include="Stipend.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="UserController.h" />
