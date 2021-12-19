@@ -29,6 +29,7 @@ private:
 	string univ_spec_table = "university_specialities";
 	string univ_fac_table = "university_faculties";
 	string addit_stipend = "additional_stipend";
+	string student_addit_stipend = "students_addit_stipend";
 
 public:
 	string getDBPath() { return db_path; }
@@ -70,7 +71,8 @@ public:
 	/*-----Student------*/
 
 	/*-----Additiontal stipends------*/
-	vector<Stipend*> getAdditStipend();
+	vector<Stipend*> getAdditStipends();
+	int AddNoteStudentStipend(wstring student_id, int stipend_id);
 	/*-----Additiontal stipends------*/
 
 	vector<wstring> getColNames(wstring table);
@@ -859,7 +861,7 @@ vector<pair<pair<int, bool>, vector<int>>> DataBase::getMarks2VById(wstring stud
 }
 
 inline 
-vector<Stipend*> DataBase::getAdditStipend()
+vector<Stipend*> DataBase::getAdditStipends()
 {
 	/*
 		params: no
@@ -905,6 +907,47 @@ vector<Stipend*> DataBase::getAdditStipend()
 	sqlite3_close(db);
 
 	return result;
+}
+
+inline 
+int DataBase::AddNoteStudentStipend(wstring student_id, int stipend_id)
+{
+	/*
+		Func adds info about the assigned stipend for the students.
+
+		return: 1 - good auth;
+				0 - faild auth;
+				-1 - faild opening db.
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
+	{
+		wstring info = L"'" + student_id + L"', " + to_wstring(stipend_id);
+
+		string sql("pragma foreign_keys=on;"
+			"insert into " + student_addit_stipend + " values (" + WS2S(info) + ");");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+		if (rc != SQLITE_OK)
+		{
+			wcout << S2WS(err) << endl;
+			return 0;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return -1;
+	}
+
+	sqlite3_close(db);
+
+	return 1;
 }
 
 inline

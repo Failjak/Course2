@@ -749,7 +749,7 @@ int Admin::AddMarksToStudent(Student * s)
 	vector<int> marks;
 	marks = addMarks2V(student_id, s->getCourse(), cols);
 
-	if (!marks.size()) { return 0; }
+	if (!marks.size()) { return -1; }
 	if (db.AddMarks(marks, cols, student_id)) { return 1; }
 
 	return -1;
@@ -773,9 +773,56 @@ int Admin::AddMarksToStudent(wstring student_id)
 	marks = addMarks2V(student_id,student->getCourse(),cols);
 
 	if (db.AddMarks(marks, cols, student_id))
-	{
 		return 1;
+
+	return -1;
+}
+
+int Admin::AddStipendToStudent(Student * s)
+{
+	DataBase db;
+
+	vector<Stipend *> stipends = db.getAdditStipends();
+	AbstractHandler::pprintAdditStipend(stipends);
+	int choice = AbstractHandler::choice_column(stipends.size());
+	if (setStipendToStudent(s, stipends.at(choice - 1)) == 1) { return 1; }
+
+	return -1;
+}
+
+int Admin::AddStipendToStudent(wstring student_id)
+{
+	DataBase db;
+
+	if (!db.existStudent(student_id))
+	{
+		wcout << L"Такого студента не существует." << endl;
+		return -1;
 	}
 
-	return 0;
+	Student * student = db.getStudentById(student_id);
+
+	if (!student->getEdFormInt())
+	{
+		wcout << L"Это студент платной формы обучения." << endl;
+		return -1;
+	}
+
+	vector<Stipend *> stipends = db.getAdditStipends();
+	int choice = AbstractHandler::choice_column(stipends.size());
+	if (setStipendToStudent(student, stipends.at(choice - 1)) == 1) { return 1; }
+
+	return -1;
+}
+
+int Admin::setStipendToStudent(Student *stud, Stipend *stip)
+{
+	DataBase db;
+
+	if (db.AddNoteStudentStipend(stud->getStudentId(), stip->getId()) == 1)
+		return 1;
+	else
+		return -1;
+
+	return -1;
 }

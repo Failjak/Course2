@@ -50,10 +50,13 @@ namespace AbstractHandler
 	{
 		bool flag = true;
 		wstring choice;
-		int i = 0;
+		int i = 0, mode = 0;
+
+		if (columns.back() == L"Назад." || columns.back() == L"Назад") { mode = 1; columns.pop_back(); }
 
 		for (auto col : columns)
 			wcout << ++i << L") " << col << endl;
+		if (mode) { wcout << L"0) " << L"Назад" << endl; }
 		wcout << L" Ваш выбор: ";
 
 		while (flag)
@@ -61,6 +64,26 @@ namespace AbstractHandler
 			rewind(stdin);
 			getline(wcin, choice);
 			if (choice >= L"0" && choice <= to_wstring(columns.size())) flag = false;
+			else {
+				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+				choice = L"";
+			}
+		}
+
+		return stoi(choice);
+	}
+
+	int choice_column(int columns_count)
+	{
+		bool flag = true;
+		wstring choice;
+		wcout << L" Ваш выбор: ";
+
+		while (flag)
+		{
+			rewind(stdin);
+			getline(wcin, choice);
+			if (choice >= L"0" && choice <= to_wstring(columns_count)) flag = false;
 			else {
 				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
 				choice = L"";
@@ -121,7 +144,6 @@ namespace AbstractHandler
 
 		return req_user;
 	}
-
 	vector<User*> searchLogin(vector<User*> users, wstring login)
 	{
 		vector<User *> req_user;
@@ -135,7 +157,6 @@ namespace AbstractHandler
 
 		return req_user;
 	}
-
 	vector<User*> searchMail(vector<User*> users, wstring mail)
 	{
 		vector<User *> req_user;
@@ -151,7 +172,6 @@ namespace AbstractHandler
 
 		return req_user;
 	}
-
 	vector<User*> searchPhone(vector<User*> users, wstring phone)
 	{
 		vector<User *> req_user;
@@ -299,6 +319,59 @@ namespace AbstractHandler
 		wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
 	}
 
+	void pprintAdditStipend(std::vector<Stipend*> stipends, std::wstring title)
+	{
+		int space_subjects = 5;
+		int MIN_SPACE = 14;
+		HANDLE hCon;
+		hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		int max_size_name = 0, max_size_ratio = 0;
+
+		for (int i = 0; i < stipends.size(); i++)
+		{
+			if (stipends.at(i)->getName().length() > max_size_name)
+				max_size_name = stipends.at(i)->getName().length();
+
+			if (to_string(stipends.at(i)->getRatio()).length() > max_size_ratio)
+				max_size_ratio = to_string(stipends.at(i)->getRatio()).length();
+		}
+
+		int table_width = space_subjects + (
+			(max_size_name > MIN_SPACE ? max_size_name + 1 : MIN_SPACE) +
+			(max_size_ratio > MIN_SPACE ? max_size_ratio + 1 : MIN_SPACE));
+
+
+		if (title.length())
+		{
+			int title_table_widht = (table_width - title.length()) / 2;
+			wcout << wstring(title_table_widht, L'─') << title << wstring(title_table_widht, L'─') << endl;
+		}
+
+		wcout << L"┌" << wstring(table_width, L'─') << L"┐" << endl;
+		wcout << L"│";
+		SetConsoleTextAttribute(hCon, FOREGROUND_INTENSITY);
+
+		wcout
+			<< setw(5) << left << L"№"
+			<< setw(max_size_name > MIN_SPACE ? max_size_name + 1 : MIN_SPACE) << left << L"Стипендия им."
+			<< setw(max_size_ratio > MIN_SPACE ? max_size_ratio + 1 : MIN_SPACE) << left << L"Коэфф.";
+
+
+		SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+		wcout << L"│" << endl;
+
+		for (int j = 0; j < stipends.size(); j++) {
+			wcout << L"├" << wstring(table_width, L'─') << L"┤" << endl;
+			wcout << L"│"
+				<< setw(5) << j + 1
+				<< setw(max_size_name > MIN_SPACE ? max_size_name + 1 : MIN_SPACE) << left << stipends[j]->getName()
+				<< setw(max_size_ratio > MIN_SPACE ? max_size_ratio + 1 : MIN_SPACE) << left << stipends[j]->getRatio();
+			wcout << left << L"│" << endl;
+		}
+		wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
+	}
+
 	wstring ppWstring(wstring word)
 	{
 		if (word.length() > 0)
@@ -310,5 +383,10 @@ namespace AbstractHandler
 		}
 
 		return word;
+	}
+
+	int choiceAdditStipend(vector<Stipend *> stipends)
+	{
+		return 0;
 	}
 }

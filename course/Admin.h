@@ -37,12 +37,14 @@ public:
 	Faculty * EnterFaculty();
 	Speciality * EnterSpec(Faculty faculty);
 	Group * EnterGroup(Faculty faculty, Speciality spec);
-	//wstring EnterGroupSuggested(wstring faculty, wstring spec);
 	int EnterEdForm();
 
 	vector<Student*> getStudents(wstring student_id = L"");
 	int AddMarksToStudent(Student *s);
 	int AddMarksToStudent(wstring student_id);
-	//friend void Admin::calcStipend(Student *s);
+	int AddStipendToStudent(Student *s);
+	int AddStipendToStudent(wstring student_id);
+
+	int setStipendToStudent(Student *, Stipend *);
 	/*-----Student------*/
 };

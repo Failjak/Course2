@@ -18,12 +18,13 @@ namespace AdminController{
 	int stipend_out_menu();
 	int stipend_menu();
 	int additional_stipend_menu();
+	int stipend_assign_menu();
 
 
 	void pprintUser(std::vector<User*>, std::wstring title=L"");
-	void pprinStudent(std::vector<Student*>, std::wstring title = L"");
-	void pprinStipend(std::vector<Student*>, std::wstring title = L"");
-	void pprinAdditStipend(std::vector<Stipend*>, std::wstring title = L"");
+	void pprintStudent(std::vector<Student*>, std::wstring title = L"");
+	void pprintStipend(std::vector<Student*>, std::wstring title = L"");
+	//void pprintAdditStipend(std::vector<Stipend*>, std::wstring title = L"");
 
 
 	void StudentRating(Admin * s = new Admin());
@@ -33,6 +34,7 @@ namespace AdminController{
 	void MarksManage(Admin * admin);
 
 	void StipendManage(Admin * admin);
+	void StipendAssign(Admin * admin);
 	void AdditionalStipend(Admin * admin);
 	void StipendOutput(Admin * admin);
 

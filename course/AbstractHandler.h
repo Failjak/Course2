@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Header.h"
+#include "Stipend.h"
 #include "Student.h"
 #include "DataBase.h"
 
@@ -15,6 +16,7 @@ namespace AbstractHandler
 	/*─────Comparatros─────*/
 
 	int choice_column(vector<wstring>);
+	int choice_column(int columns_count);
 
 	vector<User *> searchSurname(vector<User *> users, wstring surname);
 	vector<User *> searchName(vector<User *> users, wstring name);
@@ -29,6 +31,7 @@ namespace AbstractHandler
 
 	void StudentRating(vector<Student *> students, vector<wstring> fac_spec_group);
 	void pprintStudentRating(vector<Student *> students);
+	void pprintAdditStipend(std::vector<Stipend*>, std::wstring title = L"");
 
 	wstring ppWstring(wstring word);
 }
