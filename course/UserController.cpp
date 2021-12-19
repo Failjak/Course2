@@ -42,6 +42,9 @@ namespace UserController
 			{
 				system("cls");
 				AdminController::StudentRating();
+
+				system("pause");
+				system("cls");
 				break;
 			}
 			case 0:

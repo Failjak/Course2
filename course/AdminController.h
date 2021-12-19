@@ -13,6 +13,7 @@ namespace AdminController{
 	int user_menu();
 	int stud_menu();
 	int marks_menu();
+	int stipend_out_menu();
 	int stipend_menu();
 
 	void pprintUser(std::vector<User*>, std::wstring title=L"");
@@ -25,6 +26,7 @@ namespace AdminController{
 	void StudentManageController(Admin * admin);
 	void MarksManage(Admin * admin);
 	void StipendManage(Admin * admin);
+	void StipendOutput(Admin * admin);
 	void EditManage(Admin * admin);
 	void ManageData(Admin * admin);
 	void FilterManage(Admin * admin, vector<User*> users);

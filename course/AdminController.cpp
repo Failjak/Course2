@@ -79,7 +79,7 @@ namespace AdminController
 		wcout << L"1) - Работа с пользователями." << endl;
 		wcout << L"2) - Работа со студентами." << endl;
 		wcout << L"3) - Выставить оценки." << endl;
-		wcout << L"4) - Просмотр стипендий." << endl;
+		wcout << L"4) - Стипендии." << endl;
 		wcout << L"5) - Редактирование пользователей." << endl;
 		wcout << L"0) - Назад." << endl;
 
@@ -177,7 +177,7 @@ namespace AdminController
 		return stoi(choice);
 	}
 
-	int stipend_menu()
+	int stipend_out_menu()
 	{
 		coutTitle(L"Меню просмотра стипендий");
 
@@ -185,13 +185,14 @@ namespace AdminController
 		wstring choice;
 
 		wcout << L"1) - Вычислить стипендию для студента(за последний семестр)." << endl;
+		wcout << L"2) - Вычислить стипендию для всех студентов(за последний семестр)." << endl;
 		wcout << L"0) - Назад." << endl;
 		wcout << L" Ваш выбор: ";
 		while (flag)
 		{
 			rewind(stdin);
 			getline(wcin, choice);
-			if (choice >= L"0" && choice <= L"1") flag = false;
+			if (choice >= L"0" && choice <= L"2") flag = false;
 			else {
 				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
 				choice = L"";
@@ -720,7 +721,12 @@ namespace AdminController
 
 	void StipendManage(Admin * admin)
 	{
-		switch (stipend_menu())
+
+	}
+
+	void StipendOutput(Admin * admin)
+	{
+		switch (stipend_out_menu())
 		{
 		case 1: // Расчет по id 
 		{
@@ -736,10 +742,22 @@ namespace AdminController
 			vector<Student * > students = admin->getStudents(student_id);
 			if (!students.size()) { break; }
 
-			pprinStipend(students);
+			sort(students.begin(), students.end(), AbstractHandler::ScompByFIO);
 
-			system("pause");
+			pprinStipend(students);
+			break;
+		}
+		case 2:
+		{
 			system("cls");
+
+			wstring student_id;
+			coutTitle(L"Раcчет стипендии для всех студентов(за текущий семестр)");
+			vector<Student * > students = admin->getStudents();
+
+			if (!students.size()) { break; }
+
+			pprinStipend(students);
 			break;
 		}
 		case 0:

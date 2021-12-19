@@ -78,7 +78,7 @@ bool LoginController<T>::checkAuth(T * s)
 		s->setLogin(login);
 		s->setPassword(password, 1);
 
-		if (db.exist(s))
+		if (db.exist(s) == 1)
 		{
 			return true;
 		}

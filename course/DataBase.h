@@ -18,7 +18,7 @@ class Student;
 /*----------------Class DataBase--------------------*/
 class DataBase {
 private: 
-	string db_path = "migrate/main.db";
+	string db_path = "./migrate/main.db";
 
 	string admin_table = "admin";
 	string user_table = "users";
@@ -30,8 +30,6 @@ private:
 	string univ_fac_table = "university_faculties";
 
 public:
-	//DataBase() { db_path = "migrate\main.db"; }
-
 	string getDBPath() { return db_path; }
 
 	template <class T>
@@ -185,7 +183,7 @@ int DataBase::exist(T * s)
 	}
 	else
 	{
-		cout << "Failed to open db\n";
+		wcout << "Failed to open db\n";
 		return -1;
 	}
 
