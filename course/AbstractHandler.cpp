@@ -92,7 +92,24 @@ namespace AbstractHandler
 
 		return stoi(choice);
 	}
+	int choice_number(int max_number)
+	{
+		bool flag = true;
+		wstring choice;
 
+		while (flag)
+		{
+			rewind(stdin);
+			getline(wcin, choice);
+			if (choice >= L"0" && choice <= to_wstring(max_number)) flag = false;
+			else {
+				wcout << L"Неверный выбор, попробуйте еще разок. " << endl;
+				choice = L"";
+			}
+		}
+
+		return stoi(choice);
+	}
 	vector<User *> searchSurname(vector<User *> users, wstring surname) 
 	{
 		vector<User *> req_user;

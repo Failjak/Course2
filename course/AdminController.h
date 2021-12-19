@@ -24,7 +24,6 @@ namespace AdminController{
 	void pprintUser(std::vector<User*>, std::wstring title=L"");
 	void pprintStudent(std::vector<Student*>, std::wstring title = L"");
 	void pprintStipend(std::vector<Student*>, std::wstring title = L"");
-	//void pprintAdditStipend(std::vector<Stipend*>, std::wstring title = L"");
 
 
 	void StudentRating(Admin * s = new Admin());

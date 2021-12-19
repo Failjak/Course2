@@ -91,6 +91,7 @@ void create_table()
 		string sql("create table students_addit_stipend("
 			"student_id text not null,"
 			"stipend_id int not null,"
+			"term int not null,"
 			"FOREIGN key (student_id) REFERENCES students(student_id) on delete CASCADE on update no action,"
 			"FOREIGN key (stipend_id) REFERENCES additional_stipend(id) on delete CASCADE on update no action"
 			");");

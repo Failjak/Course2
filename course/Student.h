@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 
+#include "Stipend.h"
 #include "Faculty.h"
 #include "Speciality.h"
 #include "Group.h"
@@ -26,6 +27,7 @@ private:
 	Speciality spec;
 	Faculty faculty;
 
+	vector<Stipend*> addit_stipend;
 	vector<pair<int, float>> stipend; // schema: { {term, stipend} }
 
 	float getStipendRatio(float avg_mark);
@@ -55,6 +57,7 @@ public:
 	void setMarks(vector<pair<pair<int, bool>, vector<int>>>, vector<wstring> subj);
 	void setStipend(vector<pair<int, float>> stipend) { this->stipend = stipend; }
 	void setCourse(int course) { this->course = course; }
+	void setAdditStipdends(vector<Stipend *> stipends) { this->addit_stipend = stipends; }
 
 
 	wstring getStudentId() { return student_id; }
@@ -66,6 +69,7 @@ public:
 	vector<pair<int, float>> getStipend() { return stipend; }
 	float getStipendLastTerm();
 	int getCourse() { return course; }
+	vector<Stipend* > getAdditStipend() { return addit_stipend; }
 
 	wstring getEdFormWstr() { return education_form == L"F" ? L"Бюджет" : L"Платное"; }
 	wstring getEdForm() { return education_form; }

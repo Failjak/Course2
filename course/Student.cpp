@@ -13,6 +13,8 @@ Student::Student(const Student & tmp) : People(tmp.name, tmp.surname, tmp.patron
 	this->education_form = tmp.education_form;
 	this->marks = tmp.marks;
 	this->course = tmp.course;
+	for (auto s : tmp.addit_stipend)
+		this->addit_stipend.push_back(new Stipend(*s));
 }
 
 void Student::setMarks(vector<pair<pair<int, bool>, vector<int>>> tmp, vector<wstring> subj)
@@ -141,5 +143,11 @@ void Student::calcStipend(Student * s)
 
 		stipend.push_back(make_pair((*mark).first.first, BASE_STIPEND * ratio));
 	}
+
+	for (auto stip : s->getAdditStipend())
+		for (auto main_stip = stipend.begin(); main_stip != stipend.end(); main_stip++)
+			if ((*main_stip).first >= stip->getTerm())
+				(*main_stip).second += stip->getRatio() * StipendConsts::MIN_LIVING_STANDART;
+
 	s->setStipend(stipend);
 }

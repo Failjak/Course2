@@ -130,8 +130,10 @@ namespace AdminController
 	{
 		coutTitle(L"Меню просмотра стипендий");
 
-		vector<wstring> cols = { L"Вычислить стипендию для всех студентов (за последний семестр).",
+		vector<wstring> cols = { 
+			L"Вычислить стипендию для всех студентов (за последний семестр).",
 			L"Вычислить стипендию для студента (за последний семестр)." ,
+			//L"Посмотреть наличие дополнительных стипендий." ,
 			L"Назад.",
 		};
 
@@ -155,7 +157,8 @@ namespace AdminController
 	{
 		coutTitle(L"Меню управления дополнительными стипендиями");
 
-		vector<wstring> cols = { L"Просмотр дополнительных стипендий.",
+		vector<wstring> cols = { 
+			L"Просмотр дополнительных стипендий.",
 			L"Добавить стипендию." ,
 			L"Редактировать стипендию.",
 			L"Назад."
@@ -168,9 +171,11 @@ namespace AdminController
 	{
 		coutTitle(L"Меню назначения дополнительных стипендий");
 
-		vector<wstring> cols = { L"Назначить стипендию студенту по id.",
+		vector<wstring> cols = { 
+			L"Назначить стипендию студенту по id.",
 			L"Назначить стипендию выбранному студенту." ,
-			L"Редактировать стипендию.",
+			L"Редактировать назначенные стипендии.",
+			L"Удалить назначенную стипендию.",
 			L"Назад."
 		};
 
@@ -731,6 +736,31 @@ namespace AdminController
 	{
 		switch (stipend_assign_menu())
 		{
+		case 1:
+		{
+			system("cls");
+
+			wstring student_id;
+			coutTitle(L"Назначение стипендии");
+
+			wcout << L"ID-студента: ";
+			wcin >> student_id;
+
+			int res = admin->AddStipendToStudent(student_id);
+			if (res == 1)
+			{
+				wcout << L"Назначение стипендии прошло успешно." << endl;
+			}
+			else if (res == -1) {
+				wcout << L"Ошибка назначения стипендии." << endl;
+			}
+			else if (res == 0) {
+				wcout << L"Отмена назначения стипендии." << endl;
+				break;
+			}
+
+			break;
+		}
 		case 2:
 		{
 			system("cls");
@@ -789,28 +819,9 @@ namespace AdminController
 			}
 			break;
 		}
-		case 1:
+		case 3:
 		{
 			system("cls");
-
-			wstring student_id;
-			coutTitle(L"Назначение стипендии");
-
-			wcout << L"ID-студента: ";
-			wcin >> student_id;
-
-			int res = admin->AddStipendToStudent(student_id);
-			if (res == 1)
-			{
-				wcout << L"Назначение стипендии прошло успешно." << endl;
-			}
-			else if (res == -1) {
-				wcout << L"Ошибка назначения стипендии." << endl;
-			}
-			else if (res == 0) {
-				wcout << L"Отмена назначения стипендии." << endl;
-				break;
-			}
 
 			break;
 		}
@@ -871,12 +882,28 @@ namespace AdminController
 	{
 		switch (stipend_out_menu())
 		{
+		case 1:
+		{
+			system("cls");
+
+			wstring student_id;
+			coutTitle(L"Раcчет стипендии для всех студентов(за последний семестр)");
+			vector<Student * > students = admin->getStudents();
+
+			if (!students.size()) { break; }
+
+			pprintStipend(students);
+
+			system("pause");
+			system("cls");
+			break;
+		}
 		case 2: // Расчет по id 
 		{
 			system("cls");
 
 			wstring student_id;
-			coutTitle(L"Раcчет стипендии(за текущий семестр)");
+			coutTitle(L"Раcчет стипендии(за последний семестр)");
 
 			wcout << L"ID-студента: ";
 			CIN_FLUSH;
@@ -886,22 +913,6 @@ namespace AdminController
 			if (!students.size()) { break; }
 
 			sort(students.begin(), students.end(), AbstractHandler::ScompByFIO);
-
-			pprintStipend(students);
-
-			system("pause");
-			system("cls");
-			break;
-		}
-		case 1:
-		{
-			system("cls");
-
-			wstring student_id;
-			coutTitle(L"Раcчет стипендии для всех студентов(за текущий семестр)");
-			vector<Student * > students = admin->getStudents();
-
-			if (!students.size()) { break; }
 
 			pprintStipend(students);
 

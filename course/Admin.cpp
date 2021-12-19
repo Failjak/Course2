@@ -210,6 +210,9 @@ vector<Student*> Admin::getStudents(wstring student_id)
 			subj.erase(subj.begin(), subj.begin() + 3); // del 'student_id'&'term'&'retake' from subjects
 		}
 
+		vector<Stipend *> stipends = db.getStudentAdditStipends(students.at(i)->getStudentId());
+		students.at(i)->setAdditStipdends(stipends);
+
 		students.at(i)->setCourse(calcCourse(student_id));
 		students.at(i)->setMarks(marks, subj);
 		students.at(i)->calcStipend(students.at(i));
@@ -785,6 +788,11 @@ int Admin::AddStipendToStudent(Student * s)
 	vector<Stipend *> stipends = db.getAdditStipends();
 	AbstractHandler::pprintAdditStipend(stipends);
 	int choice = AbstractHandler::choice_column(stipends.size());
+
+	wcout << L"С какого семестра начислять данную стипендию: ";
+	int term = AbstractHandler::choice_number(s->getCourse() * 2);
+	stipends.at(choice - 1)->setTerm(term);
+
 	if (setStipendToStudent(s, stipends.at(choice - 1)) == 1) { return 1; }
 
 	return -1;
@@ -800,7 +808,7 @@ int Admin::AddStipendToStudent(wstring student_id)
 		return -1;
 	}
 
-	Student * student = db.getStudentById(student_id);
+	Student * student = getStudents(student_id).at(0);
 
 	if (!student->getEdFormInt())
 	{
@@ -809,7 +817,13 @@ int Admin::AddStipendToStudent(wstring student_id)
 	}
 
 	vector<Stipend *> stipends = db.getAdditStipends();
+	AbstractHandler::pprintAdditStipend(stipends);
 	int choice = AbstractHandler::choice_column(stipends.size());
+
+	wcout << L"С какого семестра начислять данную стипендию: ";
+	int term = AbstractHandler::choice_number(student->getCourse() * 2);
+	stipends.at(choice - 1)->setTerm(term);
+
 	if (setStipendToStudent(student, stipends.at(choice - 1)) == 1) { return 1; }
 
 	return -1;
@@ -819,7 +833,7 @@ int Admin::setStipendToStudent(Student *stud, Stipend *stip)
 {
 	DataBase db;
 
-	if (db.AddNoteStudentStipend(stud->getStudentId(), stip->getId()) == 1)
+	if (db.AddNoteStudentStipend(stud->getStudentId(), stip->getId(), stip->getTerm()) == 1)
 		return 1;
 	else
 		return -1;

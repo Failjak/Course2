@@ -72,7 +72,8 @@ public:
 
 	/*-----Additiontal stipends------*/
 	vector<Stipend*> getAdditStipends();
-	int AddNoteStudentStipend(wstring student_id, int stipend_id);
+	vector<Stipend*> getStudentAdditStipends(wstring student_id = L"");
+	int AddNoteStudentStipend(wstring student_id, int stipend_id, int term);
 	/*-----Additiontal stipends------*/
 
 	vector<wstring> getColNames(wstring table);
@@ -910,7 +911,62 @@ vector<Stipend*> DataBase::getAdditStipends()
 }
 
 inline 
-int DataBase::AddNoteStudentStipend(wstring student_id, int stipend_id)
+vector<Stipend*> DataBase::getStudentAdditStipends(wstring student_id)
+{
+	/*
+		params: student_id, default none
+		return: vector of Stipend objs
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+
+	vector<Stipend *> result;
+	string sql;
+
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
+	{
+		if (student_id.length())
+			sql = "select a.id, a.name, a.ratio, sas.term from " + addit_stipend + " as a inner join " + student_addit_stipend + " as sas " 
+			"on a.id = sas.stipend_id where sas.student_id = '" + WS2S(student_id) + "';";
+		else
+			sql = "select a.id, a.name, a.ratio, sas.term from " + addit_stipend + " as a inner join " + student_addit_stipend + " as sas "
+			"on a.id = sas.stipend_id;";
+
+		sqlite3_prepare(db, sql.c_str(), -1, &stmt, NULL); //preparing the statement
+		sqlite3_step(stmt); // executing the statement
+
+		while (sqlite3_column_text(stmt, 0))
+		{
+			Stipend * tmp_st = new Stipend;
+
+			tmp_st->setId(sqlite3_column_int(stmt, 0));
+			tmp_st->setName(static_cast<const wchar_t*>(sqlite3_column_text16(stmt, 1)));
+			tmp_st->setRatio(sqlite3_column_double(stmt, 2));
+			tmp_st->setTerm(sqlite3_column_int(stmt, 3));
+
+			result.push_back(tmp_st);
+			sqlite3_step(stmt);
+		}
+		if (!result.size())
+		{
+			//wcout << L"SELECT ERROR: Table '" << S2WS(group_table) << "' is Empty.'" << endl;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return {};
+	}
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+
+	return result;
+}
+
+inline 
+int DataBase::AddNoteStudentStipend(wstring student_id, int stipend_id, int term)
 {
 	/*
 		Func adds info about the assigned stipend for the students.
@@ -927,7 +983,7 @@ int DataBase::AddNoteStudentStipend(wstring student_id, int stipend_id)
 
 	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
 	{
-		wstring info = L"'" + student_id + L"', " + to_wstring(stipend_id);
+		wstring info = L"'" + student_id + L"', " + to_wstring(stipend_id) + L", " + to_wstring(term);
 
 		string sql("pragma foreign_keys=on;"
 			"insert into " + student_addit_stipend + " values (" + WS2S(info) + ");");
