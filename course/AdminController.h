@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <fstream>
 
 #include "AbstractHandler.h"
 #include "Admin.h"
@@ -24,6 +25,7 @@ namespace AdminController{
 	void pprintUser(std::vector<User*>, std::wstring title=L"");
 	void pprintStudent(std::vector<Student*>, std::wstring title = L"");
 	void pprintStipend(std::vector<Student*>, std::wstring title = L"");
+	void pprintMark(Student *, wstring title = L"");
 
 
 	void StudentRating(Admin * s = new Admin());
@@ -41,4 +43,7 @@ namespace AdminController{
 	void ManageData(Admin * admin);
 	void FilterManage(Admin * admin, vector<User*> users);
 	void SearchManage(Admin * admin, vector<User*> users);
+
+	void MakeStipendInfo2Report(vector<Student * >);
+	int MakeReport(vector<wstring> cols, vector<vector<wstring>> values, wstring);
 };

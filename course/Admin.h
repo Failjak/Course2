@@ -14,7 +14,7 @@ private:
 	//friend int Student::calcCourse(wstring student_id);
 
 	void mergeStGr(vector<Student *> *, const map<wstring, vector<wstring>>, wstring mode);
-	vector<int> addMarks2V(wstring student_id, int course, vector<wstring> subjs);
+	vector<int> addMarks2V(wstring student_id, int course, vector<wstring> subjs, int term = 0);
 	int getGroupExample(int group);
 
 public:
@@ -40,11 +40,17 @@ public:
 	int EnterEdForm();
 
 	vector<Student*> getStudents(wstring student_id = L"");
-	int AddMarksToStudent(Student *s);
-	int AddMarksToStudent(wstring student_id);
+	int AddMarksToStudent(Student *s, int term = 0);
+	int AddMarksToStudent(wstring student_id, int term = 0);
 	int AddStipendToStudent(Student *s);
 	int AddStipendToStudent(wstring student_id);
 
+	int EditMarks(Student *, int);
+
 	int setStipendToStudent(Student *, Stipend *);
+	int delStipendToStudent(Student *);
 	/*-----Student------*/
+
+	int AddAdditionalStipend();
+	int DelStipend(Stipend *);
 };

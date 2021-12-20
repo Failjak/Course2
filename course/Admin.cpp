@@ -28,47 +28,51 @@ void Admin::mergeStGr(vector<Student *> * st, map<wstring, vector<wstring>> b, w
 }
 
 
-vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> subjs)
+vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> subjs, int term)
 {
 	DataBase db;
 	vector<int> marks;
 	int ch;
 	wstring num =L"";
 
-	if (db.existMarks(student_id, course * 2))
+	if (!term)
 	{
-		wcout << L"Отметки за все семестры занесены." << endl;
-		return {};
-	}
-
-	wcout << L"Отметки за семестр: ";
-	do
-	{
-		if (num.length())
+		if (db.existMarks(student_id, course * 2))
 		{
-			wcout << (wchar_t)8 << ' ' << wchar_t(8);
-			num = L"";
+			wcout << L"Отметки за все семестры занесены." << endl;
+			return {};
 		}
 
-		ch = _getch();
-		if (ch == 13 and num.length() > 0) { break; }
-		if (ch == 32) { continue; }
-		if (ch == 8 and num.length() > 0)
+		wcout << L"Отметки за семестр: ";
+		do
 		{
-			wcout << (wchar_t)8 << ' ' << wchar_t(8);
-			num.erase(num.length() - 1, num.length());
-		}
-		else if (ch >= 48 and ch <= 57)
-		{
-			if (stoi(num + (wchar_t)ch) > 0 and stoi(num + (wchar_t)ch) <= course * 2)
+			if (num.length())
 			{
-				wcout << (wchar_t)ch;
-				num += (wchar_t)ch;
-				if (!db.existMarks(student_id, stoi(num))) { break; }
+				wcout << (wchar_t)8 << ' ' << wchar_t(8);
+				num = L"";
 			}
-		}
-	} while (true);
-	marks.push_back(stoi(num));
+
+			ch = _getch();
+			if (ch == 13 and num.length() > 0) { break; }
+			if (ch == 32) { continue; }
+			if (ch == 8 and num.length() > 0)
+			{
+				wcout << (wchar_t)8 << ' ' << wchar_t(8);
+				num.erase(num.length() - 1, num.length());
+			}
+			else if (ch >= 48 and ch <= 57)
+			{
+				if (stoi(num + (wchar_t)ch) > 0 and stoi(num + (wchar_t)ch) <= course * 2)
+				{
+					wcout << (wchar_t)ch;
+					num += (wchar_t)ch;
+					if (!db.existMarks(student_id, stoi(num))) { break; }
+				}
+			}
+		} while (true);
+		marks.push_back(stoi(num));
+	}
+	else marks.push_back(term);
 
 	wcout << L"\nПересдачи(1-'да', 0-'нет'): ";
 	while (true)
@@ -127,14 +131,9 @@ vector<int> Admin::addMarks2V(wstring student_id, int course, vector<wstring> su
 int Admin::getGroupExample(int group)
 {
 	if (to_string(group).length() == 5)
-	{
-		// 73601
 		return (group / 100) % 100;
-	}
 	else if (to_string(group).length() == 6)
-	{
 		return (group / 100) % 1000;
-	}
 }
 
 int Admin::EnterEdForm()
@@ -538,9 +537,7 @@ int Admin::AddStudent()
 	}
 
 	if (db.AddNoteStudent(&student) and db.AddNoteStudentGroup(&student))
-	{
 		return true;
-	}
 
 	return false;
 }
@@ -549,9 +546,7 @@ int Admin::DelStudent(Student * s)
 {
 	DataBase db;
 	if (db.DelNoteByStydentId(s->getStudentId(), Student()) == 1)
-	{
 		return 1;
-	}
 
 	return 0;
 }
@@ -742,7 +737,7 @@ Group * Admin::EnterGroup(Faculty faculty, Speciality spec)
 	return new Group(group);
 }
 
-int Admin::AddMarksToStudent(Student * s)
+int Admin::AddMarksToStudent(Student * s, int term)
 {
 	DataBase db;
 	wstring student_id = s->getStudentId();
@@ -750,7 +745,7 @@ int Admin::AddMarksToStudent(Student * s)
 	vector<wstring> cols = db.getColNames(L"marks");
 	cols.erase(cols.begin()); // del 'student_id' from subjects
 	vector<int> marks;
-	marks = addMarks2V(student_id, s->getCourse(), cols);
+	marks = addMarks2V(student_id, s->getCourse(), cols, term);
 
 	if (!marks.size()) { return -1; }
 	if (db.AddMarks(marks, cols, student_id)) { return 1; }
@@ -758,7 +753,7 @@ int Admin::AddMarksToStudent(Student * s)
 	return -1;
 }
 
-int Admin::AddMarksToStudent(wstring student_id)
+int Admin::AddMarksToStudent(wstring student_id, int term)
 {
 	DataBase db;
 
@@ -773,7 +768,7 @@ int Admin::AddMarksToStudent(wstring student_id)
 
 	cols.erase(cols.begin()); // del 'student_id' from subjects
 	vector<int> marks;
-	marks = addMarks2V(student_id,student->getCourse(),cols);
+	marks = addMarks2V(student_id,student->getCourse(),cols, term);
 
 	if (db.AddMarks(marks, cols, student_id))
 		return 1;
@@ -783,6 +778,12 @@ int Admin::AddMarksToStudent(wstring student_id)
 
 int Admin::AddStipendToStudent(Student * s)
 {
+	if (!s->getEdFormInt())
+	{
+		wcout << L"Это студент платной формы обучения." << endl;
+		return -1;
+	}
+
 	DataBase db;
 
 	vector<Stipend *> stipends = db.getAdditStipends();
@@ -829,6 +830,16 @@ int Admin::AddStipendToStudent(wstring student_id)
 	return -1;
 }
 
+int Admin::EditMarks(Student * s, int term)
+{
+	DataBase db;
+
+	db.DelMarks(s->getStudentId(), term);
+	AddMarksToStudent(s->getStudentId(), term);
+
+	return 0;
+}
+
 int Admin::setStipendToStudent(Student *stud, Stipend *stip)
 {
 	DataBase db;
@@ -839,4 +850,48 @@ int Admin::setStipendToStudent(Student *stud, Stipend *stip)
 		return -1;
 
 	return -1;
+}
+
+int Admin::delStipendToStudent(Student * s)
+{
+	DataBase db;
+	vector<Stipend *> stipends = db.getStudentAdditStipends(s->getStudentId());
+	AbstractHandler::pprintAdditStipend(stipends);
+	int stip_id	= AbstractHandler::choice_column(stipends.size());
+
+	if (db.DelNoteStudentStipend(s->getStudentId(), stipends.at(stip_id - 1)->getId()) == 1)
+		return 1;
+
+	return -1;
+}
+
+int Admin::AddAdditionalStipend()
+{
+	coutTitle(L"Добавление дополнительной стипендии");
+
+	DataBase db;
+	wstring name;
+	float ratio;
+
+	wcout << L"Название стипендии: ";
+	getline(wcin, name);
+	wcout << L"Повышающий коэффициент: ";
+	ratio = AbstractHandler::choice_float_number();
+	
+	Stipend tmp;
+	tmp.setName(name);
+	tmp.setRatio(ratio);
+
+	if (db.AddAdditStipends(&tmp) == 1) { return 1; }
+
+	return -1;
+}
+
+int Admin::DelStipend(Stipend * stip)
+{
+	DataBase db;
+	if (db.DelNoteByStipend(stip->getId()) == 1)
+		return 1;
+
+	return 0;
 }

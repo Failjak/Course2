@@ -48,9 +48,8 @@ void Student::setMarks(vector<pair<pair<int, bool>, vector<int>>> tmp, vector<ws
 float Student::getStipendLastTerm()
 {
 	if (stipend.size())
-	{
-		return stipend.back().second;
-	}
+		return round(stipend.back().second * 100) / 100;
+
 	return -1;
 }
 
@@ -100,7 +99,7 @@ float Student::getAvgMark()
 	{
 		sum += avg_marks.at(i).second;
 	}
-	return sum / avg_marks.size();
+	return round((sum / avg_marks.size()) * 100) / 100;
 }
 
 float Student::getStipendRatio(float avg_mark)

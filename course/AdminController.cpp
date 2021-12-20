@@ -75,7 +75,7 @@ namespace AdminController
 		vector<wstring> cols = {
 			L"Работа с пользователями." ,
 			L"Работа со студентами." ,
-			L"Выставить оценки." ,
+			L"Оценки." ,
 			L"Стипендии.",
 			L"Редактирование пользователей." ,
 			L"Назад."
@@ -90,7 +90,7 @@ namespace AdminController
 
 		vector<wstring> cols = {
 			L"Просмотр пользователей.",
-			L"Добавить пользователя."
+			L"Добавить пользователя.",
 			L"Удалить пользователя.",
 			L"Назад."
 		};
@@ -104,7 +104,7 @@ namespace AdminController
 
 		vector<wstring> cols = {
 			L"Просмотр студентов.",
-			L"Рейтинг студентов."
+			L"Рейтинг студентов.",
 			L"Добавить студента.",
 			L"Удалить студена.",
 			L"Фильтры|Поиск.",
@@ -116,10 +116,13 @@ namespace AdminController
 
 	int marks_menu()
 	{
-		coutTitle(L"Меню добавления оценок");
+		coutTitle(L"Меню оценок");
 
-		vector<wstring> cols = { L"Выбор студента.",
+		vector<wstring> cols = { 
+			L"Добавить оценки выбранному студенту.",
 			L"Добавление по id студента." ,
+			L"Просмотреть все оценки студента." ,
+			L"Редактировать оценки студента." ,
 			L"Назад.",
 		};
 
@@ -160,7 +163,7 @@ namespace AdminController
 		vector<wstring> cols = { 
 			L"Просмотр дополнительных стипендий.",
 			L"Добавить стипендию." ,
-			L"Редактировать стипендию.",
+			L"Удалить стипендию.",
 			L"Назад."
 		};
 
@@ -174,7 +177,6 @@ namespace AdminController
 		vector<wstring> cols = { 
 			L"Назначить стипендию студенту по id.",
 			L"Назначить стипендию выбранному студенту." ,
-			L"Редактировать назначенные стипендии.",
 			L"Удалить назначенную стипендию.",
 			L"Назад."
 		};
@@ -397,6 +399,101 @@ namespace AdminController
 		wcout << L"└" << wstring(table_width, L'─') << L"┘" << endl;
 	}
 
+	void pprintMark(Student * s, wstring title)
+	{
+		int space_subjects = 5;
+		int MIN_SPACE = 14;
+		HANDLE hCon;
+		hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		map<int, map<wstring, int>> all_marks = s->getMarks();
+		vector<wstring> subjs;
+
+		vector<int> max_sizes_subjs;
+		wstring title_term = L"Семестр";
+
+		max_sizes_subjs.push_back(title_term.length());
+
+		for (auto it = all_marks.cbegin(); it != all_marks.cend(); ++it)
+		{
+			for (auto n_it = (*it).second.cbegin(); n_it != (*it).second.cend(); ++n_it)
+			{
+				max_sizes_subjs.push_back(DB_SUBJS.count((*n_it).first) ? DB_SUBJS.at((*n_it).first).length() : 0);
+				subjs.push_back((*n_it).first);
+			}
+			break;
+		}
+
+		int max_size_FN = s->getFullName().length();
+		int max_size_term = title_term.length();
+		int table_width = space_subjects + (
+			(max_size_term > MIN_SPACE ? MIN_SPACE : max_size_term + 1));
+		for (int i = 0; i < max_sizes_subjs.size(); i++)
+			table_width += max_sizes_subjs.at(i);
+
+		if (title.length())
+		{
+			int title_table_widht = (table_width - title.length()) / 2;
+			wcout << wstring(title_table_widht, L'─') << title << wstring(title_table_widht, L'─') << endl;
+		}
+
+		wcout << L"┌" << wstring(table_width, L'─') << L"┐" << endl;
+		wcout << L"│";
+
+		SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+		wcout << wstring((table_width - s->getFullName().length()) / 2, L' ')
+			<< left << s->getFullName()
+			<< wstring((table_width - s->getFullName().length()) / 2, L' ')
+			<< left << L"│" << endl;
+
+		wcout << L"├";
+		for (auto size : max_sizes_subjs)
+			wcout << wstring(size > MIN_SPACE ? MIN_SPACE : size + 1, L'─') << left << L"┬";
+		wcout << (wchar_t)8 << L"┤" << endl;
+
+		wcout << left << L"│";
+		SetConsoleTextAttribute(hCon, FOREGROUND_INTENSITY);
+		wcout << setw(max_sizes_subjs.at(0) + 1) << left << title_term;
+		SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+		wcout << right << L"│";
+
+		for (int i = 0; i < subjs.size(); i++) // перечисление предметов
+		{
+			SetConsoleTextAttribute(hCon, FOREGROUND_INTENSITY);
+			wcout << setw(max_sizes_subjs.at(i + 1) + 1) << left << DB_SUBJS.at(subjs.at(i));
+
+			SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+			wcout << right << L"│";
+		}
+		SetConsoleTextAttribute(hCon, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+
+		wcout << endl << L"├";
+		for (auto size : max_sizes_subjs)
+			wcout << wstring(size > MIN_SPACE ? MIN_SPACE : size + 1, L'─') << left << L"┼";
+		wcout << (wchar_t)8 << L"┤" << endl;
+
+		for (auto it = all_marks.cbegin(); it != all_marks.cend(); ++it)
+		{
+			if (it != all_marks.cbegin())
+			{
+				wcout << endl << L"├";
+				for (auto size : max_sizes_subjs)
+					wcout << wstring(size > MIN_SPACE ? MIN_SPACE : size + 1, L'─') << left << L"┼";
+				wcout << (wchar_t)8 << L"┤" << endl;
+			}
+
+			wcout << left << L"│" << setw(max_size_term + 1) << left << (*it).first << left << L"│";
+			int i = 0;
+			for (auto n_it = (*it).second.cbegin(); n_it != (*it).second.cend(); ++n_it, i++)
+				wcout << setw(max_sizes_subjs.at(i + 1) + 1) << left << (*n_it).second << left << L"│";
+		}
+
+		wcout << endl << L"└";
+		for (auto size : max_sizes_subjs)
+			wcout << wstring(size > MIN_SPACE ? MIN_SPACE : size + 1, L'─') << left << L"┴";
+		wcout << (wchar_t)8 << L"┘" << endl;
+	}
+
 	void StudentRating(Admin * s)
 	{
 		coutTitle(L"Рейтинг студентов");
@@ -406,7 +503,6 @@ namespace AdminController
 		Group *group;
 
 		DataBase db;
-		//vector<Student *> students = db.getStudents();
 		vector<Student *>students = s->getStudents();
 
 		wcout << L"Выберете следующие поля: " << endl;
@@ -461,12 +557,11 @@ namespace AdminController
 			{
 				system("cls");
 
-				int id;
 				vector<User*> users = admin->getUsers();
 
 				AdminController::pprintUser(users, L"Удаление пользователя");
-				wcout << L"№ пользователя для удаление: ";
-				wcin >> id;
+				wcout << L"№ пользователя для удаления: ";
+				int id = AbstractHandler::choice_number(users.size());
 
 				try {
 					if (admin->DelUser(users.at(id - 1)) == 1)
@@ -553,12 +648,11 @@ namespace AdminController
 			}
 			case 4: // Удаление студента
 			{
-				int id;
 				vector<Student*> students = admin->getStudents();
 
 				AdminController::pprintStudent(students, L"Удаление студента");
-				wcout << L"№ студентя для удаление: ";
-				wcin >> id;
+				wcout << L"№ студента для удаление: ";
+				int id = AbstractHandler::choice_number(students.size());
 
 				try
 				{
@@ -607,9 +701,7 @@ namespace AdminController
 		case 1: // Выбираем студента сами
 		{
 			system("cls");
-
-			int id, ch;
-			wstring num;
+			coutTitle(L"Добавление оценок");
 			vector<Student*> students = admin->getStudents();
 			
 			while (true)
@@ -617,27 +709,7 @@ namespace AdminController
 				AdminController::pprintStudent(students, L"Добавление оценок");
 				wcout << L"№ студента(0 - Выход): ";
 
-				while (true)
-				{
-					num = L"";
-					ch = _getch();
-					if (ch == 13 and num.length() > 0) { break; }
-					if (ch == 32) { continue; }
-					if (ch == 8 and num.length() > 0)
-					{
-						wcout << (wchar_t)8 << ' ' << wchar_t(8);
-						num.erase(num.length() - 1, num.length());
-					}
-					else if (ch >= 48 and ch <= (48 + students.size()))
-					{
-						wcout << (wchar_t)ch;
-						num += (wchar_t)ch;
-						wcout << endl;
-						break;
-					}
-				}
-
-				id = stoi(num);
+				int id = AbstractHandler::choice_column(students.size());
 				if (!id) { break; }
 
 				try
@@ -686,6 +758,42 @@ namespace AdminController
 			}
 			break;
 		}
+
+		case 3:
+		{
+			coutTitle(L"Просмотр оценок для студента");
+			system("cls");
+			
+			wstring student_id;
+
+			wcout << L"ID-студента: ";
+			getline(wcin, student_id);
+
+			Student* student = admin->getStudents(student_id).at(0);
+			pprintMark(student);
+			break;
+		}
+
+		case 4:
+		{
+			wstring student_id;
+
+			coutTitle(L"Редактирование оценок для студента");
+			system("cls");
+
+			wcout << L"ID-студента: ";
+			getline(wcin, student_id);
+
+			Student* student = admin->getStudents(student_id).at(0);
+			pprintMark(student);
+			wcout << L"Семестр для редактирования: ";
+			int choice_term = AbstractHandler::choice_number(student->getMarks().size());
+
+			admin->EditMarks(student, choice_term);
+
+			break;
+		}
+
 		case 0:
 			break;
 
@@ -774,27 +882,7 @@ namespace AdminController
 				AdminController::pprintStudent(students, L"Назначение стипендий");
 				wcout << L"№ студента(0 - Выход): ";
 
-				while (true)
-				{
-					num = L"";
-					ch = _getch();
-					if (ch == 13 and num.length() > 0) { break; }
-					if (ch == 32) { continue; }
-					if (ch == 8 and num.length() > 0)
-					{
-						wcout << (wchar_t)8 << ' ' << wchar_t(8);
-						num.erase(num.length() - 1, num.length());
-					}
-					else if (ch >= 48 and ch <= (48 + students.size()))
-					{
-						wcout << (wchar_t)ch;
-						num += (wchar_t)ch;
-						wcout << endl;
-						break;
-					}
-				}
-
-				id = stoi(num);
+				int id = AbstractHandler::choice_column(students.size());
 				if (!id) { break; }
 
 				try
@@ -817,12 +905,38 @@ namespace AdminController
 					wcout << L"Неверный выбор" << endl;
 				}
 			}
+
+			system("pause");
+			system("cls");
 			break;
 		}
-		case 3:
+		case 3: // удаление стипендии
 		{
 			system("cls");
 
+			vector<Student*> students = admin->getStudents();
+
+			AdminController::pprintStudent(students, L"Удаление доп. стипендии у студента");
+			wcout << L"№ студента для удаления доп. стипендии: ";
+			int id = AbstractHandler::choice_number(students.size());
+
+			try
+			{
+				if (admin->delStipendToStudent(students.at(id - 1)) == 1)
+				{
+					wcout << L"Удаление выполнено успешно." << endl;
+				}
+				else {
+					wcout << L"Ошибка удаления." << endl;
+				}
+			}
+			catch (std::out_of_range)
+			{
+				wcout << L"Неверный выбор" << endl;
+			}
+
+			system("pause");
+			system("cls");
 			break;
 		}
 		case 0:
@@ -856,14 +970,37 @@ namespace AdminController
 		{
 			system("cls");
 
+			admin->AddAdditionalStipend();
+
 			system("pause");
 			system("cls");
 			break;
 		}
-		case 3: // редактировать
+		case 3: // удалить
 		{
 			system("cls");
 	
+			vector<Stipend *> stipends = db.getAdditStipends();
+			AbstractHandler::pprintAdditStipend(stipends, L"Удаление дополнительных стипендий");
+
+			wcout << L"№ записи для удаления: ";
+			int id = AbstractHandler::choice_number(stipends.size());
+
+			try
+			{
+				if (admin->DelStipend(stipends.at(id - 1)) == 1)
+				{
+					wcout << L"Удаление выполнено успешно." << endl;
+				}
+				else {
+					wcout << L"Ошибка удаления." << endl;
+				}
+			}
+			catch (std::out_of_range)
+			{
+				wcout << L"Неверный выбор" << endl;
+			}
+
 			system("pause");
 			system("cls");
 			break;
@@ -890,10 +1027,17 @@ namespace AdminController
 			coutTitle(L"Раcчет стипендии для всех студентов(за последний семестр)");
 			vector<Student * > students = admin->getStudents();
 
-			if (!students.size()) { break; }
-
+			if (!students.size()) {
+				wcout << L"Список студентов пуст." << endl;
+				system("pause");
+				system("cls");
+				break;
+			}
 			pprintStipend(students);
 
+			int choice = AbstractHandler::choice_column({ L"Сделать отчет.", L"Назад." });
+			if (choice == 1) { MakeStipendInfo2Report(students); }
+				
 			system("pause");
 			system("cls");
 			break;
@@ -910,11 +1054,19 @@ namespace AdminController
 			wcin >> student_id;
 
 			vector<Student * > students = admin->getStudents(student_id);
-			if (!students.size()) { break; }
+			if (!students.size()) { 
+				wcout << L"Студентов с таким id нет." << endl; 
+				system("pause");
+				system("cls");
+				break; 
+			}
 
 			sort(students.begin(), students.end(), AbstractHandler::ScompByFIO);
 
 			pprintStipend(students);
+
+			int choice = AbstractHandler::choice_column({ L"Сделать отчет.", L"Назад." });
+			if (choice == 1) { MakeStipendInfo2Report(students); }
 
 			system("pause");
 			system("cls");
@@ -1025,10 +1177,17 @@ namespace AdminController
 		else if (choice == 4)
 		{
 			int ed_form = admin->EnterEdForm();
+
+			req_users = AbstractHandler::filterByEdForm(users, ed_form);
 		}
 
-		for (auto user : req_users)
-			wcout << *user << endl;
+		if (!req_users.size()) { wcout << L"Ничего не найдено" << endl; }
+
+		vector<Student *> students;
+		for (auto us : req_users)
+			students.push_back(new Student(*us->getStudent()));
+
+		pprintStudent(students);
 
 		return;
 	}
@@ -1087,13 +1246,76 @@ namespace AdminController
 			req_users = AbstractHandler::searchPhone(users, srch_value);
 		}
 
-
 		if (!req_users.size()) { wcout << L"Ничего не найдено" << endl; }
-		else {
-			for (auto user : req_users)
-				wcout << *user << endl;
-		}
+
+		vector<Student *> students;
+		for (auto us : req_users)
+			students.push_back(new Student(*us->getStudent()));
+
+		pprintStudent(students);
 
 		return;
+	}
+
+	int MakeReport(vector<wstring> cols, vector<vector<wstring>> values, wstring file_name)
+	{
+		wofstream myfile;
+		myfile.open(L"reports\\" + file_name + L".csv", ios::out);
+		locale loc(std::locale::classic(), new std::codecvt_utf8<wchar_t>);
+		myfile.imbue(loc);
+
+		for (auto col : cols)
+		{
+			myfile << col;
+			myfile << L",";
+		}
+		myfile << L"\n";
+		for (auto vals : values)
+		{
+			for (auto val : vals)
+			{
+				myfile << val;
+				myfile << L",";
+			}
+			myfile << L"\n";
+		}
+
+		myfile.close();
+		return 0;
+	}
+
+	void MakeStipendInfo2Report(vector<Student * > students)
+	{
+		vector<wstring> cols = {
+			L"№",
+			L"ID",
+			L"ФИО",
+			L"Средний балл",
+			L"Стипендия"
+		};
+
+		vector<vector<wstring>> values;
+
+		int i = 0;
+		for (auto stud : students)
+		{
+			vector<wstring> tmp{
+				to_wstring(++i),
+				stud->getStudentId(),
+				stud->getFullName(),
+				to_wstring(stud->getAvgMark()),
+			};
+			if (stud->getEdFormInt())
+				tmp.push_back(to_wstring(stud->getStipendLastTerm()));
+			else
+				tmp.push_back(stud->getEdFormWstr());
+
+			values.push_back(tmp);
+		}
+		
+		if (students.size() == 1)
+			MakeReport(cols, values, students.at(0)->getFullName());
+		else
+			MakeReport(cols, values, L"report_all_students");
 	}
 }

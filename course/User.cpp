@@ -70,6 +70,7 @@ void User::setStudent()
 		//wcout << L"Отсутствуют записи о Студенте или Группе." << endl;
 	}
 		
+	this->student.setAdditStipdends(db.getStudentAdditStipends(student_id));
 	this->student.setCourse(calcCourse(student_id));
 	this->student.setMarks(marks, subj);
 	this->student.calcStipend(&student);

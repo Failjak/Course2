@@ -81,20 +81,19 @@ void create_table()
 					"Economic INTEGER not null"
 					");");*/
 
-		/*string sql("create table additional_stipend("
-			"id int not null,"
+		string sql("create table additional_stipend("
+			"id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
 			"name text not null,"
-			"ratio real not null,"
-			"primary key(id)"
-			");");*/
+			"ratio real not null"
+			");");
 
-		string sql("create table students_addit_stipend("
+		/*string sql("create table students_addit_stipend("
 			"student_id text not null,"
 			"stipend_id int not null,"
 			"term int not null,"
 			"FOREIGN key (student_id) REFERENCES students(student_id) on delete CASCADE on update no action,"
 			"FOREIGN key (stipend_id) REFERENCES additional_stipend(id) on delete CASCADE on update no action"
-			");");
+			");");*/
 
 
 		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
@@ -125,7 +124,7 @@ int main(int argc, char* argv[])
 	while (flag)
 	{
 		system("cls");
-		switch (1)
+		switch (type_menu())
 		{
 		case 1:
 		{
@@ -133,8 +132,7 @@ int main(int argc, char* argv[])
 			LoginController<Admin> lC;
 
 			system("cls");
-			//if (lC.checkAuth(&admin))
-			if (1)
+			if (lC.checkAuth(&admin))
 			{
 				system("cls");
 				wcout << L"¬ход выполнен успешно.\n" << endl;

@@ -18,6 +18,7 @@ namespace AbstractHandler
 	int choice_column(vector<wstring>);
 	int choice_column(int columns_count);
 	int choice_number(int max_number);
+	double choice_float_number();
 
 	vector<User *> searchSurname(vector<User *> users, wstring surname);
 	vector<User *> searchName(vector<User *> users, wstring name);

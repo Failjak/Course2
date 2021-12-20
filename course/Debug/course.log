@@ -1,13 +1,45 @@
-﻿  Student.cpp
-h:\studing\course2\course\course\student.cpp(29): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\student.cpp(32): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\student.cpp(69): warning C4101: 'avg': unreferenced local variable
-h:\studing\course2\course\course\student.cpp(99): warning C4018: '<': signed/unsigned mismatch
-h:\studing\course2\course\course\student.cpp(150): warning C4244: '+=': conversion from 'double' to '_Ty2', possible loss of data
-          with
-          [
-              _Ty2=float
-          ]
+﻿  AdminController.cpp
+h:\studing\course2\course\course\database.h(325): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(547): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(589): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(636): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(642): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(631): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(681): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(856): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(860): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\database.h(932): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+h:\studing\course2\course\course\database.h(966): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(1002): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(1060): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+h:\studing\course2\course\course\database.h(1095): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(1132): warning C4101: 'stmt': unreferenced local variable
+h:\studing\course2\course\course\database.h(1163): warning C4101: 'err': unreferenced local variable
+h:\studing\course2\course\course\admincontroller.cpp(196): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(198): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(200): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(202): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(230): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(253): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(255): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(258): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(261): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(264): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(267): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(270): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(273): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(276): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(316): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(342): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(344): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(347): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(350): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(353): warning C4018: '>': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(385): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(431): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(460): warning C4018: '<': signed/unsigned mismatch
+h:\studing\course2\course\course\admincontroller.cpp(876): warning C4101: 'id': unreferenced local variable
+h:\studing\course2\course\course\admincontroller.cpp(876): warning C4101: 'ch': unreferenced local variable
 c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(172): warning C4244: 'initializing': conversion from '_Ty' to '_Ty1', possible loss of data
           with
           [
@@ -84,26 +116,4 @@ c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.1
               _Other1=const wchar_t (&)[5],
               _Other2=int
           ]
-c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(240): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
-          with
-          [
-              _Ty=double
-          ]
-          and
-          [
-              _Ty2=float
-          ]
-  h:\studing\course2\course\course\student.cpp(137): note: see reference to function template instantiation 'std::pair<int,float>::pair<int,double,0>(std::pair<int,double> &&) noexcept' being compiled
-  h:\studing\course2\course\course\student.cpp(137): note: see reference to function template instantiation 'std::pair<int,float>::pair<int,double,0>(std::pair<int,double> &&) noexcept' being compiled
-c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.16.27023\include\utility(240): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-          and
-          [
-              _Ty2=float
-          ]
-  h:\studing\course2\course\course\student.cpp(142): note: see reference to function template instantiation 'std::pair<int,float>::pair<int,int,0>(std::pair<int,int> &&) noexcept' being compiled
-  h:\studing\course2\course\course\student.cpp(142): note: see reference to function template instantiation 'std::pair<int,float>::pair<int,int,0>(std::pair<int,int> &&) noexcept' being compiled
   course.vcxproj -> H:\Studing\Course2\course\Debug\course.exe

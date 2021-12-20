@@ -60,20 +60,26 @@ public:
 	int AddNoteStudent(Student *s);
 	int AddNoteStudentGroup(Student *s);
 	int AddMarks(vector<int>, vector<wstring>, wstring);
+	int DelMarks(wstring student_id, int term);
 	int updateGroup(wstring student_id, wstring & update_str);
 	vector<Student*> getStudents();
 	map<wstring, vector<wstring>> getGroup2V(wstring student_id = L"");
 	vector<pair<pair<int, bool>, vector<int>>> getMarks2VById(wstring);
 	Student * getStudentById(wstring id);
 	wstring getStudentIdByUser(User * s);
+
 	template <class T>
 	int DelNoteByStydentId(wstring id, T s);
 	/*-----Student------*/
 
 	/*-----Additiontal stipends------*/
 	vector<Stipend*> getAdditStipends();
+	int AddAdditStipends(Stipend *);
+	int DelNoteByStipend(int stipend_id);
+
 	vector<Stipend*> getStudentAdditStipends(wstring student_id = L"");
 	int AddNoteStudentStipend(wstring student_id, int stipend_id, int term);
+	int DelNoteStudentStipend(wstring student_id, int stipend_id);
 	/*-----Additiontal stipends------*/
 
 	vector<wstring> getColNames(wstring table);
@@ -664,7 +670,42 @@ int DataBase::AddMarks(vector<int> marks, vector<wstring> subj, wstring student_
 	return 1;
 }
 
-inline int DataBase::updateGroup(wstring student_id, wstring & update_str)
+inline 
+int DataBase::DelMarks(wstring student_id, int term)
+{
+	/*
+		Func delete note from student marks
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
+	{
+		string sql("pragma foreign_keys=on;"
+			"delete from " + mark_table + " where student_id = '" + WS2S(student_id)  + "' and term = " + to_string(term) + ";");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+
+		if (rc != SQLITE_OK)
+		{
+			wcout << S2WS(err) << endl;
+			return -1;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return 0;
+	}
+
+	sqlite3_close(db);
+	return 1;
+}
+
+inline 
+int DataBase::updateGroup(wstring student_id, wstring & update_str)
 {
 	sqlite3 *db;
 	sqlite3_stmt * stmt;
@@ -911,6 +952,80 @@ vector<Stipend*> DataBase::getAdditStipends()
 }
 
 inline 
+int DataBase::AddAdditStipends(Stipend * s)
+{
+	/*
+		Func adds info about the stipend.
+
+		return: 1 - good auth;
+				0 - faild auth;
+				-1 - faild opening db.
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
+	{
+		wstring info = L"'" + s->getName() + L"', " + to_wstring(s->getRatio());
+
+		string sql("pragma foreign_keys=on;"
+			"insert into " + addit_stipend + " (name, ratio) values (" + WS2S(info) + ");");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+		if (rc != SQLITE_OK)
+		{
+			wcout << S2WS(err) << endl;
+			return 0;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return -1;
+	}
+
+	sqlite3_close(db);
+
+	return 1;
+}
+
+inline int DataBase::DelNoteByStipend(int stipend_id)
+{
+	/*
+		Func delete note from additional stipend, dy stipend_id
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
+	{
+		string sql("pragma foreign_keys=on;"
+			"delete from " + addit_stipend + " where id = '" + to_string(stipend_id) + "';");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+
+		if (rc != SQLITE_OK)
+		{
+			wcout << S2WS(err) << endl;
+			return -1;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return 0;
+	}
+
+	sqlite3_close(db);
+	return 1;
+}
+
+inline 
 vector<Stipend*> DataBase::getStudentAdditStipends(wstring student_id)
 {
 	/*
@@ -1003,6 +1118,40 @@ int DataBase::AddNoteStudentStipend(wstring student_id, int stipend_id, int term
 
 	sqlite3_close(db);
 
+	return 1;
+}
+
+inline 
+int DataBase::DelNoteStudentStipend(wstring student_id, int stipend_id)
+{
+	/*
+		Func delete note from assigned stipend to student
+	*/
+
+	sqlite3 *db;
+	sqlite3_stmt * stmt;
+	char *err;
+
+	if (sqlite3_open(getDBPath().c_str(), &db) == SQLITE_OK)
+	{
+		string sql("pragma foreign_keys=on;"
+			"delete from " + student_addit_stipend + " where stipend_id = '" + to_string(stipend_id) + "' and student_id = '" + WS2S(student_id) + "';");
+
+		int rc = sqlite3_exec(db, sql.c_str(), NULL, NULL, &err);
+
+		if (rc != SQLITE_OK)
+		{
+			wcout << S2WS(err) << endl;
+			return -1;
+		}
+	}
+	else
+	{
+		cout << "Failed to open db\n";
+		return 0;
+	}
+
+	sqlite3_close(db);
 	return 1;
 }
 

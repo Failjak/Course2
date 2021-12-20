@@ -110,6 +110,29 @@ namespace AbstractHandler
 
 		return stoi(choice);
 	}
+
+	double choice_float_number()
+	{
+		bool flag = true;
+		wstring choice;
+
+		while (flag)
+		{
+			rewind(stdin);
+			getline(wcin, choice);
+			try 
+			{
+				return stod(choice);
+			}
+			catch (std::invalid_argument)
+			{
+				wcout << L"Неверный ввод, попробуйте еще разок. " << endl;
+				choice = L"";
+			}
+		}
+
+		
+	}
 	vector<User *> searchSurname(vector<User *> users, wstring surname) 
 	{
 		vector<User *> req_user;
@@ -119,7 +142,7 @@ namespace AbstractHandler
 		{
 			Student * stud = user->getStudent();
 
-			size_t pos = stud->getSurname().find(surname);
+			size_t pos = ppWstring(stud->getSurname()).find(surname);
 			if (pos != std::string::npos)
 				req_user.push_back(user);
 		}
@@ -392,12 +415,8 @@ namespace AbstractHandler
 	wstring ppWstring(wstring word)
 	{
 		if (word.length() > 0)
-		{
-			for (int i = 0; i < word.length(); i++) {
+			for (int i = 0; i < word.length(); i++)
 				word[i] = _towlower_l(word[i], _create_locale(LC_ALL, "Russian"));
-			}
-			//word[0] = _towupper_l(word[0], _create_locale(LC_ALL, "Russian"));
-		}
 
 		return word;
 	}
